@@ -1,0 +1,142 @@
+package com.ectd.global.eln.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.ectd.global.eln.dto.UsersDetailsDto;
+import com.ectd.global.eln.request.UsersDetailsRequest;
+
+@Repository
+@PropertySource(value = {"classpath:sql/users-details-dao.properties"})
+public class UsersDetailsDaoImpl implements UsersDetailsDao {
+
+	@Autowired
+	@Qualifier("jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	@Qualifier("namedParameterJdbcTemplate")
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	@Value(value="${getUsersDetailsById}")
+	private String getUsersDetailsByIdQuery;
+
+	@Value(value="${getUsersDetailsList}")
+	private String getUsersDetailsListQuery;
+
+	@Value(value="${createUsersDetails}")
+	private String createUsersDetailsQuery;
+
+	@Value(value="${updateUsersDetails}")
+	private String updateUsersDetailsQuery;
+
+	@Value(value="${deleteUsersDetails}")
+	private String deleteUsersDetailsQuery;
+
+	@Override
+	public UsersDetailsDto getUsersDetailsById(Integer usersDetailsId) {
+		List<UsersDetailsDto> usersDetailsList = jdbcTemplate.query(getUsersDetailsByIdQuery + usersDetailsId,
+				new UsersDetailsRowMapper());
+
+		if(usersDetailsList.isEmpty()) {
+			return null;
+		}
+
+		return usersDetailsList.get(0);
+	}
+
+	@Override
+	public List<UsersDetailsDto> getUsersDetails() {
+		return jdbcTemplate.query(getUsersDetailsListQuery, new UsersDetailsRowMapper());
+	}
+
+	@Override
+	public Integer createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("firstName", usersDetailsRequest.getFirstName());
+		parameters.addValue("lastName", usersDetailsRequest.getLastName());
+		parameters.addValue("dateOfBirth", usersDetailsRequest.getDateOfBirth());
+		parameters.addValue("gender", usersDetailsRequest.getGender());
+		parameters.addValue("deptId", usersDetailsRequest.getDeptId());
+		parameters.addValue("roleId", usersDetailsRequest.getRoleId());
+		parameters.addValue("mailId", usersDetailsRequest.getMailId());
+		parameters.addValue("status", usersDetailsRequest.getStatus());
+		parameters.addValue("addressLine1", usersDetailsRequest.getAddressLine1());
+		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
+		parameters.addValue("city", usersDetailsRequest.getCity());
+		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
+		parameters.addValue("insertProcess", usersDetailsRequest.getInsertProcess());
+		parameters.addValue("insertDate", usersDetailsRequest.getInsertDate());
+		parameters.addValue("updateProcess", usersDetailsRequest.getUpdateProcess());
+		parameters.addValue("updateDate", usersDetailsRequest.getUpdateDate());
+
+		return namedParameterJdbcTemplate.update(createUsersDetailsQuery, parameters);
+	}
+
+	@Override
+	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("userId", usersDetailsRequest.getUserId());
+		parameters.addValue("firstName", usersDetailsRequest.getFirstName());
+		parameters.addValue("lastName", usersDetailsRequest.getLastName());
+		parameters.addValue("dateOfBirth", usersDetailsRequest.getDateOfBirth());
+		parameters.addValue("gender", usersDetailsRequest.getGender());
+		parameters.addValue("deptId", usersDetailsRequest.getDeptId());
+		parameters.addValue("roleId", usersDetailsRequest.getRoleId());
+		parameters.addValue("mailId", usersDetailsRequest.getMailId());
+		parameters.addValue("status", usersDetailsRequest.getStatus());
+		parameters.addValue("addressLine1", usersDetailsRequest.getAddressLine1());
+		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
+		parameters.addValue("city", usersDetailsRequest.getCity());
+		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
+		parameters.addValue("insertProcess", usersDetailsRequest.getInsertProcess());
+		parameters.addValue("insertDate", usersDetailsRequest.getInsertDate());
+		parameters.addValue("updateProcess", usersDetailsRequest.getUpdateProcess());
+		parameters.addValue("updateDate", usersDetailsRequest.getUpdateDate());
+
+		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
+	}
+
+	@Override
+	public Integer deleteUsersDetails(Integer usersDetailsId) {
+		return jdbcTemplate.update(deleteUsersDetailsQuery, new Object[] {usersDetailsId});
+	}
+	
+	class UsersDetailsRowMapper implements RowMapper<UsersDetailsDto> {
+		public UsersDetailsDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
+			usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
+			usersDetailsDto.setFirstName(resultSet.getString("FIRST_NAME"));
+			usersDetailsDto.setLastName(resultSet.getString("LAST_NAME"));
+			usersDetailsDto.setDateOfBirth(resultSet.getDate("DATE_OF_BIRTH"));
+			usersDetailsDto.setGender(resultSet.getString("GENDER"));
+			usersDetailsDto.setDeptId(resultSet.getInt("DEPT_ID"));
+			usersDetailsDto.setRoleId(resultSet.getInt("ROLE_ID"));
+			usersDetailsDto.setContactNo(resultSet.getInt("CONTACT_NO"));
+			usersDetailsDto.setMailId(resultSet.getString("MAIL_ID"));
+			usersDetailsDto.setStatus(resultSet.getString("STATUS"));
+			usersDetailsDto.setAddressLine1(resultSet.getString("ADDRESS_LINE1"));
+			usersDetailsDto.setAddressLine2(resultSet.getString("ADDRESS_LINE2"));
+			usersDetailsDto.setCity(resultSet.getString("CITY"));
+			usersDetailsDto.setZipCode(resultSet.getString("ZIP_CODE"));
+			usersDetailsDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+			usersDetailsDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
+			usersDetailsDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			
+			return usersDetailsDto;
+		};
+	}
+
+}
