@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.MarketDto;
 import com.ectd.global.eln.request.MarketRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/market-dao.properties"})
@@ -66,7 +67,7 @@ public class MarketDaoImpl implements MarketDao{
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("marketName", marketRequest.getMarketName());
 		parameters.addValue("insertProcess", marketRequest.getInsertProcess());
-		parameters.addValue("insertDate", marketRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createMarketQuery, parameters);
 	}
@@ -76,8 +77,6 @@ public class MarketDaoImpl implements MarketDao{
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("marketId", marketRequest.getMarketId());
 		parameters.addValue("marketName", marketRequest.getMarketName());
-		parameters.addValue("insertProcess", marketRequest.getInsertProcess());
-		parameters.addValue("insertDate", marketRequest.getInsertDate());
 
 		return namedParameterJdbcTemplate.update(updateMarketQuery, parameters);
 	}

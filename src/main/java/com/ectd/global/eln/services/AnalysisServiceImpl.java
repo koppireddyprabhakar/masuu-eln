@@ -16,7 +16,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Autowired
 	AnalysisDao analysisDao; 
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -45,9 +45,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer deleteAnalysis(Integer analysisId) {
 		if(this.getAnalysisById(analysisId) != null) {
-		return analysisDao.deleteAnalysis(analysisId);
+			return analysisDao.deleteAnalysis(analysisId);
 		}
-		
+
 		return null;
 	}
 

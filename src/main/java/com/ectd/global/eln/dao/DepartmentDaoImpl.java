@@ -21,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dto.DepartmentDto;
 import com.ectd.global.eln.dto.TeamsDto;
 import com.ectd.global.eln.request.DepartmentRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/department-dao.properties"})
@@ -74,7 +75,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("departmentName", departmentRequest.getDepartmentName());
 		parameters.addValue("insertProcess", departmentRequest.getInsertProcess());
-		parameters.addValue("insertDate", departmentRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createDepartmentQuery, parameters);
 	}
@@ -84,8 +85,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("deptId", departmentRequest.getDeptId());
 		parameters.addValue("departmentName", departmentRequest.getDepartmentName());
-		parameters.addValue("insertProcess", departmentRequest.getInsertProcess());
-		parameters.addValue("insertDate", departmentRequest.getInsertDate());
 
 		return namedParameterJdbcTemplate.update(updateDepartmentQuery, parameters);
 	}

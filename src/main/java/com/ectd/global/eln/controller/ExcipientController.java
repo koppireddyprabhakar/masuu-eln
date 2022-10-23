@@ -48,4 +48,8 @@ public class ExcipientController extends BaseController{
 		return getResponseEntity(excipientService.deleteExcipient(excipientId), "Excipient Delete");
 	}
 	
+	@GetMapping("/get-excipients-by-material-name")
+	public ResponseEntity<List<ExcipientDto>> getExcipientsByMaterialName(@RequestParam String materialName) throws Exception {
+		return  new ResponseEntity<>(excipientService.getExcipientsByMaterialName(materialName), HttpStatus.OK);
+	}
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.UserRoleDto;
 import com.ectd.global.eln.request.UserRoleRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/user-role-dao.properties"})
@@ -66,8 +67,8 @@ public class UserRoleDaoImpl implements UserRoleDao {
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("roleName", userRoleRequest.getRoleName());
-		parameters.addValue("insertDate", userRoleRequest.getInsertDate());
-		parameters.addValue("updateDate", userRoleRequest.getUpdateDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createUserRoleQuery, parameters);
 	}
@@ -78,8 +79,7 @@ public class UserRoleDaoImpl implements UserRoleDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("roleId", userRoleRequest.getRoleId());
 		parameters.addValue("roleName", userRoleRequest.getRoleName());
-		parameters.addValue("insertDate", userRoleRequest.getInsertDate());
-		parameters.addValue("updateDate", userRoleRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateUserRoleQuery, parameters);
 	}

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.TestRequestFormRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/test-request-form-dao.properties"})
@@ -73,11 +74,11 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		parameters.addValue("packaging", testRequestFormRequest.getPackaging());
 		parameters.addValue("quantity", testRequestFormRequest.getQuantity());
 		parameters.addValue("manufacturingDate", testRequestFormRequest.getManufacturingDate());
-		parameters.addValue("expireDate", testRequestFormRequest.getExpireDate());
-		parameters.addValue("insertDate", testRequestFormRequest.getInsertDate());
+		parameters.addValue("expireDate", ElnUtils.getTimeStamp());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertProcess", testRequestFormRequest.getInsertProcess());
 		parameters.addValue("updateProcess", testRequestFormRequest.getUpdateProcess());
-		parameters.addValue("updateDate", testRequestFormRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(createTestRequestFormQuery, parameters);
 	}
@@ -97,10 +98,8 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		parameters.addValue("quantity", testRequestFormRequest.getQuantity());
 		parameters.addValue("manufacturingDate", testRequestFormRequest.getManufacturingDate());
 		parameters.addValue("expireDate", testRequestFormRequest.getExpireDate());
-		parameters.addValue("insertDate", testRequestFormRequest.getInsertDate());
-		parameters.addValue("insertProcess", testRequestFormRequest.getInsertProcess());
 		parameters.addValue("updateProcess", testRequestFormRequest.getUpdateProcess());
-		parameters.addValue("updateDate", testRequestFormRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(updateTestRequestFormQuery, parameters);
 	}

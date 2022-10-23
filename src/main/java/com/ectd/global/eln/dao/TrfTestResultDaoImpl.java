@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.TrfTestResultDto;
 import com.ectd.global.eln.request.TrfTestResultRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/test-request-form-dao.properties"})
@@ -70,8 +71,8 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 		parameters.addValue("testStatus", trfTestResultRequest.getTestStatus());
 		parameters.addValue("insertProcess", trfTestResultRequest.getInsertProcess());
 		parameters.addValue("updateProcess", trfTestResultRequest.getUpdateProcess());
-		parameters.addValue("insertDate", trfTestResultRequest.getInsertDate());
-		parameters.addValue("updateDate", trfTestResultRequest.getUpdateDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createTrfTestResultQuery, parameters);
 	}
@@ -84,10 +85,8 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 		parameters.addValue("trfId", trfTestResultRequest.getTrfId());
 		parameters.addValue("testId", trfTestResultRequest.getTestId());
 		parameters.addValue("testStatus", trfTestResultRequest.getTestStatus());
-		parameters.addValue("insertProcess", trfTestResultRequest.getInsertProcess());
 		parameters.addValue("updateProcess", trfTestResultRequest.getUpdateProcess());
-		parameters.addValue("insertDate", trfTestResultRequest.getInsertDate());
-		parameters.addValue("updateDate", trfTestResultRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateTrfTestResultQuery, parameters);
 	}

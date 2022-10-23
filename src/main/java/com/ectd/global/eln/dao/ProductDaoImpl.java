@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.ProductDto;
 import com.ectd.global.eln.request.ProductRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/product-dao.properties"})
@@ -67,7 +68,7 @@ public class ProductDaoImpl implements ProductDao {
 		//		parameters.addValue("productId", productRequest.getProductId());
 		parameters.addValue("productName", productRequest.getProductName());
 		parameters.addValue("insertProcess", productRequest.getInsertProcess());
-		parameters.addValue("insertDate", productRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createProductQuery, parameters);
 	}
@@ -77,8 +78,6 @@ public class ProductDaoImpl implements ProductDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("productId", productRequest.getProductId());
 		parameters.addValue("productName", productRequest.getProductName());
-		parameters.addValue("insertProcess", productRequest.getInsertProcess());
-		parameters.addValue("insertDate", productRequest.getInsertDate());
 
 		return namedParameterJdbcTemplate.update(updateProductQuery, parameters);
 	}

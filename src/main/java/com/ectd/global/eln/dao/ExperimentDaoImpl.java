@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.request.ExperimentRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/experiment-dao.properties"})
@@ -71,9 +72,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("experimentStatus", experimentRequest.getExperimentStatus());
 		parameters.addValue("summary", experimentRequest.getSummary());
 		parameters.addValue("insertProcess", experimentRequest.getInsertProcess());
-		parameters.addValue("insertDate", experimentRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateProcess", experimentRequest.getUpdateProcess());
-		parameters.addValue("updateDate", experimentRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createExperimentQuery, parameters);
 	}
@@ -88,10 +89,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("experimentName", experimentRequest.getExperimentName());
 		parameters.addValue("experimentStatus", experimentRequest.getExperimentStatus());
 		parameters.addValue("summary", experimentRequest.getSummary());
-		parameters.addValue("insertProcess", experimentRequest.getInsertProcess());
-		parameters.addValue("insertDate", experimentRequest.getInsertDate());
 		parameters.addValue("updateProcess", experimentRequest.getUpdateProcess());
-		parameters.addValue("updateDate", experimentRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateExperimentQuery, parameters);
 	}

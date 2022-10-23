@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.FormulationDto;
 import com.ectd.global.eln.request.FormulationRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/formulation-dao.properties"})
@@ -66,9 +67,9 @@ public class FormulationDaoImpl implements FormulationDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("formulationName", formulationRequest.getFormulationName());
 		parameters.addValue("insertProcess", formulationRequest.getInsertProcess());
-		parameters.addValue("insertDate", formulationRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateProcess", formulationRequest.getUpdateProcess());
-		parameters.addValue("updateDate", formulationRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("dosageId", formulationRequest.getDosageId());
 
 		return namedParameterJdbcTemplate.update(createFormulationQuery, parameters);
@@ -79,10 +80,8 @@ public class FormulationDaoImpl implements FormulationDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("formulationId", formulationRequest.getFormulationId());
 		parameters.addValue("formulationName", formulationRequest.getFormulationName());
-		parameters.addValue("insertProcess", formulationRequest.getInsertProcess());
-		parameters.addValue("insertDate", formulationRequest.getInsertDate());
 		parameters.addValue("updateProcess", formulationRequest.getUpdateProcess());
-		parameters.addValue("updateDate", formulationRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("dosageId", formulationRequest.getDosageId());
 
 		return namedParameterJdbcTemplate.update(updateFormulationQuery, parameters);

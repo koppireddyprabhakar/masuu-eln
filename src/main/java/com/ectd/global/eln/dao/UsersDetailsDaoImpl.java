@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.UsersDetailsRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/users-details-dao.properties"})
@@ -77,9 +78,9 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("city", usersDetailsRequest.getCity());
 		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
 		parameters.addValue("insertProcess", usersDetailsRequest.getInsertProcess());
-		parameters.addValue("insertDate", usersDetailsRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateProcess", usersDetailsRequest.getUpdateProcess());
-		parameters.addValue("updateDate", usersDetailsRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createUsersDetailsQuery, parameters);
 	}
@@ -100,10 +101,8 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
 		parameters.addValue("city", usersDetailsRequest.getCity());
 		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
-		parameters.addValue("insertProcess", usersDetailsRequest.getInsertProcess());
-		parameters.addValue("insertDate", usersDetailsRequest.getInsertDate());
 		parameters.addValue("updateProcess", usersDetailsRequest.getUpdateProcess());
-		parameters.addValue("updateDate", usersDetailsRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
 	}

@@ -25,6 +25,7 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dto.DosageDto;
 import com.ectd.global.eln.dto.FormulationDto;
 import com.ectd.global.eln.request.DosageRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/dosage-dao.properties"})
@@ -84,9 +85,9 @@ public class DosageDaoImpl implements DosageDao{
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("dosageName", dosageRequest.getDosageName());
 		parameters.addValue("insertProcess", dosageRequest.getInsertProcess());
-		parameters.addValue("insertDate", dosageRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateProcess", dosageRequest.getUpdateProcess());
-		parameters.addValue("updateDate", dosageRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(createDosageQuery, parameters, keyHolder);
 
@@ -98,10 +99,8 @@ public class DosageDaoImpl implements DosageDao{
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("dosageId", dosageRequest.getDosageId());
 		parameters.addValue("dosageName", dosageRequest.getDosageName());
-		parameters.addValue("insertProcess", dosageRequest.getInsertProcess());
-		parameters.addValue("insertDate", dosageRequest.getInsertDate());
 		parameters.addValue("updateProcess", dosageRequest.getUpdateProcess());
-		parameters.addValue("updateDate", dosageRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateDosageQuery, parameters);
 	}
@@ -122,11 +121,7 @@ public class DosageDaoImpl implements DosageDao{
 			DosageDto dosageDto = new DosageDto();
 			dosageDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
 			dosageDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
-			dosageDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			dosageDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
 
-			dosageDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			dosageDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
 			return dosageDto;
 		};
 	}
@@ -142,20 +137,12 @@ public class DosageDaoImpl implements DosageDao{
 				DosageDto dosageDto = new DosageDto();
 				dosageDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
 				dosageDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
-				dosageDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-				dosageDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
-				dosageDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-				dosageDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
-
+				
 				FormulationDto formulationDto = new FormulationDto();
 				formulationDto.setFormulationId(resultSet.getInt("FORMULATION_ID"));
 				formulationDto.setFormulationName(resultSet.getString("FORMULATION_NAME"));
 				formulationDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
-				formulationDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-				formulationDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
-				formulationDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-				formulationDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
-
+				
 				if(CollectionUtils.contains(dosageDtos.iterator(), dosageDto)) {
 					int index = dosageDtos.indexOf(dosageDto);
 					dosageDtos.get(index).getFormulations().add(formulationDto);
@@ -188,5 +175,5 @@ public class DosageDaoImpl implements DosageDao{
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(formulationDtos.toArray());
 		return this.namedParameterJdbcTemplate.batchUpdate( createFormulationQuery, batch);
 	}
-	
+		
 }

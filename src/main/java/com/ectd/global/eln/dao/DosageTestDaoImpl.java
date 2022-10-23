@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.DosageTestDto;
 import com.ectd.global.eln.request.DosageTestRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/dosage-dao.properties"})
@@ -67,9 +68,9 @@ public class DosageTestDaoImpl implements DosageTestDao {
 		parameters.addValue("testId", dosageTestRequest.getTestId());
 		parameters.addValue("dosageId", dosageTestRequest.getDosageId());
 		parameters.addValue("insertProcess", dosageTestRequest.getInsertProcess());
-		parameters.addValue("insertDate", dosageTestRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateProcess", dosageTestRequest.getUpdateProcess());
-		parameters.addValue("updateDate", dosageTestRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(createDosageTestQuery, parameters);
 	}
@@ -79,10 +80,8 @@ public class DosageTestDaoImpl implements DosageTestDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("testId", dosageTestRequest.getTestId());
 		parameters.addValue("dosageId", dosageTestRequest.getDosageId());
-		parameters.addValue("insertProcess", dosageTestRequest.getInsertProcess());
-		parameters.addValue("insertDate", dosageTestRequest.getInsertDate());
 		parameters.addValue("updateProcess", dosageTestRequest.getUpdateProcess());
-		parameters.addValue("updateDate", dosageTestRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(updateDosageTestQuery, parameters);
 	}

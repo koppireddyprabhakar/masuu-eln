@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.ExcipientDto;
 import com.ectd.global.eln.request.ExcipientRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/excipient-dao.properties"})
@@ -34,6 +35,9 @@ public class ExcipientDaoImpl implements ExcipientDao {
 
 	@Value(value="${getExcipientList}")
 	private String getExcipientListQuery;
+	
+	@Value(value="${getExcipientsByMaterialName}")
+	private String getExcipientsByMaterialNameQuery;
 
 	@Value(value="${createExcipient}")
 	private String createExcipientQuery;
@@ -60,6 +64,13 @@ public class ExcipientDaoImpl implements ExcipientDao {
 	public List<ExcipientDto> getExcipients() {
 		return jdbcTemplate.query(getExcipientListQuery, new ExcipientRowMapper());
 	}
+	
+	@Override
+	public List<ExcipientDto> getExcipientsByMaterialName(String materialName) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("materialName", materialName);
+		return namedParameterJdbcTemplate.query(getExcipientsByMaterialNameQuery, parameters, new ExcipientRowMapper());
+	}
 
 	@Override
 	public Integer createExcipient(ExcipientRequest excipientRequest) {
@@ -72,9 +83,9 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("potency", excipientRequest.getPotency());
 		parameters.addValue("grade", excipientRequest.getGrade());
 		parameters.addValue("insertProcess", excipientRequest.getInsertProcess());
-		parameters.addValue("insertDate", excipientRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateProcess", excipientRequest.getUpdateProcess());
-		parameters.addValue("updateDate", excipientRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(createExcipientQuery, parameters);
 	}
@@ -90,10 +101,8 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("sourceName", excipientRequest.getSourceName());
 		parameters.addValue("potency", excipientRequest.getPotency());
 		parameters.addValue("grade", excipientRequest.getGrade());
-		parameters.addValue("insertProcess", excipientRequest.getInsertProcess());
-		parameters.addValue("insertDate", excipientRequest.getInsertDate());
 		parameters.addValue("updateProcess", excipientRequest.getUpdateProcess());
-		parameters.addValue("updateDate", excipientRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(updateExcipientQuery, parameters);
 	}

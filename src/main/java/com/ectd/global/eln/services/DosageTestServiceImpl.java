@@ -44,7 +44,12 @@ public class DosageTestServiceImpl implements DosageTestService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer deleteDosageTest(Integer dosageTestId) {
+		
+		if(this.getDosageTestById(dosageTestId) != null) {
 		return dosageTestDao.deleteDosageTest(dosageTestId);
+		}
+		
+		return null;
 	}
 	
 }

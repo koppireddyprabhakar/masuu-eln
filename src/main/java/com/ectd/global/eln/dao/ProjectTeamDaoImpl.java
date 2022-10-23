@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.ProjectTeamDto;
 import com.ectd.global.eln.request.ProjectTeamRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/project-dao.properties"})
@@ -66,9 +67,9 @@ public class ProjectTeamDaoImpl implements ProjectTeamDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectTeamRequest.getProjectId());
 		parameters.addValue("teamId", projectTeamRequest.getTeamId());
-		parameters.addValue("insertDate", projectTeamRequest.getInsertDate());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertProcess", projectTeamRequest.getInsertProcess());
-		parameters.addValue("updateDate", projectTeamRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateProcess", projectTeamRequest.getUpdateProcess());
 
 		return namedParameterJdbcTemplate.update(createProjectTeamQuery, parameters);
@@ -80,9 +81,7 @@ public class ProjectTeamDaoImpl implements ProjectTeamDao {
 		parameters.addValue("projectTeamId", projectTeamRequest.getProjectTeamId());
 		parameters.addValue("projectId", projectTeamRequest.getProjectId());
 		parameters.addValue("teamId", projectTeamRequest.getTeamId());
-		parameters.addValue("insertDate", projectTeamRequest.getInsertDate());
-		parameters.addValue("insertProcess", projectTeamRequest.getInsertProcess());
-		parameters.addValue("updateDate", projectTeamRequest.getUpdateDate());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateProcess", projectTeamRequest.getUpdateProcess());
 
 		return namedParameterJdbcTemplate.update(updateProjectTeamQuery, parameters);

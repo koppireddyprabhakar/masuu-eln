@@ -16,5 +16,7 @@ public interface ExcipientDao {
 	Integer updateExcipient(ExcipientRequest excipientRequest);
 
 	Integer deleteExcipient(Integer excipientId);
+	
+	List<ExcipientDto> getExcipientsByMaterialName(String materialName);
 
 }

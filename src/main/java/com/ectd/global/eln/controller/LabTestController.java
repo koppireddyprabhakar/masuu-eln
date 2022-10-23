@@ -18,32 +18,32 @@ import com.ectd.global.eln.services.TestService;
 
 @RestController
 @RequestMapping("/test")
-public class TestController extends BaseController {
+public class LabTestController extends BaseController {
 
 	@Autowired
 	TestService testService;
 	
-	@GetMapping("/get-test-by-id")
+	@GetMapping("/get-lab-test-by-id")
 	public ResponseEntity<TestDto> getTestById(@RequestParam Integer testId) throws Exception {
 		return new ResponseEntity<>(testService.getTestById(testId), HttpStatus.OK);
 	}
 	
-	@GetMapping("/get-tests")
+	@GetMapping("/get-lab-tests")
 	public ResponseEntity<List<TestDto>> getTests() throws Exception {
 		return  new ResponseEntity<>(testService.getTests(), HttpStatus.OK);
 	}
 	
-	@PostMapping("/create-test")
+	@PostMapping("/create-lab-test")
 	public ResponseEntity<String> createTest(@RequestBody TestRequest testRequest) {
 		return getResponseEntity(testService.createTest(testRequest), "Test Create");
 	}
 	
-	@PostMapping("/update-test")
+	@PostMapping("/update-lab-test")
 	public ResponseEntity<String> updateTest(@RequestBody TestRequest testRequest) {
 		return getResponseEntity(testService.updateTest(testRequest), "Test Updated");
 	}
 	
-	@GetMapping("/delete-test")
+	@GetMapping("/delete-lab-test")
 	public ResponseEntity<String> deleteTest(@RequestParam Integer testId) throws Exception {
 		return getResponseEntity(testService.deleteTest(testId), "Test Delete");
 	}

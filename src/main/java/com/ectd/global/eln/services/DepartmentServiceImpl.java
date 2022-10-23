@@ -13,7 +13,7 @@ import com.ectd.global.eln.request.DepartmentRequest;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-	
+
 	@Autowired
 	private DepartmentDao departmentDao;
 
@@ -44,7 +44,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer deleteDepartment(Integer departmentId) {
-		return departmentDao.deleteDepartment(departmentId);
+		if(this.getDepartmentById(departmentId) != null) {
+			return departmentDao.deleteDepartment(departmentId);
+		}
+		return null;
 	}
 
 	@Override

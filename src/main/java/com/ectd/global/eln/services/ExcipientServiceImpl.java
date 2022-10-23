@@ -47,4 +47,10 @@ public class ExcipientServiceImpl implements ExcipientService {
 		return excipientDao.deleteExcipient(excipientId);
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public List<ExcipientDto> getExcipientsByMaterialName(String materialName) {
+		return excipientDao.getExcipientsByMaterialName(materialName);
+	}
+
 }
