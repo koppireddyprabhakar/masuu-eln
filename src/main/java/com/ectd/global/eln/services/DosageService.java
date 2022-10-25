@@ -21,4 +21,6 @@ public interface DosageService {
 	
 	Boolean saveDosageWithFormulations(DosageRequest dosageRequest);
 	
+	Boolean updateDosageWithFormulations(DosageRequest dosageRequest);
+	
 }

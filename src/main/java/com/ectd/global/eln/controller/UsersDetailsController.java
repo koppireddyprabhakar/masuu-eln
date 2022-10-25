@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,12 +40,12 @@ public class UsersDetailsController extends BaseController {
 		return getResponseEntity(usersDetailsService.createUsersDetails(UsersDetailsRequest), "Users Details Create");
 	}
 
-	@PostMapping("/update-users-details")
+	@PutMapping("/update-users-details")
 	public ResponseEntity<String> updateUsersDetails(@RequestBody UsersDetailsRequest UsersDetailsRequest) {
 		return getResponseEntity(usersDetailsService.updateUsersDetails(UsersDetailsRequest), "Users Details Update");
 	}
 
-	@GetMapping("/delete-users-details")
+	@DeleteMapping("/delete-users-details")
 	public ResponseEntity<String> deleteUsersDetails(@RequestParam Integer userId) throws Exception {
 		return getResponseEntity(usersDetailsService.deleteUsersDetails(userId), "Users Details Delete");
 	}

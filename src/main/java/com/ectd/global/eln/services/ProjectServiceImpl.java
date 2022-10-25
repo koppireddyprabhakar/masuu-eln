@@ -25,8 +25,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<ProjectDto> getProjects() {
-		return projectDao.getProjects();
+	public List<ProjectDto> getProjects(Integer dosageId) {
+		return projectDao.getProjects(dosageId);
 	}
 
 	@Override

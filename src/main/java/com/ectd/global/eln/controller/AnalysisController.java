@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,13 +47,13 @@ public class AnalysisController extends BaseController {
 		return getResponseEntity(analysisService.createAnalysis(analysisRequest), "Analysis Create");
 	}
 
-	@PostMapping("/update-analysis")
+	@PutMapping("/update-analysis")
 	public ResponseEntity<String> updateAnalysis(@RequestBody AnalysisRequest analysisRequest, Principal principal) {
 		principal.getName();
 		return getResponseEntity(analysisService.updateAnalysis(analysisRequest), "Analysis Update");
 	}
 
-	@GetMapping("/delete-analysis")
+	@DeleteMapping("/delete-analysis")
 	public ResponseEntity<String> deleteAnalysis(@RequestParam Integer analysisId, HttpServletRequest httpRequest) throws Exception {
 		httpRequest.getUserPrincipal().getName();
 		return getResponseEntity(analysisService.deleteAnalysis(analysisId), "Analysis Delete");

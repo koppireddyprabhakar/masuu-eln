@@ -29,7 +29,7 @@ import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
 @PropertySource(value = {"classpath:sql/dosage-dao.properties"})
-public class DosageDaoImpl implements DosageDao{
+public class DosageDaoImpl implements DosageDao {
 
 	@Autowired
 	@Qualifier("jdbcTemplate")
@@ -60,6 +60,9 @@ public class DosageDaoImpl implements DosageDao{
 
 	@Value(value="${createFormulation}")
 	private String createFormulationQuery;
+	
+	@Value(value="${updateFormulation}")
+	private String updateFormulationQuery;
 
 	@Override
 	public DosageDto getDosageById(Integer dosageId) {
@@ -172,8 +175,38 @@ public class DosageDaoImpl implements DosageDao{
 	}
 
 	private int[] batchInsert(List<FormulationDto> formulationDtos, Integer dosageId) {
+		
+		formulationDtos.forEach(f -> 
+		{	
+			f.setDosageId(dosageId);
+			f.setInsertDate(ElnUtils.getTimeStamp());
+			f.setUpdateDate(ElnUtils.getTimeStamp());
+		});
+		
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(formulationDtos.toArray());
 		return this.namedParameterJdbcTemplate.batchUpdate( createFormulationQuery, batch);
+	}
+	
+	@Override
+	public Boolean updateDosageWithFormulations(DosageRequest dosageRequest) {
+		this.updateDosage(dosageRequest);
+		int[] updatedRows = this.batchUpdate(dosageRequest.getFormulations());
+
+		if(updatedRows.length > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private int[] batchUpdate(List<FormulationDto> formulationDtos) {
+		
+		formulationDtos.forEach(f -> { 
+			f.setUpdateDate(ElnUtils.getTimeStamp());
+		});
+		
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(formulationDtos.toArray());
+		return this.namedParameterJdbcTemplate.batchUpdate( updateFormulationQuery, batch);
 	}
 		
 }

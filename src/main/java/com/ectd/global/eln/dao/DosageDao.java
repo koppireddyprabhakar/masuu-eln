@@ -20,5 +20,7 @@ public interface DosageDao {
 	List<DosageDto> getDosagesAndFormulations();
 	
 	Boolean saveDosageWithFormulations(DosageRequest dosageRequest);
+	
+	Boolean updateDosageWithFormulations(DosageRequest dosageRequest);
 
 }

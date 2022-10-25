@@ -11,7 +11,7 @@ public interface UsersDetailsDao {
 
 	List<UsersDetailsDto> getUsersDetails();
 
-	Integer createUsersDetails(UsersDetailsRequest experimentRequest);
+	Boolean createUsersDetails(UsersDetailsRequest experimentRequest);
 
 	Integer updateUsersDetails(UsersDetailsRequest experimentRequest);
 

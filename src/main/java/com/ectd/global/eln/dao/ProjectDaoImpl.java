@@ -21,7 +21,7 @@ import com.ectd.global.eln.utils.ElnUtils;
 @Repository
 @PropertySource(value = {"classpath:sql/project-dao.properties"})
 public class ProjectDaoImpl implements ProjectDao {
-	
+
 	@Autowired
 	@Qualifier("jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
@@ -58,8 +58,16 @@ public class ProjectDaoImpl implements ProjectDao {
 	}
 
 	@Override
-	public List<ProjectDto> getProjects() {
-		return jdbcTemplate.query(getProjectListQuery, new ProjectRowMapper());
+	public List<ProjectDto> getProjects(Integer dosageId) {
+
+		StringBuilder sb = new StringBuilder(getProjectListQuery);
+
+		if(dosageId != null) {
+			sb.append(" AND DOSAGE_ID = ").append(dosageId);
+		}
+		sb.append(" ORDER BY INSERT_DATE DESC");
+
+		return jdbcTemplate.query(sb.toString(), new ProjectRowMapper());
 	}
 
 	@Override
@@ -106,7 +114,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	class ProjectRowMapper implements RowMapper<ProjectDto> {
 		public ProjectDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			
+
 			ProjectDto projectDto = new ProjectDto();
 			projectDto.setProjectId(resultSet.getInt("PROJECT_ID"));
 			projectDto.setProjectName(resultSet.getString("PROJECT_NAME"));
@@ -121,10 +129,10 @@ public class ProjectDaoImpl implements ProjectDao {
 			projectDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
 			projectDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			projectDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
-			
+
 			return  projectDto;
 		};
 	}
-	
+
 
 }

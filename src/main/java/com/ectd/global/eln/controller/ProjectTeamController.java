@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,12 +40,12 @@ public class ProjectTeamController extends BaseController {
 		return getResponseEntity(projectTeamService.createProjectTeam(projectTeamRequest), "Project Team Create");
 	}
 	
-	@PostMapping("/update-project-team")
+	@PutMapping("/update-project-team")
 	public ResponseEntity<String> updateProjectTeam(@RequestBody ProjectTeamRequest projectTeamRequest) {
 		return getResponseEntity(projectTeamService.updateProjectTeam(projectTeamRequest), "Project Team Update");
 	}
 	
-	@GetMapping("/delete-project-team")
+	@DeleteMapping("/delete-project-team")
 	public ResponseEntity<String> deleteProjectTeam(@RequestParam Integer projectTeamId) throws Exception {
 		return getResponseEntity(projectTeamService.deleteProjectTeam(projectTeamId), "Project Team Delete");
 	}

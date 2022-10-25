@@ -26,8 +26,8 @@ import com.ectd.global.eln.request.TestRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
-@PropertySource(value = {"classpath:sql/test-dao.properties"})
-public class TestDaoImpl implements TestDao {
+@PropertySource(value = {"classpath:sql/lab-test-dao.properties"})
+public class LabTestDaoImpl implements LabTestDao {
 
 	@Autowired
 	@Qualifier("jdbcTemplate")

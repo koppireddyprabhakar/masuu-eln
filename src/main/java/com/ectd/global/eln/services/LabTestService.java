@@ -5,7 +5,7 @@ import java.util.List;
 import com.ectd.global.eln.dto.TestDto;
 import com.ectd.global.eln.request.TestRequest;
 
-public interface TestService {
+public interface LabTestService {
 	
 	TestDto getTestById(Integer testId);
 	

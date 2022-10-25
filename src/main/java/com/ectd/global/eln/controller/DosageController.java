@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,12 +40,12 @@ public class DosageController extends BaseController {
 		return getResponseEntity(dosageService.createDosage(dosageRequest), "Dosage Create");
 	}
 	
-	@PostMapping("/update-dosage")
+	@PutMapping("/update-dosage")
 	public ResponseEntity<String> updateDosage(@RequestBody DosageRequest dosageRequest) {
 		return getResponseEntity(dosageService.updateDosage(dosageRequest), "Dosage Update");
 	}
 	
-	@GetMapping("/delete-dosage")
+	@DeleteMapping("/delete-dosage")
 	public ResponseEntity<String> deleteDosage(@RequestParam Integer dosageId) {
 		return getResponseEntity(dosageService.deleteDosage(dosageId), "Dosage Delete");
 	}
@@ -51,6 +53,11 @@ public class DosageController extends BaseController {
 	@PostMapping("/save-dosage-formulations")
 	public ResponseEntity<String> saveDosageWithFormulations(@RequestBody DosageRequest dosageRequest) {
 		return getResponseEntity(dosageService.saveDosageWithFormulations(dosageRequest), "Dosage Saved");
+	}
+
+	@PutMapping("update-dosage-formulations")
+	public ResponseEntity<String> updateDosageWithFormulations(@RequestBody DosageRequest dosageRequest) {
+		return getResponseEntity(dosageService.updateDosageWithFormulations(dosageRequest), "Dosage Updated");
 	}
 
 }

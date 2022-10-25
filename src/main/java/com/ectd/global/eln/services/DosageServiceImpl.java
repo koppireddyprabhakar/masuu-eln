@@ -64,4 +64,9 @@ public class DosageServiceImpl implements DosageService {
 		return dosageDao.saveDosageWithFormulations(dosageRequest);
 	}
 
+	@Override
+	public Boolean updateDosageWithFormulations(DosageRequest dosageRequest) {
+		return dosageDao.updateDosageWithFormulations(dosageRequest);
+	}
+
 }

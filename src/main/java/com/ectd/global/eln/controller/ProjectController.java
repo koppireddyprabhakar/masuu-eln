@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +42,7 @@ public class ProjectController  extends BaseController {
 	
 	@GetMapping("/get-projects")
 	public ResponseEntity<List<ProjectDto>> getProjects() throws Exception {
-		return  new ResponseEntity<>(projectService.getProjects(), HttpStatus.OK);
+		return  new ResponseEntity<>(projectService.getProjects(null), HttpStatus.OK);
 	}
 	
 	@PostMapping("/create-project")
@@ -48,12 +50,12 @@ public class ProjectController  extends BaseController {
 		return getResponseEntity(projectService.createProject(projectRequest), "Project Create");
 	}
 	
-	@PostMapping("/update-project")
+	@PutMapping("/update-project")
 	public ResponseEntity<String> updateProject(@RequestBody ProjectRequest projectRequest) {
 		return getResponseEntity(projectService.updateProject(projectRequest), "Project Update");
 	}
 	
-	@GetMapping("/delete-project")
+	@DeleteMapping("/delete-project")
 	public ResponseEntity<String> deleteProject(@RequestParam Integer projectId) throws Exception {
 		return getResponseEntity(projectService.deleteProject(projectId), "Project Delete");
 	}

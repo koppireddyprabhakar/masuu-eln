@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,12 +40,12 @@ public class TrfTestResultController extends BaseController {
 		return getResponseEntity(trfTestResultService.createTrfTestResult(trfTestResultRequest), "TRF TEST Result Create");
 	}
 	
-	@PostMapping("/update-trf-test-result")
+	@PutMapping("/update-trf-test-result")
 	public ResponseEntity<String> updateTrfTestResult(@RequestBody TrfTestResultRequest trfTestResultRequest) {
 		return getResponseEntity(trfTestResultService.updateTrfTestResult(trfTestResultRequest), "TRF TEST Result Update");
 	}
 	
-	@GetMapping("/delete-trf-test-result")
+	@DeleteMapping("/delete-trf-test-result")
 	public ResponseEntity<String> deleteTrfTestResult(@RequestParam Integer trfTestResultId) throws Exception {
 		return getResponseEntity(trfTestResultService.deleteTrfTestResult(trfTestResultId), "TRF TEST Result Delete");
 	}

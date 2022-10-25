@@ -12,9 +12,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.UsersDetailsDto;
+import com.ectd.global.eln.request.UserTeamRequest;
 import com.ectd.global.eln.request.UsersDetailsRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 
@@ -45,6 +50,9 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	@Value(value="${deleteUsersDetails}")
 	private String deleteUsersDetailsQuery;
 
+	@Value(value="${createUserTeam}")
+	private String createUserTeamQuery;
+
 	@Override
 	public UsersDetailsDto getUsersDetailsById(Integer usersDetailsId) {
 		List<UsersDetailsDto> usersDetailsList = jdbcTemplate.query(getUsersDetailsByIdQuery + usersDetailsId,
@@ -60,29 +68,6 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	@Override
 	public List<UsersDetailsDto> getUsersDetails() {
 		return jdbcTemplate.query(getUsersDetailsListQuery, new UsersDetailsRowMapper());
-	}
-
-	@Override
-	public Integer createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("firstName", usersDetailsRequest.getFirstName());
-		parameters.addValue("lastName", usersDetailsRequest.getLastName());
-		parameters.addValue("dateOfBirth", usersDetailsRequest.getDateOfBirth());
-		parameters.addValue("gender", usersDetailsRequest.getGender());
-		parameters.addValue("deptId", usersDetailsRequest.getDeptId());
-		parameters.addValue("roleId", usersDetailsRequest.getRoleId());
-		parameters.addValue("mailId", usersDetailsRequest.getMailId());
-		parameters.addValue("status", usersDetailsRequest.getStatus());
-		parameters.addValue("addressLine1", usersDetailsRequest.getAddressLine1());
-		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
-		parameters.addValue("city", usersDetailsRequest.getCity());
-		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
-		parameters.addValue("insertProcess", usersDetailsRequest.getInsertProcess());
-		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", usersDetailsRequest.getUpdateProcess());
-		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
-
-		return namedParameterJdbcTemplate.update(createUsersDetailsQuery, parameters);
 	}
 
 	@Override
@@ -111,7 +96,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	public Integer deleteUsersDetails(Integer usersDetailsId) {
 		return jdbcTemplate.update(deleteUsersDetailsQuery, new Object[] {usersDetailsId});
 	}
-	
+
 	class UsersDetailsRowMapper implements RowMapper<UsersDetailsDto> {
 		public UsersDetailsDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
@@ -133,9 +118,61 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 			usersDetailsDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
 			usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			usersDetailsDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
-			
+
 			return usersDetailsDto;
 		};
+	}
+
+	@Override
+	public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		Integer userId = this.create(usersDetailsRequest);
+		int[] insertedRows = this.batchInsert(usersDetailsRequest.getUserTeamRequests(), userId);
+
+		if(insertedRows.length > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private Integer create(UsersDetailsRequest usersDetailsRequest) {
+
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("firstName", usersDetailsRequest.getFirstName());
+		parameters.addValue("lastName", usersDetailsRequest.getLastName());
+		parameters.addValue("dateOfBirth", usersDetailsRequest.getDateOfBirth());
+		parameters.addValue("gender", usersDetailsRequest.getGender());
+		parameters.addValue("deptId", usersDetailsRequest.getDeptId());
+		parameters.addValue("roleId", usersDetailsRequest.getRoleId());
+		parameters.addValue("mailId", usersDetailsRequest.getMailId());
+		parameters.addValue("status", usersDetailsRequest.getStatus());
+		parameters.addValue("addressLine1", usersDetailsRequest.getAddressLine1());
+		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
+		parameters.addValue("city", usersDetailsRequest.getCity());
+		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
+		parameters.addValue("insertProcess", usersDetailsRequest.getInsertProcess());
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateProcess", usersDetailsRequest.getUpdateProcess());
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+
+		namedParameterJdbcTemplate.update(createUsersDetailsQuery, parameters, keyHolder);
+
+		return keyHolder.getKey().intValue();
+	}
+
+	private int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId) {
+
+		userTeamRequests.forEach(f -> 
+		{	
+			f.setUserId(userId);
+			f.setInsertDate(ElnUtils.getTimeStamp());
+			f.setUpdateDate(ElnUtils.getTimeStamp());
+		});
+
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(userTeamRequests.toArray());
+		return this.namedParameterJdbcTemplate.batchUpdate( createUserTeamQuery, batch);
 	}
 
 }

@@ -9,7 +9,7 @@ public interface ProjectService {
 
 	ProjectDto getProjectById(Integer projectId);
 
-	List<ProjectDto> getProjects();
+	List<ProjectDto> getProjects(Integer dosageId);
 
 	Integer createProject(ProjectRequest projectRequest);
 

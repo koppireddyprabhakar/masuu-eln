@@ -22,7 +22,11 @@ public class UsersDetailsDto extends Base implements Serializable {
     private String addressLine1;  
     private String addressLine2;  
     private String city;  
-    private String zipCode;  
+    private String zipCode;
+    
+    private Integer dosageId;
+    private String roleName;
+    private String departmentName;
 
 	public UsersDetailsDto() {
 		// Needed empty constructor for serialization
@@ -124,6 +128,27 @@ public class UsersDetailsDto extends Base implements Serializable {
 	}
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+
+	public Integer getDosageId() {
+		return dosageId;
+	}
+	public void setDosageId(Integer dosageId) {
+		this.dosageId = dosageId;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 	
 }
