@@ -8,6 +8,7 @@ public class ProductRequest extends Base implements Serializable {
 
 	private Integer productId ;
 	private String productName;
+	private String productCode;
 	
 	public void setProductId( Integer productId ) {
 		this.productId = productId ;
@@ -23,6 +24,13 @@ public class ProductRequest extends Base implements Serializable {
 		return this.productName;
 	}
 
+	public String getProductCode() {
+		return productCode;
+	}
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+	
 	@Override
 	public String toString() { 
 		StringBuilder sb = new StringBuilder(); 
@@ -30,5 +38,6 @@ public class ProductRequest extends Base implements Serializable {
 		sb.append("|");
 		sb.append(productName);
 		return sb.toString(); 
-	} 
+	}
+	 
 }

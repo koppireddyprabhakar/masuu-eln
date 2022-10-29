@@ -32,7 +32,7 @@ public class DosageController extends BaseController {
 	
 	@GetMapping("/get-dosages")
 	public ResponseEntity<List<DosageDto>> getDosages() throws Exception {
-		return  new ResponseEntity<>(dosageService.getDosages(), HttpStatus.OK);
+		return  new ResponseEntity<>(dosageService.getDosagesAndFormulations(), HttpStatus.OK);
 	}
 	
 	@PostMapping("/create-dosage")

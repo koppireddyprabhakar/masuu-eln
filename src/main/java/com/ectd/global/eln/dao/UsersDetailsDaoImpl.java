@@ -80,6 +80,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("gender", usersDetailsRequest.getGender());
 		parameters.addValue("deptId", usersDetailsRequest.getDeptId());
 		parameters.addValue("roleId", usersDetailsRequest.getRoleId());
+		parameters.addValue("contactNo", usersDetailsRequest.getContactNo());
 		parameters.addValue("mailId", usersDetailsRequest.getMailId());
 		parameters.addValue("status", usersDetailsRequest.getStatus());
 		parameters.addValue("addressLine1", usersDetailsRequest.getAddressLine1());
@@ -146,6 +147,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("gender", usersDetailsRequest.getGender());
 		parameters.addValue("deptId", usersDetailsRequest.getDeptId());
 		parameters.addValue("roleId", usersDetailsRequest.getRoleId());
+		parameters.addValue("contactNo", usersDetailsRequest.getContactNo());
 		parameters.addValue("mailId", usersDetailsRequest.getMailId());
 		parameters.addValue("status", usersDetailsRequest.getStatus());
 		parameters.addValue("addressLine1", usersDetailsRequest.getAddressLine1());
