@@ -31,7 +31,7 @@ public class TeamsServiceImpl implements TeamsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer createTeams(TeamsRequest teamsRequest) {
+	public Boolean createTeams(TeamsRequest teamsRequest) {
 		return teamsDao.createTeams(teamsRequest);
 	}
 

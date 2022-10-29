@@ -57,7 +57,6 @@ public class DosageDaoImpl implements DosageDao {
 	@Value(value="${getDosagesAndFormulations}")
 	private String getDosagesAndFormulationsQuery;
 
-
 	@Value(value="${createFormulation}")
 	private String createFormulationQuery;
 	

@@ -11,7 +11,7 @@ public interface TeamsService {
 	
 	List<TeamsDto> getTeamsList();
 	
-	Integer createTeams(TeamsRequest teamsRequest);
+	Boolean createTeams(TeamsRequest teamsRequest);
 	
 	Integer updateTeams(TeamsRequest teamsRequest);
 	
