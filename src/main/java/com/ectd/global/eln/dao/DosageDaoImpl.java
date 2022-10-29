@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -117,6 +119,67 @@ public class DosageDaoImpl implements DosageDao {
 		List<DosageDto> dtos = jdbcTemplate.query(getDosagesAndFormulationsQuery, new DosageFormulationExtractor());
 		return dtos;
 	}
+	
+	@Override
+	public Boolean saveDosageWithFormulations(DosageRequest dosageRequest) {
+		Integer dosageId = this.createDosage(dosageRequest);
+		int[] insertedRows = this.batchInsert(dosageRequest.getFormulations(), dosageId);
+
+		if(insertedRows.length > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private int[] batchInsert(List<FormulationDto> formulationDtos, Integer dosageId) {
+		
+		formulationDtos.forEach(f -> 
+		{	
+			f.setDosageId(dosageId);
+			f.setInsertProcess("ELN");
+			f.setUpdateProcess("ELN");
+			f.setInsertDate(ElnUtils.getTimeStamp());
+			f.setUpdateDate(ElnUtils.getTimeStamp());
+		});
+		
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(formulationDtos.toArray());
+		return this.namedParameterJdbcTemplate.batchUpdate( createFormulationQuery, batch);
+	}
+	
+	@Override
+	public Boolean updateDosageWithFormulations(DosageRequest dosageRequest) {
+		this.updateDosage(dosageRequest);
+		
+		List<FormulationDto> updateFormulations = dosageRequest.getFormulations().stream().filter(f -> !(ObjectUtils.isEmpty(f.getFormulationId())) ).collect(Collectors.toList());
+		List<FormulationDto> insertFormulations = dosageRequest.getFormulations().stream().filter(f -> ObjectUtils.isEmpty(f.getFormulationId())).collect(Collectors.toList());
+		
+		int[] updatedRows = null;
+		if(!CollectionUtils.isEmpty(updateFormulations)) {
+			updatedRows = this.batchUpdate(updateFormulations);
+		}
+		
+		if(!CollectionUtils.isEmpty(insertFormulations)) {
+			this.batchInsert(insertFormulations, dosageRequest.getDosageId());
+		}
+		
+		if(updatedRows != null && updatedRows.length > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private int[] batchUpdate(List<FormulationDto> formulationDtos) {
+		
+		formulationDtos.forEach(f -> {
+			f.setUpdateProcess("ELN");
+			f.setUpdateDate(ElnUtils.getTimeStamp());
+		});
+		
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(formulationDtos.toArray());
+		return this.namedParameterJdbcTemplate.batchUpdate( updateFormulationQuery, batch);
+	}
 
 	class DosageRowMapper implements RowMapper<DosageDto> {
 		public DosageDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
@@ -161,51 +224,4 @@ public class DosageDaoImpl implements DosageDao {
 		};
 	}
 
-	@Override
-	public Boolean saveDosageWithFormulations(DosageRequest dosageRequest) {
-		Integer dosageId = this.createDosage(dosageRequest);
-		int[] insertedRows = this.batchInsert(dosageRequest.getFormulations(), dosageId);
-
-		if(insertedRows.length > 0) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private int[] batchInsert(List<FormulationDto> formulationDtos, Integer dosageId) {
-		
-		formulationDtos.forEach(f -> 
-		{	
-			f.setDosageId(dosageId);
-			f.setInsertDate(ElnUtils.getTimeStamp());
-			f.setUpdateDate(ElnUtils.getTimeStamp());
-		});
-		
-		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(formulationDtos.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate( createFormulationQuery, batch);
-	}
-	
-	@Override
-	public Boolean updateDosageWithFormulations(DosageRequest dosageRequest) {
-		this.updateDosage(dosageRequest);
-		int[] updatedRows = this.batchUpdate(dosageRequest.getFormulations());
-
-		if(updatedRows.length > 0) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private int[] batchUpdate(List<FormulationDto> formulationDtos) {
-		
-		formulationDtos.forEach(f -> { 
-			f.setUpdateDate(ElnUtils.getTimeStamp());
-		});
-		
-		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(formulationDtos.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate( updateFormulationQuery, batch);
-	}
-		
 }

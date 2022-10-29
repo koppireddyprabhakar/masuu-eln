@@ -3,7 +3,9 @@ package com.ectd.global.eln.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dto.TeamsDto;
 import com.ectd.global.eln.request.TeamDosage;
@@ -55,6 +58,9 @@ public class TeamsDaoImpl implements TeamsDao {
 
 	@Value(value="${create.team.dosage}")
 	private String createTeamDosageQuery;
+
+	@Value(value="${update.team.dosage}")
+	private String updateTeamDosageQuery;
 
 	@Override
 	public TeamsDto getTeamsById(Integer teamsId) {
@@ -120,6 +126,30 @@ public class TeamsDaoImpl implements TeamsDao {
 
 	@Override
 	public Integer updateTeams(TeamsRequest teamsRequest) {
+		this.update(teamsRequest);
+
+		List<TeamDosage> updateTeamDosages = teamsRequest.getTeamDosages().stream().filter(td -> !(ObjectUtils.isEmpty(td.getTeamId())) ).collect(Collectors.toList());
+		List<TeamDosage> insertTeamDosages = teamsRequest.getTeamDosages().stream().filter(td -> ObjectUtils.isEmpty(td.getTeamId())).collect(Collectors.toList());
+
+		int[] updatedRows = null;
+
+		if(!CollectionUtils.isEmpty(updateTeamDosages)) {
+			updatedRows = this.batchUpdate(updateTeamDosages);
+		}
+
+		if(!CollectionUtils.isEmpty(insertTeamDosages)) {
+			this.batchInsert(insertTeamDosages, teamsRequest.getTeamId());
+		}
+
+		if(updatedRows != null && updatedRows.length > 0) {
+			return updatedRows.length;
+		}
+
+		return 0;
+	}
+
+	private Integer update(TeamsRequest teamsRequest) {
+
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("teamId", teamsRequest.getTeamId());
 		parameters.addValue("teamName", teamsRequest.getTeamName());
@@ -128,6 +158,17 @@ public class TeamsDaoImpl implements TeamsDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateTeamsQuery, parameters);
+	}
+
+	private int[] batchUpdate(List<TeamDosage> teamDosages) {
+
+		teamDosages.forEach(td -> {
+			td.setUpdateProcess("ELN");
+			td.setUpdateDate(ElnUtils.getTimeStamp());
+		});
+
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(teamDosages.toArray());
+		return this.namedParameterJdbcTemplate.batchUpdate( updateTeamDosageQuery, batch);
 	}
 
 	@Override
