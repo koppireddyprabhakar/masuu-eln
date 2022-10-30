@@ -80,9 +80,10 @@ public class LabTestDaoImpl implements LabTestDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("testName", testRequest.getTestName());
 		parameters.addValue("description", testRequest.getDescription());
+		parameters.addValue("status", testRequest.getStatus());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp(), Types.TIMESTAMP);
-		parameters.addValue("insertProcess", testRequest.getInsertProcess());
-		parameters.addValue("updateProcess", testRequest.getUpdateProcess());
+		parameters.addValue("insertUser", testRequest.getInsertUser());
+		parameters.addValue("updateUser", testRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp(), Types.TIMESTAMP);
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -97,8 +98,9 @@ public class LabTestDaoImpl implements LabTestDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("testId", testRequest.getTestId());
 		parameters.addValue("testName", testRequest.getTestName());
+		parameters.addValue("status", testRequest.getStatus());
 		parameters.addValue("description", testRequest.getDescription());
-		parameters.addValue("updateProcess", testRequest.getUpdateProcess());
+		parameters.addValue("updateUser", testRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateTestQuery, parameters);
@@ -118,9 +120,9 @@ public class LabTestDaoImpl implements LabTestDao {
 			request.getDosageTestReqeustList().stream().forEach(dt -> {
 				dt.setTestId(testId);
 				dt.setInsertDate(ElnUtils.getTimeStamp());
-				dt.setInsertProcess("ELN");
+				dt.setInsertUser("ELN");
 				dt.setUpdateDate(ElnUtils.getTimeStamp());
-				dt.setUpdateProcess("ELN");
+				dt.setUpdateUser("ELN");
 			});
 
 			this.batchExecution(request.getDosageTestReqeustList(), createDosageTestQuery);
@@ -136,7 +138,7 @@ public class LabTestDaoImpl implements LabTestDao {
 		if(count > 0) {
 			testRequest.getDosageTestReqeustList().stream().forEach(dt -> {
 				dt.setUpdateDate(ElnUtils.getTimeStamp());
-				dt.setUpdateProcess("ELN");
+				dt.setUpdateUser("ELN");
 			});
 
 			this.batchExecution(testRequest.getDosageTestReqeustList(), deleteDosageTestQuery);
@@ -154,7 +156,7 @@ public class LabTestDaoImpl implements LabTestDao {
 		if(count > 0) {
 			testRequest.getDosageTestReqeustList().stream().forEach(dt -> {
 				dt.setUpdateDate(ElnUtils.getTimeStamp());
-				dt.setUpdateProcess("ELN");
+				dt.setUpdateUser("ELN");
 			});
 
 			this.batchExecution(testRequest.getDosageTestReqeustList(), deleteDosageTestQuery);
@@ -174,9 +176,10 @@ public class LabTestDaoImpl implements LabTestDao {
 			testDto.setTestId(resultSet.getInt("TEST_ID"));
 			testDto.setTestName(resultSet.getString("TEST_NAME"));
 			testDto.setDescription(resultSet.getString("DESCRIPTION"));
-			testDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			testDto.setStatus(resultSet.getString("STATUS"));
+			testDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			testDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			testDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			testDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 
 			return testDto;
 		};

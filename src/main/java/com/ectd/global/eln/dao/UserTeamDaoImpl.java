@@ -74,9 +74,10 @@ public class UserTeamDaoImpl implements UserTeamDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("teamId", userTeamRequest.getTeamId());
 		parameters.addValue("userId", userTeamRequest.getUserId());
-		parameters.addValue("insertProcess", userTeamRequest.getInsertProcess());
+		parameters.addValue("status", userTeamRequest.getStatus());
+		parameters.addValue("insertUser", userTeamRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", userTeamRequest.getUpdateProcess());
+		parameters.addValue("updateUser", userTeamRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(createUserTeamQuery, parameters);
@@ -87,9 +88,10 @@ public class UserTeamDaoImpl implements UserTeamDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("teamId", userTeamRequest.getTeamId());
 		parameters.addValue("userId", userTeamRequest.getUserId());
-		parameters.addValue("updateProcess", userTeamRequest.getUpdateProcess());
+		parameters.addValue("status", userTeamRequest.getStatus());
+		parameters.addValue("updateUser", userTeamRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
-		
+
 		return namedParameterJdbcTemplate.update(updateUserTeamQuery, parameters);
 	}
 
@@ -105,10 +107,11 @@ public class UserTeamDaoImpl implements UserTeamDao {
 			UserTeamDto userTeam = new UserTeamDto();
 			userTeam.setTeamId(resultSet.getInt("TEAM_ID"));
 			userTeam.setUserId(resultSet.getInt("USER_ID"));
+			userTeam.setStatus(resultSet.getString("STATUS"));
 			userTeam.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			userTeam.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			userTeam.setInsertUser(resultSet.getString("INSERT_USER"));
 			userTeam.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			userTeam.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			userTeam.setUpdateUser(resultSet.getString("UPDATE_USER"));
 
 			return  userTeam;
 		};

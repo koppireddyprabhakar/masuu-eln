@@ -67,7 +67,9 @@ public class ProductDaoImpl implements ProductDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		//		parameters.addValue("productId", productRequest.getProductId());
 		parameters.addValue("productName", productRequest.getProductName());
-		parameters.addValue("insertProcess", productRequest.getInsertProcess());
+		parameters.addValue("productCode", productRequest.getProductCode());
+		parameters.addValue("status", productRequest.getStatus());
+		parameters.addValue("insertUser", productRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createProductQuery, parameters);
@@ -78,6 +80,8 @@ public class ProductDaoImpl implements ProductDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("productId", productRequest.getProductId());
 		parameters.addValue("productName", productRequest.getProductName());
+		parameters.addValue("productCode", productRequest.getProductCode());
+		parameters.addValue("status", productRequest.getStatus());
 
 		return namedParameterJdbcTemplate.update(updateProductQuery, parameters);
 	}
@@ -94,7 +98,7 @@ public class ProductDaoImpl implements ProductDao {
 			productDto.setProductId(resultSet.getInt("PRODUCT_ID"));
 			productDto.setProductName(resultSet.getString("PRODUCT_NAME"));
 			productDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			productDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			productDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			
 			return  productDto;
 		};

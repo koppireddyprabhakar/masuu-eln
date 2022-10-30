@@ -87,7 +87,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
 		parameters.addValue("city", usersDetailsRequest.getCity());
 		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
-		parameters.addValue("updateProcess", usersDetailsRequest.getUpdateProcess());
+		parameters.addValue("updateUser", usersDetailsRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
@@ -116,9 +116,9 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 			usersDetailsDto.setCity(resultSet.getString("CITY"));
 			usersDetailsDto.setZipCode(resultSet.getString("ZIP_CODE"));
 			usersDetailsDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			usersDetailsDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			usersDetailsDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			usersDetailsDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			usersDetailsDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 
 			return usersDetailsDto;
 		};
@@ -154,9 +154,9 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
 		parameters.addValue("city", usersDetailsRequest.getCity());
 		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
-		parameters.addValue("insertProcess", usersDetailsRequest.getInsertProcess());
+		parameters.addValue("insertUser", usersDetailsRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", usersDetailsRequest.getUpdateProcess());
+		parameters.addValue("updateUser", usersDetailsRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(createUsersDetailsQuery, parameters, keyHolder);

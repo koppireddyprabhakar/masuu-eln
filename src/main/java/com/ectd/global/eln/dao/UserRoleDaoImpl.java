@@ -67,8 +67,9 @@ public class UserRoleDaoImpl implements UserRoleDao {
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("roleName", userRoleRequest.getRoleName());
+		parameters.addValue("status", userRoleRequest.getStatus());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("insertUser", "ELN");
 
 		return namedParameterJdbcTemplate.update(createUserRoleQuery, parameters);
 	}
@@ -79,7 +80,7 @@ public class UserRoleDaoImpl implements UserRoleDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("roleId", userRoleRequest.getRoleId());
 		parameters.addValue("roleName", userRoleRequest.getRoleName());
-		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("status", userRoleRequest.getStatus());
 
 		return namedParameterJdbcTemplate.update(updateUserRoleQuery, parameters);
 	}
@@ -94,8 +95,9 @@ public class UserRoleDaoImpl implements UserRoleDao {
 			UserRoleDto userRoleDto = new UserRoleDto();
 			userRoleDto.setRoleId(resultSet.getInt("ROLE_ID"));
 			userRoleDto.setRoleName(resultSet.getString("ROLE_NAME"));
+			userRoleDto.setStatus(resultSet.getString("STATUS"));
 			userRoleDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			userRoleDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
+			userRoleDto.setUpdateDate(resultSet.getDate("INSERT_USER"));
 			
 			return userRoleDto;
 		};

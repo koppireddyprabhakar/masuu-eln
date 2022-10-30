@@ -74,10 +74,11 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		parameters.addValue("packaging", testRequestFormRequest.getPackaging());
 		parameters.addValue("quantity", testRequestFormRequest.getQuantity());
 		parameters.addValue("manufacturingDate", testRequestFormRequest.getManufacturingDate());
+		parameters.addValue("status", testRequestFormRequest.getStatus());
 		parameters.addValue("expireDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("insertProcess", testRequestFormRequest.getInsertProcess());
-		parameters.addValue("updateProcess", testRequestFormRequest.getUpdateProcess());
+		parameters.addValue("insertUser", testRequestFormRequest.getInsertUser());
+		parameters.addValue("updateUser", testRequestFormRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(createTestRequestFormQuery, parameters);
@@ -96,9 +97,10 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		parameters.addValue("stage", testRequestFormRequest.getStage());
 		parameters.addValue("packaging", testRequestFormRequest.getPackaging());
 		parameters.addValue("quantity", testRequestFormRequest.getQuantity());
+		parameters.addValue("status", testRequestFormRequest.getStatus());
 		parameters.addValue("manufacturingDate", testRequestFormRequest.getManufacturingDate());
 		parameters.addValue("expireDate", testRequestFormRequest.getExpireDate());
-		parameters.addValue("updateProcess", testRequestFormRequest.getUpdateProcess());
+		parameters.addValue("updateUser", testRequestFormRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(updateTestRequestFormQuery, parameters);
@@ -123,10 +125,11 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
 			testRequestFormDto.setManufacturingDate(resultSet.getDate("MANUFACTURING_DATE"));
 			testRequestFormDto.setExpireDate(resultSet.getDate("EXPIRE_DATE"));
+			testRequestFormDto.setStatus(resultSet.getString("STATUS"));		
 			testRequestFormDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			testRequestFormDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			testRequestFormDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			testRequestFormDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			testRequestFormDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			testRequestFormDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			
 		return testRequestFormDto;
 		};

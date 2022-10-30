@@ -67,9 +67,9 @@ public class DosageTestDaoImpl implements DosageTestDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("testId", dosageTestRequest.getTestId());
 		parameters.addValue("dosageId", dosageTestRequest.getDosageId());
-		parameters.addValue("insertProcess", dosageTestRequest.getInsertProcess());
+		parameters.addValue("insertUser", dosageTestRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", dosageTestRequest.getUpdateProcess());
+		parameters.addValue("updateUser", dosageTestRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(createDosageTestQuery, parameters);
@@ -80,7 +80,7 @@ public class DosageTestDaoImpl implements DosageTestDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("testId", dosageTestRequest.getTestId());
 		parameters.addValue("dosageId", dosageTestRequest.getDosageId());
-		parameters.addValue("updateProcess", dosageTestRequest.getUpdateProcess());
+		parameters.addValue("updateUser", dosageTestRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(updateDosageTestQuery, parameters);
@@ -97,9 +97,9 @@ public class DosageTestDaoImpl implements DosageTestDao {
 			dosageTestDto.setTestId(resultSet.getInt("TEST_ID"));
 			dosageTestDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
 			dosageTestDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			dosageTestDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			dosageTestDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			dosageTestDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			dosageTestDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			dosageTestDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			
 			return dosageTestDto;
 		};

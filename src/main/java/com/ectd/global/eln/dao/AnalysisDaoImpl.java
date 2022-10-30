@@ -21,7 +21,7 @@ import com.ectd.global.eln.utils.ElnUtils;
 @Repository
 @PropertySource(value = {"classpath:sql/analysis-dao.properties"})
 public class AnalysisDaoImpl implements AnalysisDao {
-	
+
 	@Autowired
 	@Qualifier("jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
@@ -70,9 +70,10 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("teamId", analysisRequest.getProjectId());
 		parameters.addValue("expId", analysisRequest.getProjectId());
 		parameters.addValue("summary", analysisRequest.getProjectId());
-		parameters.addValue("insertProcess", analysisRequest.getInsertProcess());
+		parameters.addValue("status", analysisRequest.getStatus());
+		parameters.addValue("insertUser", analysisRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", analysisRequest.getUpdateProcess());
+		parameters.addValue("updateUser", analysisRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createAnalysisQuery, parameters);
@@ -80,7 +81,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 	@Override
 	public Integer updateAnalysis(AnalysisRequest analysisRequest) {
-		
+
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("analysisId", analysisRequest.getAnalysisId());
 		parameters.addValue("analysisName", analysisRequest.getAnalysisName());
@@ -88,18 +89,19 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("teamId", analysisRequest.getProjectId());
 		parameters.addValue("expId", analysisRequest.getProjectId());
 		parameters.addValue("summary", analysisRequest.getProjectId());
-		parameters.addValue("updateProcess", analysisRequest.getUpdateProcess());
+		parameters.addValue("status", analysisRequest.getStatus());
+		parameters.addValue("updateUser", analysisRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateAnalysisQuery, parameters);
 	}
 
-	
+
 	@Override
 	public Integer deleteAnalysis(Integer analysisId) {
 		return jdbcTemplate.update(deleteAnalysisQuery, new Object[] {analysisId});
 	}
-	
+
 	class AnalysisRowMapper implements RowMapper<AnalysisDto> {
 		public AnalysisDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			AnalysisDto analysisDto = new AnalysisDto();
@@ -109,10 +111,11 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			analysisDto.setTeamId(resultSet.getInt("TEAM_ID"));
 			analysisDto.setExpId(resultSet.getInt("EXP_ID"));
 			analysisDto.setSummary(resultSet.getString("SUMMARY"));
+			analysisDto.setStatus(resultSet.getString("STATUS"));
 			analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			analysisDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			analysisDto.setUpdateDate(resultSet.getDate("INSERT_DATE"));
-			analysisDto.setUpdateProcess(resultSet.getString("INSERT_PROCESS"));
+			analysisDto.setUpdateUser(resultSet.getString("INSERT_USER"));
 			return  analysisDto;
 		};
 	}

@@ -74,7 +74,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	public Integer createDepartment(DepartmentRequest departmentRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("departmentName", departmentRequest.getDepartmentName());
-		parameters.addValue("insertProcess", departmentRequest.getInsertProcess());
+		parameters.addValue("status", departmentRequest.getStatus());
+		parameters.addValue("insertUser", departmentRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createDepartmentQuery, parameters);
@@ -85,7 +86,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("deptId", departmentRequest.getDeptId());
 		parameters.addValue("departmentName", departmentRequest.getDepartmentName());
-
+		parameters.addValue("status", departmentRequest.getStatus());
 		return namedParameterJdbcTemplate.update(updateDepartmentQuery, parameters);
 	}
 
@@ -104,8 +105,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
 			DepartmentDto departmentDto = new DepartmentDto();
 			departmentDto.setDeptId(resultSet.getInt("DEPT_ID"));
 			departmentDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
+			departmentDto.setStatus(resultSet.getString("STATUS"));
 			departmentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			departmentDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			departmentDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			return  departmentDto;
 		};
 	}

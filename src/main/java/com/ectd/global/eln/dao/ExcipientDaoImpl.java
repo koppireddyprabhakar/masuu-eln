@@ -82,9 +82,10 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("sourceName", excipientRequest.getSourceName());
 		parameters.addValue("potency", excipientRequest.getPotency());
 		parameters.addValue("grade", excipientRequest.getGrade());
-		parameters.addValue("insertProcess", excipientRequest.getInsertProcess());
+		parameters.addValue("status", excipientRequest.getStatus());
+		parameters.addValue("insertUser", excipientRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", excipientRequest.getUpdateProcess());
+		parameters.addValue("updateUser", excipientRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(createExcipientQuery, parameters);
@@ -101,7 +102,8 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("sourceName", excipientRequest.getSourceName());
 		parameters.addValue("potency", excipientRequest.getPotency());
 		parameters.addValue("grade", excipientRequest.getGrade());
-		parameters.addValue("updateProcess", excipientRequest.getUpdateProcess());
+		parameters.addValue("status", excipientRequest.getStatus());
+		parameters.addValue("updateUser", excipientRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(updateExcipientQuery, parameters);
@@ -123,10 +125,11 @@ public class ExcipientDaoImpl implements ExcipientDao {
 			excipientDto.setSourceName(resultSet.getString("SOURCE_NAME"));
 			excipientDto.setPotency(resultSet.getString("POTENCY"));
 			excipientDto.setGrade(resultSet.getString("GRADE"));
+			excipientDto.setStatus(resultSet.getString("STATUS"));
 			excipientDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			excipientDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			excipientDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			excipientDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			excipientDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			excipientDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			
 			return excipientDto;
 		};

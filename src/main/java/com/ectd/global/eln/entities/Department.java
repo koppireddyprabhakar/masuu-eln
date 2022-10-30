@@ -21,7 +21,7 @@ public class Department implements Serializable {
     @Column(name="INSERT_DATE")
     private Date insertDate ;     
     
-    @Column(name="INSERT_PROCESS", length=20)
+    @Column(name="INSERT_USER", length=20)
     private String insertProcess ; 
 
     public Department() {
@@ -41,8 +41,8 @@ public class Department implements Serializable {
 	public void setInsertDate(Date insertDate) {this.insertDate = insertDate;}
 	public Date getInsertDate() {return this.insertDate;}
 
-	public void setInsertProcess(String insertProcess) {this.insertProcess = insertProcess;}
-	public String getInsertProcess() {return this.insertProcess;}
+	public void setInsertUser(String insertProcess) {this.insertProcess = insertProcess;}
+	public String getInsertUser() {return this.insertProcess;}
 
  	public String toString() {
 		StringBuilder sb = new StringBuilder(); 

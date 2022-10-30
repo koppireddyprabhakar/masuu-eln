@@ -71,9 +71,10 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("experimentName", experimentRequest.getExperimentName());
 		parameters.addValue("experimentStatus", experimentRequest.getExperimentStatus());
 		parameters.addValue("summary", experimentRequest.getSummary());
-		parameters.addValue("insertProcess", experimentRequest.getInsertProcess());
+		parameters.addValue("status", experimentRequest.getStatus());
+		parameters.addValue("insertUser", experimentRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", experimentRequest.getUpdateProcess());
+		parameters.addValue("updateUser", experimentRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createExperimentQuery, parameters);
@@ -89,7 +90,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("experimentName", experimentRequest.getExperimentName());
 		parameters.addValue("experimentStatus", experimentRequest.getExperimentStatus());
 		parameters.addValue("summary", experimentRequest.getSummary());
-		parameters.addValue("updateProcess", experimentRequest.getUpdateProcess());
+		parameters.addValue("status", experimentRequest.getStatus());
+		parameters.addValue("updateUser", experimentRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateExperimentQuery, parameters);
@@ -110,10 +112,11 @@ public class ExperimentDaoImpl implements ExperimentDao {
 			experimentDto.setUserId(resultSet.getInt("USER_ID"));
 			experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
 			experimentDto.setSummary(resultSet.getString("SUMMARY"));
+			experimentDto.setStatus(resultSet.getString("STATUS"));
 			experimentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			experimentDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			experimentDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			experimentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			experimentDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			experimentDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			
 			return experimentDto;
 		};

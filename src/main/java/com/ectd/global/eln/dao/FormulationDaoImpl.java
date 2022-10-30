@@ -66,11 +66,12 @@ public class FormulationDaoImpl implements FormulationDao {
 	public Integer createFormulation(FormulationRequest formulationRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("formulationName", formulationRequest.getFormulationName());
-		parameters.addValue("insertProcess", formulationRequest.getInsertProcess());
+		parameters.addValue("insertUser", formulationRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", formulationRequest.getUpdateProcess());
+		parameters.addValue("updateUser", formulationRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("dosageId", formulationRequest.getDosageId());
+		parameters.addValue("status", formulationRequest.getStatus());
 
 		return namedParameterJdbcTemplate.update(createFormulationQuery, parameters);
 	}
@@ -80,9 +81,10 @@ public class FormulationDaoImpl implements FormulationDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("formulationId", formulationRequest.getFormulationId());
 		parameters.addValue("formulationName", formulationRequest.getFormulationName());
-		parameters.addValue("updateProcess", formulationRequest.getUpdateProcess());
+		parameters.addValue("updateUser", formulationRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("dosageId", formulationRequest.getDosageId());
+		parameters.addValue("status", formulationRequest.getStatus());
 
 		return namedParameterJdbcTemplate.update(updateFormulationQuery, parameters);
 	}
@@ -98,10 +100,11 @@ public class FormulationDaoImpl implements FormulationDao {
 			formulationDto.setFormulationId(resultSet.getInt("FORMULATION_ID"));
 			formulationDto.setFormulationName(resultSet.getString("FORMULATION_NAME"));
 			formulationDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
+			formulationDto.setStatus(resultSet.getString("STATUS"));
 			formulationDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			formulationDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			formulationDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			formulationDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			formulationDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			formulationDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			
 			return formulationDto;
 		};

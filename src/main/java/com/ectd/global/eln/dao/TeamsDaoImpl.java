@@ -99,9 +99,10 @@ public class TeamsDaoImpl implements TeamsDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("teamName", teamsRequest.getTeamName());
 		parameters.addValue("deptId", teamsRequest.getDeptId());
-		parameters.addValue("insertProcess", teamsRequest.getInsertProcess());
+		parameters.addValue("status", teamsRequest.getStatus());
+		parameters.addValue("insertUser", teamsRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", teamsRequest.getUpdateProcess());
+		parameters.addValue("updateUser", teamsRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(createTeamsQuery, parameters, keyHolder);
@@ -114,8 +115,8 @@ public class TeamsDaoImpl implements TeamsDao {
 		teamDosages.forEach(td -> 
 		{	
 			td.setTeamId(teamId);
-			td.setInsertProcess("ELN");
-			td.setUpdateProcess("ELN");
+			td.setInsertUser("ELN");
+			td.setUpdateUser("ELN");
 			td.setInsertDate(ElnUtils.getTimeStamp());
 			td.setUpdateDate(ElnUtils.getTimeStamp());
 		});
@@ -154,7 +155,8 @@ public class TeamsDaoImpl implements TeamsDao {
 		parameters.addValue("teamId", teamsRequest.getTeamId());
 		parameters.addValue("teamName", teamsRequest.getTeamName());
 		parameters.addValue("deptId", teamsRequest.getDeptId());
-		parameters.addValue("updateProcess", teamsRequest.getUpdateProcess());
+		parameters.addValue("status", teamsRequest.getStatus());
+		parameters.addValue("updateUser", teamsRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateTeamsQuery, parameters);
@@ -163,7 +165,7 @@ public class TeamsDaoImpl implements TeamsDao {
 	private int[] batchUpdate(List<TeamDosage> teamDosages) {
 
 		teamDosages.forEach(td -> {
-			td.setUpdateProcess("ELN");
+			td.setUpdateUser("ELN");
 			td.setUpdateDate(ElnUtils.getTimeStamp());
 		});
 
@@ -188,10 +190,11 @@ public class TeamsDaoImpl implements TeamsDao {
 			teams.setTeamId(resultSet.getInt("TEAM_ID"));
 			teams.setTeamName(resultSet.getString("TEAM_NAME"));
 			teams.setDeptId(resultSet.getInt("DEPT_ID"));
+			teams.setStatus(resultSet.getString("STATUS"));
 			teams.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			teams.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			teams.setInsertUser(resultSet.getString("INSERT_USER"));
 			teams.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			teams.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			teams.setUpdateUser(resultSet.getString("UPDATE_USER"));
 
 			return  teams;
 		};

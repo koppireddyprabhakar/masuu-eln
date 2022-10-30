@@ -9,6 +9,7 @@ public class ProductRequest extends Base implements Serializable {
 	private Integer productId ;
 	private String productName;
 	private String productCode;
+	private String status;
 	
 	public void setProductId( Integer productId ) {
 		this.productId = productId ;
@@ -29,6 +30,13 @@ public class ProductRequest extends Base implements Serializable {
 	}
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	@Override

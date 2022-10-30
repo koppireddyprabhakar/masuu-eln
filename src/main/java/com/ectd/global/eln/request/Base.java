@@ -5,9 +5,10 @@ import java.util.Date;
 public class Base {
 
 	private Date insertDate;
-	private String insertProcess;
+	private String insertUser;
 	private Date updateDate;
-	private String updateProcess;
+	private String updateUser;
+	private String status;
 
 	public Date getInsertDate() {
 		return insertDate;
@@ -16,25 +17,32 @@ public class Base {
 		this.insertDate = insertDate;
 	}
 
-	public String getInsertProcess() {
-		return insertProcess;
-	}
-	public void setInsertProcess(String insertProcess) {
-		this.insertProcess = insertProcess;
-	}
-
 	public Date getUpdateDate() {
 		return updateDate;
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
-
-	public String getUpdateProcess() {
-		return updateProcess;
+	
+	public String getInsertUser() {
+		return insertUser;
 	}
-	public void setUpdateProcess(String updateProcess) {
-		this.updateProcess = updateProcess;
+	public void setInsertUser(String insertUser) {
+		this.insertUser = insertUser;
+	}
+	
+	public String getUpdateUser() {
+		return updateUser;
+	}
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

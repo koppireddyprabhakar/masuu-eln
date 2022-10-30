@@ -88,9 +88,10 @@ public class DosageDaoImpl implements DosageDao {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("dosageName", dosageRequest.getDosageName());
-		parameters.addValue("insertProcess", dosageRequest.getInsertProcess());
+		parameters.addValue("status", dosageRequest.getStatus());
+		parameters.addValue("insertUser", dosageRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", dosageRequest.getUpdateProcess());
+		parameters.addValue("updateUser", dosageRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(createDosageQuery, parameters, keyHolder);
@@ -103,7 +104,8 @@ public class DosageDaoImpl implements DosageDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("dosageId", dosageRequest.getDosageId());
 		parameters.addValue("dosageName", dosageRequest.getDosageName());
-		parameters.addValue("updateProcess", dosageRequest.getUpdateProcess());
+		parameters.addValue("status", dosageRequest.getStatus());
+		parameters.addValue("updateUser", dosageRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateDosageQuery, parameters);
@@ -137,8 +139,8 @@ public class DosageDaoImpl implements DosageDao {
 		formulationDtos.forEach(f -> 
 		{	
 			f.setDosageId(dosageId);
-			f.setInsertProcess("ELN");
-			f.setUpdateProcess("ELN");
+			f.setInsertUser("ELN");
+			f.setUpdateUser("ELN");
 			f.setInsertDate(ElnUtils.getTimeStamp());
 			f.setUpdateDate(ElnUtils.getTimeStamp());
 		});
@@ -173,7 +175,7 @@ public class DosageDaoImpl implements DosageDao {
 	private int[] batchUpdate(List<FormulationDto> formulationDtos) {
 		
 		formulationDtos.forEach(f -> {
-			f.setUpdateProcess("ELN");
+			f.setUpdateUser("ELN");
 			f.setUpdateDate(ElnUtils.getTimeStamp());
 		});
 		
@@ -186,7 +188,7 @@ public class DosageDaoImpl implements DosageDao {
 			DosageDto dosageDto = new DosageDto();
 			dosageDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
 			dosageDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
-
+			dosageDto.setStatus(resultSet.getString("STATUS"));
 			return dosageDto;
 		};
 	}

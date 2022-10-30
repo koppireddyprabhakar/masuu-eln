@@ -82,9 +82,9 @@ public class ProjectDaoImpl implements ProjectDao {
 		parameters.addValue("teamId", projectRequest.getTeamId());
 		parameters.addValue("marketId", projectRequest.getMarketId());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("insertProcess", projectRequest.getInsertProcess());
+		parameters.addValue("insertUser", projectRequest.getInsertUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", projectRequest.getUpdateProcess());
+		parameters.addValue("updateUser", projectRequest.getUpdateUser());
 
 		return namedParameterJdbcTemplate.update(createProjectQuery, parameters);
 	}
@@ -102,7 +102,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		parameters.addValue("teamId", projectRequest.getTeamId());
 		parameters.addValue("marketId", projectRequest.getMarketId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateProcess", projectRequest.getUpdateProcess());
+		parameters.addValue("updateUser", projectRequest.getUpdateUser());
 
 		return namedParameterJdbcTemplate.update(updateProjectQuery, parameters);
 	}
@@ -126,9 +126,9 @@ public class ProjectDaoImpl implements ProjectDao {
 			projectDto.setTeamId(resultSet.getInt("TEAM_ID"));
 			projectDto.setMarketId(resultSet.getInt("MARKET_ID"));
 			projectDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			projectDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			projectDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			projectDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			projectDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			projectDto.setInsertUser(resultSet.getString("INSERT_USER"));
 
 			return  projectDto;
 		};

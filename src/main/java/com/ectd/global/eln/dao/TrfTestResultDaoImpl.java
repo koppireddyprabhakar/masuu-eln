@@ -69,8 +69,9 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 		parameters.addValue("trfId", trfTestResultRequest.getTrfId());
 		parameters.addValue("testId", trfTestResultRequest.getTestId());
 		parameters.addValue("testStatus", trfTestResultRequest.getTestStatus());
-		parameters.addValue("insertProcess", trfTestResultRequest.getInsertProcess());
-		parameters.addValue("updateProcess", trfTestResultRequest.getUpdateProcess());
+		parameters.addValue("status", trfTestResultRequest.getStatus());
+		parameters.addValue("insertUser", trfTestResultRequest.getInsertUser());
+		parameters.addValue("updateUser", trfTestResultRequest.getUpdateUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
@@ -85,7 +86,8 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 		parameters.addValue("trfId", trfTestResultRequest.getTrfId());
 		parameters.addValue("testId", trfTestResultRequest.getTestId());
 		parameters.addValue("testStatus", trfTestResultRequest.getTestStatus());
-		parameters.addValue("updateProcess", trfTestResultRequest.getUpdateProcess());
+		parameters.addValue("status", trfTestResultRequest.getStatus());
+		parameters.addValue("updateUser", trfTestResultRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateTrfTestResultQuery, parameters);
@@ -103,10 +105,11 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 			trfTestResultDto.setTrfTestId(resultSet.getInt("TRF_TEST_ID"));
 			trfTestResultDto.setTestId(resultSet.getInt("TEST_ID"));
 			trfTestResultDto.setTestStatus(resultSet.getString("TEST_STATUS"));
+			trfTestResultDto.setStatus(resultSet.getString("STATUS"));
 			trfTestResultDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			trfTestResultDto.setInsertProcess(resultSet.getString("UPDATE_DATE"));
+			trfTestResultDto.setInsertUser(resultSet.getString("UPDATE_DATE"));
 			trfTestResultDto.setInsertDate(resultSet.getDate("UPDATE_DATE"));
-			trfTestResultDto.setUpdateProcess(resultSet.getString("UPDATE_PROCESS"));
+			trfTestResultDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			return trfTestResultDto;
 		};
 	}

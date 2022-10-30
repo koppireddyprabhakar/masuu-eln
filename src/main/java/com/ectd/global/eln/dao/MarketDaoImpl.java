@@ -66,7 +66,8 @@ public class MarketDaoImpl implements MarketDao{
 	public Integer createMarket(MarketRequest marketRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("marketName", marketRequest.getMarketName());
-		parameters.addValue("insertProcess", marketRequest.getInsertProcess());
+		parameters.addValue("status", marketRequest.getStatus());
+		parameters.addValue("insertUser", marketRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createMarketQuery, parameters);
@@ -77,6 +78,7 @@ public class MarketDaoImpl implements MarketDao{
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("marketId", marketRequest.getMarketId());
 		parameters.addValue("marketName", marketRequest.getMarketName());
+		parameters.addValue("status", marketRequest.getStatus());
 
 		return namedParameterJdbcTemplate.update(updateMarketQuery, parameters);
 	}
@@ -91,8 +93,9 @@ public class MarketDaoImpl implements MarketDao{
 			MarketDto marketDto = new MarketDto();
 			marketDto.setMarketId(resultSet.getInt("MARKET_ID"));
 			marketDto.setMarketName(resultSet.getString("MARKET_NAME"));
+			marketDto.setStatus(resultSet.getString("STATUS"));
 			marketDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			marketDto.setInsertProcess(resultSet.getString("INSERT_PROCESS"));
+			marketDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			
 			return marketDto;
 		};

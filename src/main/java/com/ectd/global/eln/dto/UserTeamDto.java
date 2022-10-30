@@ -42,10 +42,10 @@ public class UserTeamDto extends Base implements Serializable {
 		this.insertDate = insertDate;
 	}
 	
-	public String getInsertProcess() {
+	public String getInsertUser() {
 		return this.insertProcess;
 	}
-	public void setInsertProcess(String insertProcess) {
+	public void setInsertUser(String insertProcess) {
 		this.insertProcess = insertProcess;
 	}
 	
@@ -56,10 +56,10 @@ public class UserTeamDto extends Base implements Serializable {
 		this.updateDate = updateDate;
 	}
 	
-	public String getUpdateProcess() {
+	public String getUpdateUser() {
 		return this.updateProcess;
 	}
-	public void setUpdateProcess(String updateProcess) {
+	public void setUpdateUser(String updateProcess) {
 		this.updateProcess = updateProcess;
 	}
 	
