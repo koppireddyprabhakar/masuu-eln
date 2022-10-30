@@ -36,14 +36,14 @@ public class TrfTestResult implements Serializable {
     @Column(name="INSERT_DATE")
     private Date insertDate;
     
-    @Column(name="INSERT_PROCESS", length=20)
+    @Column(name="INSERT_USER", length=20)
     private String insertProcess;
 
     @Temporal(TemporalType.DATE)
     @Column(name="UPDATE_DATE")
     private Date updateDate;
     
-    @Column(name="UPDATE_PROCESS", length=20)
+    @Column(name="UPDATE_USER", length=20)
     private String updateProcess; 
 
     public TrfTestResult() {
@@ -69,14 +69,14 @@ public class TrfTestResult implements Serializable {
 	public void setInsertDate(Date insertDate) {this.insertDate = insertDate;}
 	public Date getInsertDate() {return this.insertDate;}
 
-	public void setInsertProcess(String insertProcess) {this.insertProcess = insertProcess;}
-	public String getInsertProcess() {return this.insertProcess;}
+	public void setInsertUser(String insertProcess) {this.insertProcess = insertProcess;}
+	public String getInsertUser() {return this.insertProcess;}
 
 	public void setUpdateDate(Date updateDate) {this.updateDate = updateDate;}
 	public Date getUpdateDate() {return this.updateDate;}
 
-	public void setUpdateProcess(String updateProcess) {this.updateProcess = updateProcess;}
-	public String getUpdateProcess() {return this.updateProcess;}
+	public void setUpdateUser(String updateProcess) {this.updateProcess = updateProcess;}
+	public String getUpdateUser() {return this.updateProcess;}
 
  	public String toString() {
 		StringBuilder sb = new StringBuilder(); 

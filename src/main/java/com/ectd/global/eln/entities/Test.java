@@ -20,14 +20,14 @@ public class Test implements Serializable {
     @Column(name="DESCRIPTION", length=100)
     private String description;
     
-    @Column(name="INSERT_PROCESS", length=20)
+    @Column(name="INSERT_USER", length=20)
     private String insertProcess;
     
     @Temporal(TemporalType.DATE)
     @Column(name="UPDATE_DATE")
     private Date updateDate;
     
-    @Column(name="UPDATE_PROCESS", length=20)
+    @Column(name="UPDATE_USER", length=20)
     private String updateProcess; 
 
     public Test() {
@@ -47,14 +47,14 @@ public class Test implements Serializable {
 	public void setDescription(String description) {this.description = description;}
 	public String getDescription() {return this.description;}
 
-	public void setInsertProcess(String insertProcess) {this.insertProcess = insertProcess;}
-	public String getInsertProcess() {return this.insertProcess;}
+	public void setInsertUser(String insertProcess) {this.insertProcess = insertProcess;}
+	public String getInsertUser() {return this.insertProcess;}
 
 	public void setUpdateDate(Date updateDate) {this.updateDate = updateDate;}
 	public Date getUpdateDate() {return this.updateDate;}
 
-	public void setUpdateProcess(String updateProcess) {this.updateProcess = updateProcess;}
-	public String getUpdateProcess() {return this.updateProcess;}
+	public void setUpdateUser(String updateProcess) {this.updateProcess = updateProcess;}
+	public String getUpdateUser() {return this.updateProcess;}
 
  	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
