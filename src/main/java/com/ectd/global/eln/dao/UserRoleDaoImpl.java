@@ -97,7 +97,7 @@ public class UserRoleDaoImpl implements UserRoleDao {
 			userRoleDto.setRoleName(resultSet.getString("ROLE_NAME"));
 			userRoleDto.setStatus(resultSet.getString("STATUS"));
 			userRoleDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			userRoleDto.setUpdateDate(resultSet.getDate("INSERT_USER"));
+			userRoleDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			
 			return userRoleDto;
 		};

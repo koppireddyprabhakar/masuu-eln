@@ -25,7 +25,7 @@ public class Product implements Serializable {
     @Column(name="INSERT_DATE")
     private Date       insertDate ;
 
-    @Column(name="INSERT_PROCESS", length=20)
+    @Column(name="INSERT_USER", length=20)
     private String     insertProcess ;
     
     //--- GETTERS & SETTERS FOR FIELDS
@@ -50,10 +50,10 @@ public class Product implements Serializable {
         return this.insertDate;
     }
 
-    public void setInsertProcess( String insertProcess ) {
+    public void setInsertUser( String insertProcess ) {
         this.insertProcess = insertProcess ;
     }
-    public String getInsertProcess() {
+    public String getInsertUser() {
         return this.insertProcess;
     }
 

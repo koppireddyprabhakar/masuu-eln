@@ -21,7 +21,7 @@ public class Market implements Serializable {
     @Column(name="INSERT_DATE")
     private Date insertDate ;     
     
-    @Column(name="INSERT_PROCESS", length=20)
+    @Column(name="INSERT_USER", length=20)
     private String insertProcess ; 
 
     public Market() {
@@ -44,9 +44,9 @@ public class Market implements Serializable {
 	
 	public Date getInsertDate() {return this.insertDate;}
 
-	public void setInsertProcess(String insertProcess) {this.insertProcess = insertProcess;}
+	public void setInsertUser(String insertProcess) {this.insertProcess = insertProcess;}
 	
-	public String getInsertProcess() {return this.insertProcess;}
+	public String getInsertUser() {return this.insertProcess;}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
