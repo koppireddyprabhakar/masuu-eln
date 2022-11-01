@@ -152,16 +152,16 @@ public class LabTestDaoImpl implements LabTestDao {
 	@Override
 	public Boolean deleteTests(TestRequest testRequest) {
 
-		Integer count = this.deleteTest(testRequest.getTestId());
-		if(count > 0) {
-			testRequest.getDosageTestReqeustList().stream().forEach(dt -> {
-				dt.setUpdateDate(ElnUtils.getTimeStamp());
-				dt.setUpdateUser("ELN");
-			});
+//		testRequest.getDosageTestReqeustList().stream().forEach(dt -> {
+//			dt.setUpdateDate(ElnUtils.getTimeStamp());
+//			dt.setUpdateUser("ELN");
+//		});
 
-			this.batchExecution(testRequest.getDosageTestReqeustList(), deleteDosageTestQuery);
+		int[] count = this.batchExecution(testRequest.getDosageTestReqeustList(), deleteDosageTestQuery);
+	
+		if(count.length > 0) {	
+			this.deleteTest(testRequest.getTestId());
 		}
-		
 		return true;
 	}
 
