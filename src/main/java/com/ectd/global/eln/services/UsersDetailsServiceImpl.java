@@ -43,8 +43,8 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer deleteUsersDetails(Integer usersDetailsId) {
-		return usersDetailsDao.deleteUsersDetails(usersDetailsId);
+	public Integer deleteUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		return usersDetailsDao.updateUsersDetails(usersDetailsRequest);
 	}
 	
 }

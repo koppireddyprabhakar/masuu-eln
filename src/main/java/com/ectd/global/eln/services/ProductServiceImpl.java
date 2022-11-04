@@ -43,8 +43,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer deleteProduct(Integer productId) {
-		return productRepository.deleteProduct(productId);
+	public Integer deleteProduct(ProductRequest productRequest) {
+		return productRepository.deleteProduct(productRequest);
 	}
 
 }

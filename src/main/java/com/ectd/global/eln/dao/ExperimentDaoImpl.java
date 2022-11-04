@@ -72,9 +72,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("experimentStatus", experimentRequest.getExperimentStatus());
 		parameters.addValue("summary", experimentRequest.getSummary());
 		parameters.addValue("status", experimentRequest.getStatus());
-		parameters.addValue("insertUser", experimentRequest.getInsertUser());
+		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateUser", experimentRequest.getUpdateUser());
+		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createExperimentQuery, parameters);

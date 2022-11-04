@@ -71,9 +71,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("expId", analysisRequest.getProjectId());
 		parameters.addValue("summary", analysisRequest.getProjectId());
 		parameters.addValue("status", analysisRequest.getStatus());
-		parameters.addValue("insertUser", analysisRequest.getInsertUser());
+		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateUser", analysisRequest.getUpdateUser());
+		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createAnalysisQuery, parameters);

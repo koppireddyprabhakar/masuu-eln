@@ -48,17 +48,20 @@ public class LabTestServiceImpl implements LabTestService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean createTests(List<TestRequest> testRequests) {
 		return labTestDao.createTests(testRequests);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean updateTests(TestRequest testRequest) {
 		return labTestDao.updateTests(testRequest);
 	}
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean deleteTests(TestRequest testRequest) {
-		return labTestDao.deleteTests(testRequest);
+		return labTestDao.updateTests(testRequest);
 	}
 }

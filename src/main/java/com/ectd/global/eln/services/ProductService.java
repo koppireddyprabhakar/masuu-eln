@@ -11,6 +11,6 @@ public interface ProductService  {
 	List<ProductDto> getProducts();
 	Integer createProduct(ProductRequest productRequest);
 	Integer updateProduct(ProductRequest productRequest);
-	Integer deleteProduct(Integer productId);
+	Integer deleteProduct(ProductRequest productRequest);
 
 }

@@ -3,7 +3,9 @@ package com.ectd.global.eln.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.UserTeamRequest;
@@ -53,6 +56,9 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	@Value(value="${createUserTeam}")
 	private String createUserTeamQuery;
 
+	@Value(value="${updateUserTeam}")
+	private String updateUserTeamQuery;
+
 	@Override
 	public UsersDetailsDto getUsersDetailsById(Integer usersDetailsId) {
 		List<UsersDetailsDto> usersDetailsList = jdbcTemplate.query(getUsersDetailsByIdQuery + usersDetailsId,
@@ -72,6 +78,25 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 	@Override
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		this.update(usersDetailsRequest);
+
+		List<UserTeamRequest> updateUserTeams = usersDetailsRequest.getUserTeamRequests().stream().filter(ut -> !ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
+		List<UserTeamRequest> insertUserTeams = usersDetailsRequest.getUserTeamRequests().stream().filter(ut -> ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
+
+		int[] updatedRows = null;
+		if(!CollectionUtils.isEmpty(updateUserTeams)) {
+			updatedRows = this.batchUpdate(updateUserTeams);
+		}
+
+		if(!CollectionUtils.isEmpty(insertUserTeams)) {
+			this.batchInsert(insertUserTeams, usersDetailsRequest.getUserId());
+		}
+
+		return updatedRows != null ? updatedRows.length : 0;
+
+	}
+
+	private Integer update(UsersDetailsRequest usersDetailsRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("userId", usersDetailsRequest.getUserId());
 		parameters.addValue("firstName", usersDetailsRequest.getFirstName());
@@ -93,35 +118,20 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
 	}
 
+	private int[] batchUpdate(List<UserTeamRequest> userTeamRequests) {
+
+		userTeamRequests.forEach(f -> {
+			f.setUpdateUser("ELN");
+			f.setUpdateDate(ElnUtils.getTimeStamp());
+		});
+
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(userTeamRequests.toArray());
+		return this.namedParameterJdbcTemplate.batchUpdate( updateUserTeamQuery, batch);
+	}
+
 	@Override
 	public Integer deleteUsersDetails(Integer usersDetailsId) {
 		return jdbcTemplate.update(deleteUsersDetailsQuery, new Object[] {usersDetailsId});
-	}
-
-	class UsersDetailsRowMapper implements RowMapper<UsersDetailsDto> {
-		public UsersDetailsDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
-			usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
-			usersDetailsDto.setFirstName(resultSet.getString("FIRST_NAME"));
-			usersDetailsDto.setLastName(resultSet.getString("LAST_NAME"));
-			usersDetailsDto.setDateOfBirth(resultSet.getDate("DATE_OF_BIRTH"));
-			usersDetailsDto.setGender(resultSet.getString("GENDER"));
-			usersDetailsDto.setDeptId(resultSet.getInt("DEPT_ID"));
-			usersDetailsDto.setRoleId(resultSet.getInt("ROLE_ID"));
-			usersDetailsDto.setContactNo(resultSet.getInt("CONTACT_NO"));
-			usersDetailsDto.setMailId(resultSet.getString("MAIL_ID"));
-			usersDetailsDto.setStatus(resultSet.getString("STATUS"));
-			usersDetailsDto.setAddressLine1(resultSet.getString("ADDRESS_LINE1"));
-			usersDetailsDto.setAddressLine2(resultSet.getString("ADDRESS_LINE2"));
-			usersDetailsDto.setCity(resultSet.getString("CITY"));
-			usersDetailsDto.setZipCode(resultSet.getString("ZIP_CODE"));
-			usersDetailsDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			usersDetailsDto.setInsertUser(resultSet.getString("INSERT_USER"));
-			usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			usersDetailsDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
-
-			return usersDetailsDto;
-		};
 	}
 
 	@Override
@@ -167,14 +177,43 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	private int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId) {
 
 		userTeamRequests.forEach(f -> 
-		{	
+		{
 			f.setUserId(userId);
 			f.setInsertDate(ElnUtils.getTimeStamp());
+			f.setInsertUser("ELN");
 			f.setUpdateDate(ElnUtils.getTimeStamp());
+			f.setUpdateUser("ELN");
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(userTeamRequests.toArray());
 		return this.namedParameterJdbcTemplate.batchUpdate( createUserTeamQuery, batch);
 	}
 
+	class UsersDetailsRowMapper implements RowMapper<UsersDetailsDto> {
+		public UsersDetailsDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
+			usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
+			usersDetailsDto.setFirstName(resultSet.getString("FIRST_NAME"));
+			usersDetailsDto.setLastName(resultSet.getString("LAST_NAME"));
+			usersDetailsDto.setDateOfBirth(resultSet.getDate("DATE_OF_BIRTH"));
+			usersDetailsDto.setGender(resultSet.getString("GENDER"));
+			usersDetailsDto.setDeptId(resultSet.getInt("DEPT_ID"));
+			usersDetailsDto.setRoleId(resultSet.getInt("ROLE_ID"));
+			usersDetailsDto.setContactNo(resultSet.getInt("CONTACT_NO"));
+			usersDetailsDto.setMailId(resultSet.getString("MAIL_ID"));
+			usersDetailsDto.setStatus(resultSet.getString("STATUS"));
+			usersDetailsDto.setAddressLine1(resultSet.getString("ADDRESS_LINE1"));
+			usersDetailsDto.setAddressLine2(resultSet.getString("ADDRESS_LINE2"));
+			usersDetailsDto.setCity(resultSet.getString("CITY"));
+			usersDetailsDto.setZipCode(resultSet.getString("ZIP_CODE"));
+			usersDetailsDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+			usersDetailsDto.setInsertUser(resultSet.getString("INSERT_USER"));
+			usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
+			usersDetailsDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+			usersDetailsDto.setRoleName(resultSet.getString("ROLE_NAME"));
+			usersDetailsDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
+
+			return usersDetailsDto;
+		};
+	}
 }
