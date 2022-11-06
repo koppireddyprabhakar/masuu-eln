@@ -212,6 +212,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 			usersDetailsDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			usersDetailsDto.setRoleName(resultSet.getString("ROLE_NAME"));
 			usersDetailsDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
+			usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
 
 			return usersDetailsDto;
 		};

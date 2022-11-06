@@ -27,6 +27,7 @@ public class UsersDetailsDto extends Base implements Serializable {
     private Integer dosageId;
     private String roleName;
     private String departmentName;
+    private Integer teamId;
 
 	public UsersDetailsDto() {
 		// Needed empty constructor for serialization
@@ -149,6 +150,13 @@ public class UsersDetailsDto extends Base implements Serializable {
 	}
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
+	}
+
+	public Integer getTeamId() {
+		return teamId;
+	}
+	public void setTeamId(Integer teamId) {
+		this.teamId = teamId;
 	}
 	
 }
