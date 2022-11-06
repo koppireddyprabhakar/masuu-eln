@@ -38,11 +38,11 @@ public class TeamsDaoImpl implements TeamsDao {
 	@Qualifier("namedParameterJdbcTemplate")
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Value(value="${getTeamsById}")
-	private String getTeamsByIdQuery;
+	@Value(value="${get.teams.by.id}")
+	private String GET_TEAMS_BY_ID_QUERY;
 
-	@Value(value="${getTeamsList}")
-	private String getTeamsListQuery;
+	@Value(value="${get.teams.list}")
+	private String GET_TEAMS_LIST_QUERY;
 
 	@Value(value="${createTeams}")
 	private String createTeamsQuery;
@@ -64,7 +64,7 @@ public class TeamsDaoImpl implements TeamsDao {
 
 	@Override
 	public TeamsDto getTeamsById(Integer teamsId) {
-		List<TeamsDto> teamsList = jdbcTemplate.query(getTeamsByIdQuery + teamsId,
+		List<TeamsDto> teamsList = jdbcTemplate.query(GET_TEAMS_BY_ID_QUERY + teamsId,
 				new TeamsRowMapper());
 
 		if(teamsList.isEmpty()) {
@@ -76,7 +76,7 @@ public class TeamsDaoImpl implements TeamsDao {
 
 	@Override
 	public List<TeamsDto> getTeamsList() {
-		return jdbcTemplate.query(getTeamsListQuery, new TeamsRowMapper());
+		return jdbcTemplate.query(GET_TEAMS_LIST_QUERY, new TeamsRowMapper());
 	}
 
 	@Override
@@ -100,9 +100,9 @@ public class TeamsDaoImpl implements TeamsDao {
 		parameters.addValue("teamName", teamsRequest.getTeamName());
 		parameters.addValue("deptId", teamsRequest.getDeptId());
 		parameters.addValue("status", teamsRequest.getStatus());
-		parameters.addValue("insertUser", teamsRequest.getInsertUser());
+		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateUser", teamsRequest.getUpdateUser());
+		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(createTeamsQuery, parameters, keyHolder);
@@ -156,7 +156,7 @@ public class TeamsDaoImpl implements TeamsDao {
 		parameters.addValue("teamName", teamsRequest.getTeamName());
 		parameters.addValue("deptId", teamsRequest.getDeptId());
 		parameters.addValue("status", teamsRequest.getStatus());
-		parameters.addValue("updateUser", teamsRequest.getUpdateUser());
+		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateTeamsQuery, parameters);
@@ -191,11 +191,9 @@ public class TeamsDaoImpl implements TeamsDao {
 			teams.setTeamName(resultSet.getString("TEAM_NAME"));
 			teams.setDeptId(resultSet.getInt("DEPT_ID"));
 			teams.setStatus(resultSet.getString("STATUS"));
-			teams.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			teams.setInsertUser(resultSet.getString("INSERT_USER"));
-			teams.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			teams.setUpdateUser(resultSet.getString("UPDATE_USER"));
-
+			teams.setDosageId(resultSet.getInt("DOSAGE_ID"));
+			teams.setDosageName(resultSet.getString("DOSAGE_NAME"));
+			teams.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
 			return  teams;
 		};
 	}

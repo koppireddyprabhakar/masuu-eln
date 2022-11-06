@@ -46,8 +46,8 @@ public class TeamsController extends BaseController {
 	}
 
 	@DeleteMapping("/delete-team")
-	public ResponseEntity<String> deleteTeams(@RequestParam Integer teamsId) throws Exception {
-		return getResponseEntity(teamsService.deleteTeams(teamsId), "Teams Delete");
+	public ResponseEntity<String> deleteTeams(@RequestBody TeamsRequest teamsRequest) {
+		return getResponseEntity(teamsService.deleteTeams(teamsRequest), "Teams Delete");
 	}
 
 }

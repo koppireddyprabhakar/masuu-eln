@@ -22,8 +22,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import com.ectd.global.eln.dto.DosageTestDto;
-import com.ectd.global.eln.dto.FormulationDto;
 import com.ectd.global.eln.dto.TestDto;
 import com.ectd.global.eln.request.DosageTestRequest;
 import com.ectd.global.eln.request.TestRequest;

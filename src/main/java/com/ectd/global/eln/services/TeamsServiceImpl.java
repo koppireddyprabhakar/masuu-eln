@@ -43,8 +43,8 @@ public class TeamsServiceImpl implements TeamsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer deleteTeams(Integer teamsId) {
-		return teamsDao.deleteTeams(teamsId);
+	public Integer deleteTeams(TeamsRequest teamsRequest) {
+		return teamsDao.updateTeams(teamsRequest);
 	}
 
 	@Override
