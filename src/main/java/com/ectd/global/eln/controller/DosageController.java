@@ -46,8 +46,8 @@ public class DosageController extends BaseController {
 	}
 	
 	@DeleteMapping("/delete-dosage")
-	public ResponseEntity<String> deleteDosage(@RequestParam Integer dosageId) {
-		return getResponseEntity(dosageService.deleteDosage(dosageId), "Dosage Delete");
+	public ResponseEntity<String> deleteDosage(@RequestBody DosageRequest dosageRequest) {
+		return getResponseEntity(dosageService.deleteDosage(dosageRequest), "Dosage Delete");
 	}
 	
 	@PostMapping("/save-dosage-formulations")
@@ -55,7 +55,7 @@ public class DosageController extends BaseController {
 		return getResponseEntity(dosageService.saveDosageWithFormulations(dosageRequest), "Dosage Saved");
 	}
 
-	@PutMapping("update-dosage-formulations")
+	@PutMapping("/update-dosage-formulations")
 	public ResponseEntity<String> updateDosageWithFormulations(@RequestBody DosageRequest dosageRequest) {
 		return getResponseEntity(dosageService.updateDosageWithFormulations(dosageRequest), "Dosage Updated");
 	}

@@ -25,8 +25,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<ProjectDto> getProjects(Integer dosageId) {
-		return projectDao.getProjects(dosageId);
+	public List<ProjectDto> getProjects(Integer dosageId, Integer teamId) {
+		return projectDao.getProjects(dosageId, teamId);
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer deleteProject(Integer projectId) {
-		return projectDao.deleteProject(projectId);
+	public Integer deleteProject(ProjectRequest projectRequest) {
+		return projectDao.updateProject(projectRequest);
 	}
 
 }

@@ -3,9 +3,7 @@ package com.ectd.global.eln.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +17,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.UserTeamRequest;
@@ -78,25 +75,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 	@Override
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
-		this.update(usersDetailsRequest);
-
-		List<UserTeamRequest> updateUserTeams = usersDetailsRequest.getUserTeamRequests().stream().filter(ut -> !ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
-		List<UserTeamRequest> insertUserTeams = usersDetailsRequest.getUserTeamRequests().stream().filter(ut -> ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
-
-		int[] updatedRows = null;
-		if(!CollectionUtils.isEmpty(updateUserTeams)) {
-			updatedRows = this.batchUpdate(updateUserTeams);
-		}
-
-		if(!CollectionUtils.isEmpty(insertUserTeams)) {
-			this.batchInsert(insertUserTeams, usersDetailsRequest.getUserId());
-		}
-
-		return updatedRows != null ? updatedRows.length : 0;
-
-	}
-
-	private Integer update(UsersDetailsRequest usersDetailsRequest) {
+		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("userId", usersDetailsRequest.getUserId());
 		parameters.addValue("firstName", usersDetailsRequest.getFirstName());
@@ -118,7 +97,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
 	}
 
-	private int[] batchUpdate(List<UserTeamRequest> userTeamRequests) {
+	public int[] batchUpdate(List<UserTeamRequest> userTeamRequests) {
 
 		userTeamRequests.forEach(f -> {
 			f.setUpdateUser("ELN");
@@ -137,7 +116,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	@Override
 	public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		Integer userId = this.create(usersDetailsRequest);
-		int[] insertedRows = this.batchInsert(usersDetailsRequest.getUserTeamRequests(), userId);
+		int[] insertedRows = this.batchInsert(usersDetailsRequest.getUserTeams(), userId);
 
 		if(insertedRows.length > 0) {
 			return true;
@@ -174,7 +153,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		return keyHolder.getKey().intValue();
 	}
 
-	private int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId) {
+	public int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId) {
 
 		userTeamRequests.forEach(f -> 
 		{

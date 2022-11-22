@@ -32,7 +32,7 @@ public class ExperimentController extends BaseController {
 	
 	@GetMapping("/get-experiments")
 	public ResponseEntity<List<ExperimentDto>> getExperiments() throws Exception {
-		return  new ResponseEntity<>(experimentService.getExperiments(), HttpStatus.OK);
+		return  new ResponseEntity<>(experimentService.getExperiments(null), HttpStatus.OK);
 	}
 	
 	@PostMapping("/create-experiment")
@@ -46,8 +46,8 @@ public class ExperimentController extends BaseController {
 	}
 	
 	@DeleteMapping("/delete-experiment")
-	public ResponseEntity<String> deleteExperiment(@RequestParam Integer experimentId) throws Exception {
-		return getResponseEntity(experimentService.deleteExperiment(experimentId), "Experiment Delete");
+	public ResponseEntity<String> deleteExperiment(@RequestBody ExperimentRequest experimentRequest) throws Exception {
+		return getResponseEntity(experimentService.deleteExperiment(experimentRequest), "Experiment Delete");
 	}
 	
 }

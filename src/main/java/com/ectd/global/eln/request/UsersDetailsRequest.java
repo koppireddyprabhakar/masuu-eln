@@ -23,7 +23,7 @@ public class UsersDetailsRequest extends Base implements Serializable {
     private String city;  
     private String zipCode;  
     
-    private List<UserTeamRequest> userTeamRequests;
+    private List<UserTeamRequest> userTeams;
     
 	public UsersDetailsRequest() {
 		// Needed empty constructor for serialization
@@ -127,10 +127,11 @@ public class UsersDetailsRequest extends Base implements Serializable {
 		this.zipCode = zipCode;
 	}
 
-	public List<UserTeamRequest> getUserTeamRequests() {
-		return userTeamRequests;
+	public List<UserTeamRequest> getUserTeams() {
+		return userTeams;
 	}
-	public void setUserTeamRequests(List<UserTeamRequest> userTeamRequests) {
-		this.userTeamRequests = userTeamRequests;
+
+	public void setUserTeams(List<UserTeamRequest> userTeams) {
+		this.userTeams = userTeams;
 	}
 }

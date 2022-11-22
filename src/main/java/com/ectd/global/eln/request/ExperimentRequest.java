@@ -1,26 +1,30 @@
 package com.ectd.global.eln.request;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ExperimentRequest extends Base implements Serializable {
 
 	private static final long serialVersionUID = 5372705845771096869L;
 	
-	private Integer expId; 
+	private Integer experimentId;
 	private Integer projectId;
 	private Integer teamId;
     private Integer userId;
     private String experimentName;
     private String experimentStatus;
     private String summary;
+    
+    private List<ExperimentDetails> experimentDetailsList;
+    private List<ExcipientRequest> excipients;
 
-    public Integer getExpId() {
-		return expId;
+    public Integer getExperimentId() {
+		return experimentId;
 	}
-	public void setExpId(Integer expId) {
-		this.expId = expId;
+	public void setExperimentId(Integer experimentId) {
+		this.experimentId = experimentId;
 	}
-	
+    
 	public Integer getProjectId() {
 		return projectId;
 	}
@@ -61,6 +65,20 @@ public class ExperimentRequest extends Base implements Serializable {
 	}
 	public void setSummary(String summary) {
 		this.summary = summary;
+	}
+	
+	public List<ExperimentDetails> getExperimentDetailsList() {
+		return experimentDetailsList;
+	}
+	public void setExperimentDetailsList(List<ExperimentDetails> experimentDetailsList) {
+		this.experimentDetailsList = experimentDetailsList;
+	}
+	
+	public List<ExcipientRequest> getExcipients() {
+		return excipients;
+	}
+	public void setExcipients(List<ExcipientRequest> excipients) {
+		this.excipients = excipients;
 	}
 
 }

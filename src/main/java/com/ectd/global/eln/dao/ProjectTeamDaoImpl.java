@@ -30,24 +30,24 @@ public class ProjectTeamDaoImpl implements ProjectTeamDao {
 	@Qualifier("namedParameterJdbcTemplate")
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Value(value="${getProjectTeamById}")
-	private String getProjectTeamByIdQuery;
+	@Value(value="${get.project.team.by.id}")
+	private String GET_PROJECT_TEAM_BY_ID;
 
-	@Value(value="${getProjectTeamList}")
-	private String getProjectTeamListQuery;
+	@Value(value="${get.project.team.list}")
+	private String GET_PROJECT_TEAM_LIST;
 
-	@Value(value="${createProjectTeam}")
-	private String createProjectTeamQuery;
+	@Value(value="${create.project.team}")
+	private String CREATE_PROJECT_TEAM_QUERY;
 
-	@Value(value="${updateProjectTeam}")
-	private String updateProjectTeamQuery;
+	@Value(value="${update.project.team}")
+	private String UPDATE_PROJECT_TEAM_QUERY;
 
-	@Value(value="${deleteProjectTeam}")
-	private String deleteProjectTeamQuery;
+	@Value(value="${delete.project.team}")
+	private String DELETE_PROJECT_TEAM_QUERY;
 
 	@Override
 	public ProjectTeamDto getProjectTeamById(Integer projectTeamId) {
-		List<ProjectTeamDto> projectTeams = jdbcTemplate.query(getProjectTeamByIdQuery + projectTeamId,
+		List<ProjectTeamDto> projectTeams = jdbcTemplate.query(GET_PROJECT_TEAM_BY_ID + projectTeamId,
 				new ProjectTeamRowMapper());
 
 		if(projectTeams.isEmpty()) {
@@ -59,7 +59,7 @@ public class ProjectTeamDaoImpl implements ProjectTeamDao {
 
 	@Override
 	public List<ProjectTeamDto> getProjectTeams() {
-		return jdbcTemplate.query(getProjectTeamListQuery, new ProjectTeamRowMapper());
+		return jdbcTemplate.query(GET_PROJECT_TEAM_LIST, new ProjectTeamRowMapper());
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class ProjectTeamDaoImpl implements ProjectTeamDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", projectTeamRequest.getUpdateUser());
 
-		return namedParameterJdbcTemplate.update(createProjectTeamQuery, parameters);
+		return namedParameterJdbcTemplate.update(CREATE_PROJECT_TEAM_QUERY, parameters);
 	}
 
 	@Override
@@ -84,12 +84,12 @@ public class ProjectTeamDaoImpl implements ProjectTeamDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", projectTeamRequest.getUpdateUser());
 
-		return namedParameterJdbcTemplate.update(updateProjectTeamQuery, parameters);
+		return namedParameterJdbcTemplate.update(UPDATE_PROJECT_TEAM_QUERY, parameters);
 	}
 
 	@Override
 	public Integer deleteProjectTeam(Integer projectTeamId) {
-		return jdbcTemplate.update(deleteProjectTeamQuery, new Object[] {projectTeamId});
+		return jdbcTemplate.update(DELETE_PROJECT_TEAM_QUERY, new Object[] {projectTeamId});
 	}
 
 	class ProjectTeamRowMapper implements RowMapper<ProjectTeamDto> {

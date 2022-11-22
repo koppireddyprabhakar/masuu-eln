@@ -11,13 +11,18 @@ public class ProjectDto extends Base implements Serializable {
 	private Integer projectId;
     private String projectName;
     private Integer productId;
+    private String productName;
     private String status;
     private String strength;
     private Integer dosageId;
+    private String dosageName;
     private Integer formulationId;
+    private String formulationName;
     private Integer teamId;
+    private String teamName;
     private Integer marketId;
-	
+    private String markertName;
+    
     public Integer getProjectId() {
 		return projectId;
 	}
@@ -79,5 +84,40 @@ public class ProjectDto extends Base implements Serializable {
 	}
 	public void setMarketId(Integer marketId) {
 		this.marketId = marketId;
+	}
+	
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	
+	public String getDosageName() {
+		return dosageName;
+	}
+	public void setDosageName(String dosageName) {
+		this.dosageName = dosageName;
+	}
+	
+	public String getFormulationName() {
+		return formulationName;
+	}
+	public void setFormulationName(String formulationName) {
+		this.formulationName = formulationName;
+	}
+	
+	public String getTeamName() {
+		return teamName;
+	}
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+	
+	public String getMarkertName() {
+		return markertName;
+	}
+	public void setMarkertName(String markertName) {
+		this.markertName = markertName;
 	}
 }

@@ -9,12 +9,12 @@ public interface ProjectService {
 
 	ProjectDto getProjectById(Integer projectId);
 
-	List<ProjectDto> getProjects(Integer dosageId);
+	List<ProjectDto> getProjects(Integer dosageId, Integer teamId);
 
 	Integer createProject(ProjectRequest projectRequest);
 
 	Integer updateProject(ProjectRequest projectRequest);
 
-	Integer deleteProject(Integer projectId);
+	Integer deleteProject(ProjectRequest projectRequest);
 
 }

@@ -56,8 +56,9 @@ public class FormulationController extends BaseController {
 	}
 	
 	@GetMapping("/get-projects-by-dosage-id")
-	public ResponseEntity<List<ProjectDto>> getProjectsByDosageId(@RequestParam Integer dosageId) {
-		return new ResponseEntity<List<ProjectDto>>(projectService.getProjects(dosageId), HttpStatus.OK);
+	public ResponseEntity<List<ProjectDto>> getProjectsByDosageId(@RequestParam Integer dosageId, 
+			@RequestParam Integer teamId) {
+		return new ResponseEntity<List<ProjectDto>>(projectService.getProjects(dosageId, teamId), HttpStatus.OK);
 	}
 	
 }

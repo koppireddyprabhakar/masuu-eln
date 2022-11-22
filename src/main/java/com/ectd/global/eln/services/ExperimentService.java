@@ -9,12 +9,12 @@ public interface ExperimentService {
 
 	ExperimentDto getExperimentById(Integer experimentId);
 
-	List<ExperimentDto> getExperiments();
+	List<ExperimentDto> getExperiments(Integer userId);
 
 	Integer createExperiment(ExperimentRequest experimentRequest);
 
 	Integer updateExperiment(ExperimentRequest experimentRequest);
 
-	Integer deleteExperiment(Integer experimentId);
+	Integer deleteExperiment(ExperimentRequest experimentRequest);
 	
 }
