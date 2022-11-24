@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.ExperimentDto;
@@ -34,36 +36,36 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	@Qualifier("namedParameterJdbcTemplate")
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Value(value="${getExperimentById}")
-	private String getExperimentByIdQuery;
+	@Value(value="${get.experiment.by.id}")
+	private String GET_EXPERIMENT_BY_ID_QUERY;
 
-	@Value(value="${getExperimentList}")
-	private String getExperimentListQuery;
+	@Value(value="${get.experiment.list}")
+	private String GET_EXPERIMENT_LIST_QUERY;
 
-	@Value(value="${createExperiment}")
-	private String createExperimentQuery;
+	@Value(value="${create.experiment}")
+	private String CREATE_EXPERIMENT_QUERY;
 
-	@Value(value="${updateExperiment}")
-	private String updateExperimentQuery;
+	@Value(value="${update.experiment}")
+	private String UPDATE_EXPERIMENT_QUERY;
 
-	@Value(value="${deleteExperiment}")
-	private String deleteExperimentQuery;
+	@Value(value="${delete.experiment}")
+	private String DELETE_EXPERIMENT_QUERY;
 
 	@Value(value="${create.experiment.details}")
 	private String CREATE_EXPERIMENT_DETAILS_QUERY;
 
-	@Value(value = "${create.excipient}")
-	private String CREATE_EXCIPIENT_QUERY;
+	@Value(value = "${create.experiment.excipient}")
+	private String CREATE_EXPERIMENT_EXCIPIENT_QUERY;
 
-	@Value(value="${update.excipient}")
-	private String UPDATE_EXCIPIENT_QUERY;
+	@Value(value="${update.experiment.excipient}")
+	private String UPDATE_EXPERIMENT_EXCIPIENT_QUERY;
 
 	@Value(value="${update.experiment.details}")
 	private String UPDATE_EXPERIMENT_DETAILS;
 
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
-		List<ExperimentDto> experiments = jdbcTemplate.query(getExperimentByIdQuery + experimentId,
+		List<ExperimentDto> experiments = jdbcTemplate.query(GET_EXPERIMENT_BY_ID_QUERY + experimentId,
 				new ExperimentRowMapper());
 
 		if(experiments.isEmpty()) {
@@ -76,7 +78,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	@Override
 	public List<ExperimentDto> getExperiments(Integer userId) {
 
-		StringBuilder sb = new StringBuilder(getExperimentListQuery);
+		StringBuilder sb = new StringBuilder(GET_EXPERIMENT_LIST_QUERY);
 
 		if(userId != null) {
 			sb.append(" AND USER_ID = ").append(userId);
@@ -84,13 +86,14 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 		sb.append(" ORDER BY INSERT_DATE DESC");
 
-		return jdbcTemplate.query(getExperimentListQuery, new ExperimentRowMapper());
+		return jdbcTemplate.query(sb.toString(), new ExperimentRowMapper());
 	}
 
 	@Override
 	public Integer createExperiment(ExperimentRequest experimentRequest) {
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		KeyHolder keyHolder = new GeneratedKeyHolder();
 		parameters.addValue("projectId", experimentRequest.getProjectId());
 		parameters.addValue("teamId", experimentRequest.getTeamId());
 		parameters.addValue("userId", experimentRequest.getUserId());
@@ -103,7 +106,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
-		return namedParameterJdbcTemplate.update(createExperimentQuery, parameters);
+		namedParameterJdbcTemplate.update(CREATE_EXPERIMENT_QUERY, parameters, keyHolder);
+		
+		return keyHolder.getKey().intValue();
 	}
 
 	@Override
@@ -131,7 +136,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(excipients.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_EXCIPIENT_QUERY, batch);
+		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_EXPERIMENT_EXCIPIENT_QUERY, batch);
 	}
 
 	@Override
@@ -143,7 +148,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(excipients.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate(UPDATE_EXCIPIENT_QUERY, batch);
+		return this.namedParameterJdbcTemplate.batchUpdate(UPDATE_EXPERIMENT_EXCIPIENT_QUERY, batch);
 	}
 
 	@Override
@@ -172,12 +177,12 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("updateUser", experimentRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
-		return namedParameterJdbcTemplate.update(updateExperimentQuery, parameters);
+		return namedParameterJdbcTemplate.update(UPDATE_EXPERIMENT_QUERY, parameters);
 	}
 
 	@Override
 	public Integer deleteExperiment(Integer experimentId) {
-		return jdbcTemplate.update(deleteExperimentQuery, new Object[] {experimentId});
+		return jdbcTemplate.update(DELETE_EXPERIMENT_QUERY, new Object[] {experimentId});
 	}
 
 	class ExperimentRowMapper implements RowMapper<ExperimentDto> {

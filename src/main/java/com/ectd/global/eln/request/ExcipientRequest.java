@@ -7,6 +7,7 @@ public class ExcipientRequest extends Base implements Serializable {
 	private static final long serialVersionUID = 2277762864529613946L;
 
 	private Integer excipientId;
+	private Integer experimentId;
 	private String excipientsName;
 	private String materialType;
 	private String materialName;
@@ -69,6 +70,13 @@ public class ExcipientRequest extends Base implements Serializable {
 	}
 	public void setGrade(String grade) {
 		this.grade = grade;
+	}
+	
+	public Integer getExperimentId() {
+		return experimentId;
+	}
+	public void setExperimentId(Integer experimentId) {
+		this.experimentId = experimentId;
 	}
 
 }
