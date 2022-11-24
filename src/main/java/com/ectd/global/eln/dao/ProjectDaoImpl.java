@@ -50,8 +50,14 @@ public class ProjectDaoImpl implements ProjectDao {
 	@Value(value="${create.project.team}")
 	private String CREATE_PROJECT_TEAM_QUERY;
 	
+	@Value(value="${update.project.team}")
+	private String UPDATE_PROJECT_TEAM_QUERY;
+	
 	@Value("${inactivate.project}")
 	private String INACTIVATE_PROJECT_QUERY;
+	
+	@Value("${inactivate.project.team}")
+	private String INACTIVATE_PROJECT_TEAM_QUERY;
 
 	@Override
 	public ProjectDto getProjectById(Integer projectId) {
@@ -91,6 +97,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		parameters.addValue("projectName", projectRequest.getProjectName());
 		parameters.addValue("productId", projectRequest.getProductId());
 		parameters.addValue("productName", projectRequest.getProductName());
+		parameters.addValue("productCode", projectRequest.getProductCode());
 		parameters.addValue("status", ProjectRequest.PROJECT_STATUS.NEW.name());
 		parameters.addValue("strength", projectRequest.getStrength());
 		parameters.addValue("dosageId", projectRequest.getDosageId());
@@ -123,6 +130,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		parameters.addValue("projectName", projectRequest.getProjectName());
 		parameters.addValue("productId", projectRequest.getProductId());
 		parameters.addValue("productName", projectRequest.getProductName());
+		parameters.addValue("productCode", projectRequest.getProductCode());
 		parameters.addValue("status", projectRequest.getStatus());
 		parameters.addValue("strength", projectRequest.getStrength());
 		parameters.addValue("dosageId", projectRequest.getDosageId());
@@ -136,7 +144,20 @@ public class ProjectDaoImpl implements ProjectDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 
-		return namedParameterJdbcTemplate.update(UPDATE_PROJECT_QUERY, parameters);
+		namedParameterJdbcTemplate.update(UPDATE_PROJECT_QUERY, parameters);
+		
+		return this.updateProjectTeam(projectRequest.getProjectId(), projectRequest.getTeamId());
+	}
+	
+	private Integer updateProjectTeam(Integer projectId, Integer teamId) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("projectId", projectId);
+		parameters.addValue("teamId", teamId);
+		parameters.addValue("status", "ACTIVE");
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
+
+		return namedParameterJdbcTemplate.update(UPDATE_PROJECT_TEAM_QUERY, parameters);
 	}
 	
 	@Override
@@ -145,8 +166,23 @@ public class ProjectDaoImpl implements ProjectDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectRequest.getProjectId());
 		parameters.addValue("status", "INACTIVE");
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		
-		return namedParameterJdbcTemplate.update(INACTIVATE_PROJECT_QUERY, parameters);
+		namedParameterJdbcTemplate.update(INACTIVATE_PROJECT_QUERY, parameters);
+		
+		return this.inActivateProjectTeam(projectRequest);
+	}
+	
+	private Integer inActivateProjectTeam(ProjectRequest projectRequest) {
+		
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("projectId", projectRequest.getProjectId());
+		parameters.addValue("status", "INACTIVE");
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
+		
+		return namedParameterJdbcTemplate.update(INACTIVATE_PROJECT_TEAM_QUERY, parameters);
 	}
 
 	@Override
@@ -176,6 +212,7 @@ public class ProjectDaoImpl implements ProjectDao {
 			projectDto.setProjectName(resultSet.getString("PROJECT_NAME"));
 			projectDto.setProductId(resultSet.getInt("PRODUCT_ID"));
 			projectDto.setProductName(resultSet.getString("PRODUCT_NAME"));
+			projectDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
 			projectDto.setStatus(resultSet.getString("STATUS"));
 			projectDto.setStrength(resultSet.getString("STRENGTH"));
 			projectDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
