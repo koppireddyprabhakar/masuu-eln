@@ -47,4 +47,10 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectDao.updateProject(projectRequest);
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer inActivateProject(ProjectRequest projectRequest) {
+		return projectDao.inActivateProject(projectRequest);
+	}
+	
 }

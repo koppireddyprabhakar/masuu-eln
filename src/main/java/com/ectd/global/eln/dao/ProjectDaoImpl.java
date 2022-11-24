@@ -49,6 +49,9 @@ public class ProjectDaoImpl implements ProjectDao {
 	
 	@Value(value="${create.project.team}")
 	private String CREATE_PROJECT_TEAM_QUERY;
+	
+	@Value("${inactivate.project}")
+	private String INACTIVATE_PROJECT_QUERY;
 
 	@Override
 	public ProjectDto getProjectById(Integer projectId) {
@@ -114,6 +117,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	public Integer updateProject(ProjectRequest projectRequest) {
+		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectRequest.getProjectId());
 		parameters.addValue("projectName", projectRequest.getProjectName());
@@ -130,9 +134,19 @@ public class ProjectDaoImpl implements ProjectDao {
 		parameters.addValue("marketId", projectRequest.getMarketId());
 		parameters.addValue("markertName", projectRequest.getMarkertName());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateUser", projectRequest.getUpdateUser());
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 
 		return namedParameterJdbcTemplate.update(UPDATE_PROJECT_QUERY, parameters);
+	}
+	
+	@Override
+	public Integer inActivateProject(ProjectRequest projectRequest) {
+		
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("projectId", projectRequest.getProjectId());
+		parameters.addValue("status", "INACTIVE");
+		
+		return namedParameterJdbcTemplate.update(INACTIVATE_PROJECT_QUERY, parameters);
 	}
 
 	@Override
@@ -140,8 +154,8 @@ public class ProjectDaoImpl implements ProjectDao {
 		return jdbcTemplate.update(DELETE_PROJECT_QUERY, new Object[] {projectId});
 	}
 	
-	@Override
-	public Integer createProjectTeam(Integer projectId, Integer teamId) {
+//	@Override
+	private Integer createProjectTeam(Integer projectId, Integer teamId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectId);
 		parameters.addValue("teamId", teamId);
@@ -165,13 +179,13 @@ public class ProjectDaoImpl implements ProjectDao {
 			projectDto.setStatus(resultSet.getString("STATUS"));
 			projectDto.setStrength(resultSet.getString("STRENGTH"));
 			projectDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
-			projectDto.setProjectName(resultSet.getString("DOSAGE_NAME"));
+			projectDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
 			projectDto.setFormulationId(resultSet.getInt("FORMULATION_ID"));
-			projectDto.setProjectName(resultSet.getString("FORMULATION_NAME"));
+			projectDto.setFormulationName(resultSet.getString("FORMULATION_NAME"));
 			projectDto.setTeamId(resultSet.getInt("TEAM_ID"));
-			projectDto.setProjectName(resultSet.getString("TEAM_NAME"));
+			projectDto.setTeamName(resultSet.getString("TEAM_NAME"));
 			projectDto.setMarketId(resultSet.getInt("MARKET_ID"));
-			projectDto.setProjectName(resultSet.getString("MARKET_NAME"));
+			projectDto.setMarkertName(resultSet.getString("MARKET_NAME"));
 			projectDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			projectDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			projectDto.setInsertDate(resultSet.getDate("INSERT_DATE"));

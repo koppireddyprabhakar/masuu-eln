@@ -57,7 +57,7 @@ public class ProjectController  extends BaseController {
 	
 	@DeleteMapping("/delete-project")
 	public ResponseEntity<String> deleteProject(@RequestBody ProjectRequest projectRequest) throws Exception {
-		return getResponseEntity(projectService.deleteProject(projectRequest), "Project Delete");
+		return getResponseEntity(projectService.inActivateProject(projectRequest), "Project Delete");
 	}
 	
 	@GetMapping("/get-dosages-and-formulations")

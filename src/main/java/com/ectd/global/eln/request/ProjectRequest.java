@@ -10,6 +10,7 @@ public class ProjectRequest extends Base implements Serializable {
     private String projectName;
     private Integer productId;
     private String productName;
+    private String productCode;
     private String status;
     private String strength;
     private Integer dosageId;
@@ -121,6 +122,13 @@ public class ProjectRequest extends Base implements Serializable {
 	}
 	public void setMarkertName(String markertName) {
 		this.markertName = markertName;
+	}
+	
+	public String getProductCode() {
+		return productCode;
+	}
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
 	}
 	
 }

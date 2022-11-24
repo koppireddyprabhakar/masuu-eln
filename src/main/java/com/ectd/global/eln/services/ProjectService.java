@@ -17,4 +17,6 @@ public interface ProjectService {
 
 	Integer deleteProject(ProjectRequest projectRequest);
 
+	Integer inActivateProject(ProjectRequest projectRequest);
+
 }
