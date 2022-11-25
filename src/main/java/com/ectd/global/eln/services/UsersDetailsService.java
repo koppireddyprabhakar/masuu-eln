@@ -15,6 +15,6 @@ public interface UsersDetailsService {
 
 	Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest);
 
-	Integer deleteUsersDetails(Integer usersDetailsId);
+	Integer deleteUsersDetails(UsersDetailsRequest usersDetailsRequest);
 	
 }

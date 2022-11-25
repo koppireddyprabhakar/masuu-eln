@@ -12,6 +12,8 @@ public class TestDto extends Base implements Serializable {
     private String testName;
     private String description;
     
+    private DosageTestDto dosageTest;
+    
     public Integer getTestId() {
 		return testId;
 	}
@@ -31,5 +33,12 @@ public class TestDto extends Base implements Serializable {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public DosageTestDto getDosageTest() {
+		return dosageTest;
+	}
+	public void setDosageTest(DosageTestDto dosageTest) {
+		this.dosageTest = dosageTest;
 	}
 }

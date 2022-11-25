@@ -2,6 +2,7 @@
 package com.ectd.global.eln.request;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class AnalysisRequest extends Base implements Serializable {
 
@@ -13,6 +14,9 @@ public class AnalysisRequest extends Base implements Serializable {
     private Integer expId;  
     private String analysisName;  
     private String summary;  
+    
+    private List<AnalysisDetails> analysisDetailsList;
+    private List<ExcipientRequest> excipients;
     
 	// Constructor
 	public AnalysisRequest() {
@@ -59,6 +63,22 @@ public class AnalysisRequest extends Base implements Serializable {
 	}
 	public void setSummary(String summary) {
 		this.summary = summary;
+	}
+
+	public List<AnalysisDetails> getAnalysisDetailsList() {
+		return analysisDetailsList;
+	}
+
+	public void setAnalysisDetailsList(List<AnalysisDetails> analysisDetailsList) {
+		this.analysisDetailsList = analysisDetailsList;
+	}
+
+	public List<ExcipientRequest> getExcipients() {
+		return excipients;
+	}
+
+	public void setExcipients(List<ExcipientRequest> excipients) {
+		this.excipients = excipients;
 	}
 	
 }

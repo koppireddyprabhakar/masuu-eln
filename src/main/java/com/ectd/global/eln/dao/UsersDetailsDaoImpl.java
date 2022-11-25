@@ -53,6 +53,9 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	@Value(value="${createUserTeam}")
 	private String createUserTeamQuery;
 
+	@Value(value="${updateUserTeam}")
+	private String updateUserTeamQuery;
+
 	@Override
 	public UsersDetailsDto getUsersDetailsById(Integer usersDetailsId) {
 		List<UsersDetailsDto> usersDetailsList = jdbcTemplate.query(getUsersDetailsByIdQuery + usersDetailsId,
@@ -72,6 +75,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 	@Override
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("userId", usersDetailsRequest.getUserId());
 		parameters.addValue("firstName", usersDetailsRequest.getFirstName());
@@ -93,41 +97,26 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
 	}
 
+	public int[] batchUpdate(List<UserTeamRequest> userTeamRequests) {
+
+		userTeamRequests.forEach(f -> {
+			f.setUpdateUser("ELN");
+			f.setUpdateDate(ElnUtils.getTimeStamp());
+		});
+
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(userTeamRequests.toArray());
+		return this.namedParameterJdbcTemplate.batchUpdate( updateUserTeamQuery, batch);
+	}
+
 	@Override
 	public Integer deleteUsersDetails(Integer usersDetailsId) {
 		return jdbcTemplate.update(deleteUsersDetailsQuery, new Object[] {usersDetailsId});
 	}
 
-	class UsersDetailsRowMapper implements RowMapper<UsersDetailsDto> {
-		public UsersDetailsDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
-			usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
-			usersDetailsDto.setFirstName(resultSet.getString("FIRST_NAME"));
-			usersDetailsDto.setLastName(resultSet.getString("LAST_NAME"));
-			usersDetailsDto.setDateOfBirth(resultSet.getDate("DATE_OF_BIRTH"));
-			usersDetailsDto.setGender(resultSet.getString("GENDER"));
-			usersDetailsDto.setDeptId(resultSet.getInt("DEPT_ID"));
-			usersDetailsDto.setRoleId(resultSet.getInt("ROLE_ID"));
-			usersDetailsDto.setContactNo(resultSet.getInt("CONTACT_NO"));
-			usersDetailsDto.setMailId(resultSet.getString("MAIL_ID"));
-			usersDetailsDto.setStatus(resultSet.getString("STATUS"));
-			usersDetailsDto.setAddressLine1(resultSet.getString("ADDRESS_LINE1"));
-			usersDetailsDto.setAddressLine2(resultSet.getString("ADDRESS_LINE2"));
-			usersDetailsDto.setCity(resultSet.getString("CITY"));
-			usersDetailsDto.setZipCode(resultSet.getString("ZIP_CODE"));
-			usersDetailsDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			usersDetailsDto.setInsertUser(resultSet.getString("INSERT_USER"));
-			usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			usersDetailsDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
-
-			return usersDetailsDto;
-		};
-	}
-
 	@Override
 	public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		Integer userId = this.create(usersDetailsRequest);
-		int[] insertedRows = this.batchInsert(usersDetailsRequest.getUserTeamRequests(), userId);
+		int[] insertedRows = this.batchInsert(usersDetailsRequest.getUserTeams(), userId);
 
 		if(insertedRows.length > 0) {
 			return true;
@@ -164,17 +153,47 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		return keyHolder.getKey().intValue();
 	}
 
-	private int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId) {
+	public int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId) {
 
 		userTeamRequests.forEach(f -> 
-		{	
+		{
 			f.setUserId(userId);
 			f.setInsertDate(ElnUtils.getTimeStamp());
+			f.setInsertUser("ELN");
 			f.setUpdateDate(ElnUtils.getTimeStamp());
+			f.setUpdateUser("ELN");
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(userTeamRequests.toArray());
 		return this.namedParameterJdbcTemplate.batchUpdate( createUserTeamQuery, batch);
 	}
 
+	class UsersDetailsRowMapper implements RowMapper<UsersDetailsDto> {
+		public UsersDetailsDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
+			usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
+			usersDetailsDto.setFirstName(resultSet.getString("FIRST_NAME"));
+			usersDetailsDto.setLastName(resultSet.getString("LAST_NAME"));
+			usersDetailsDto.setDateOfBirth(resultSet.getDate("DATE_OF_BIRTH"));
+			usersDetailsDto.setGender(resultSet.getString("GENDER"));
+			usersDetailsDto.setDeptId(resultSet.getInt("DEPT_ID"));
+			usersDetailsDto.setRoleId(resultSet.getInt("ROLE_ID"));
+			usersDetailsDto.setContactNo(resultSet.getInt("CONTACT_NO"));
+			usersDetailsDto.setMailId(resultSet.getString("MAIL_ID"));
+			usersDetailsDto.setStatus(resultSet.getString("STATUS"));
+			usersDetailsDto.setAddressLine1(resultSet.getString("ADDRESS_LINE1"));
+			usersDetailsDto.setAddressLine2(resultSet.getString("ADDRESS_LINE2"));
+			usersDetailsDto.setCity(resultSet.getString("CITY"));
+			usersDetailsDto.setZipCode(resultSet.getString("ZIP_CODE"));
+			usersDetailsDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+			usersDetailsDto.setInsertUser(resultSet.getString("INSERT_USER"));
+			usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
+			usersDetailsDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+			usersDetailsDto.setRoleName(resultSet.getString("ROLE_NAME"));
+			usersDetailsDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
+			usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
+
+			return usersDetailsDto;
+		};
+	}
 }

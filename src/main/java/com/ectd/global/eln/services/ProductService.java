@@ -8,9 +8,13 @@ import com.ectd.global.eln.request.ProductRequest;
 public interface ProductService  {
 
 	ProductDto getProductById(Integer productId);
+	
 	List<ProductDto> getProducts();
+	
 	Integer createProduct(ProductRequest productRequest);
+	
 	Integer updateProduct(ProductRequest productRequest);
-	Integer deleteProduct(Integer productId);
+	
+	Integer deleteProduct(ProductRequest productRequest);
 
 }

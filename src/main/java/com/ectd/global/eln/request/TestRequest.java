@@ -11,7 +11,7 @@ public class TestRequest extends Base implements Serializable {
     private String testName;
     private String description;
     
-    private List<DosageTestRequest> dosageTestReqeustList; 
+    private List<DosageTestRequest> dosageTests; 
     
 	public Integer getTestId() {
 		return testId;
@@ -33,12 +33,11 @@ public class TestRequest extends Base implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public List<DosageTestRequest> getDosageTests() {
+		return dosageTests;
+	}
+	public void setDosageTests(List<DosageTestRequest> dosageTests) {
+		this.dosageTests = dosageTests;
+	}
 	
-	public List<DosageTestRequest> getDosageTestReqeustList() {
-		return dosageTestReqeustList;
-	}
-	public void setDosageTestReqeustList(List<DosageTestRequest> dosageTestReqeustList) {
-		this.dosageTestReqeustList = dosageTestReqeustList;
-	}
-
 }

@@ -32,13 +32,19 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer createAnalysis(AnalysisRequest analysisRequest) {
-		return analysisDao.createAnalysis(analysisRequest);
+		analysisDao.createAnalysis(analysisRequest);
+
+		analysisDao.batchAnalysisDetailsInsert(analysisRequest.getAnalysisDetailsList());
+		analysisDao.batchExcipientInsert(analysisRequest.getExcipients());
+
+		return 1;
+
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateAnalysis(AnalysisRequest analysisRequest) {
-		return analysisDao.updateAnalysis(analysisRequest);
+		return this.update(analysisRequest);
 	}
 
 	@Override
@@ -49,6 +55,22 @@ public class AnalysisServiceImpl implements AnalysisService {
 		}
 
 		return null;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer deleteAnalysisDetails(AnalysisRequest analysisRequest) {
+		return this.update(analysisRequest);
+	}
+
+	private Integer update(AnalysisRequest analysisRequest) {
+
+		analysisDao.updateAnalysis(analysisRequest);
+
+		analysisDao.batchAnalysisDetailsUpdate(analysisRequest.getAnalysisDetailsList());
+		analysisDao.batchExcipientUpdate(analysisRequest.getExcipients());
+
+		return 1;
 	}
 
 }

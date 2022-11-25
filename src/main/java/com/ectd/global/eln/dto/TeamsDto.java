@@ -12,6 +12,8 @@ public class TeamsDto extends Base implements Serializable {
 	private String teamName;
 	private Integer deptId;
 	private Integer dosageId;
+	private String dosageName;
+	private String departmentName;
 
 	public Integer getTeamId() {
 		return teamId;
@@ -39,6 +41,20 @@ public class TeamsDto extends Base implements Serializable {
 	}
 	public void setDosageId(Integer dosageId) {
 		this.dosageId = dosageId;
+	}
+	
+	public String getDosageName() {
+		return dosageName;
+	}
+	public void setDosageName(String dosageName) {
+		this.dosageName = dosageName;
+	}
+	
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 	
 }

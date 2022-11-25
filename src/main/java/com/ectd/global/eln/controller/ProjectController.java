@@ -42,7 +42,7 @@ public class ProjectController  extends BaseController {
 	
 	@GetMapping("/get-projects")
 	public ResponseEntity<List<ProjectDto>> getProjects() throws Exception {
-		return  new ResponseEntity<>(projectService.getProjects(null), HttpStatus.OK);
+		return  new ResponseEntity<>(projectService.getProjects(null, null), HttpStatus.OK);
 	}
 	
 	@PostMapping("/create-project")
@@ -56,8 +56,8 @@ public class ProjectController  extends BaseController {
 	}
 	
 	@DeleteMapping("/delete-project")
-	public ResponseEntity<String> deleteProject(@RequestParam Integer projectId) throws Exception {
-		return getResponseEntity(projectService.deleteProject(projectId), "Project Delete");
+	public ResponseEntity<String> deleteProject(@RequestBody ProjectRequest projectRequest) throws Exception {
+		return getResponseEntity(projectService.inActivateProject(projectRequest), "Project Delete");
 	}
 	
 	@GetMapping("/get-dosages-and-formulations")

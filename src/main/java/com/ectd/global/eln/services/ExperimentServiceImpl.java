@@ -25,26 +25,46 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<ExperimentDto> getExperiments() {
-		return experimentDao.getExperiments();
+	public List<ExperimentDto> getExperiments(Integer userId) {
+		return experimentDao.getExperiments(userId);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer createExperiment(ExperimentRequest experimentRequest) {
-		return experimentDao.createExperiment(experimentRequest);
+
+		Integer expermentId = experimentDao.createExperiment(experimentRequest);
+		
+		experimentRequest.getExperimentDetailsList()
+		.stream().forEach(ed -> ed.setExperimentId(expermentId));
+		experimentDao.batchInsert(experimentRequest.getExperimentDetailsList());
+		
+		experimentRequest.getExcipients().stream().forEach(e -> e.setExperimentId(expermentId));
+		experimentDao.batchExcipientInsert(experimentRequest.getExcipients());
+
+		return 1;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateExperiment(ExperimentRequest experimentRequest) {
-		return experimentDao.updateExperiment(experimentRequest);
+		
+		return this.update(experimentRequest);
 	}
-
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer deleteExperiment(Integer experimentId) {
-		return experimentDao.deleteExperiment(experimentId);
+	public Integer deleteExperiment(ExperimentRequest experimentRequest) {
+		return this.update(experimentRequest);
+	}
+	
+	private Integer update(ExperimentRequest experimentRequest) {
+		
+		experimentDao.updateExperiment(experimentRequest);
+		experimentDao.batchUpdate(experimentRequest.getExperimentDetailsList());
+		experimentDao.batchExcipientUpdate(experimentRequest.getExcipients());
+
+		return 1;
 	}
 
 }

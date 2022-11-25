@@ -15,6 +15,6 @@ public interface ProductDao {
 	
 	Integer updateProduct(ProductRequest productRequest);
 	
-	Integer deleteProduct(Integer productId);
+	Integer deleteProduct(ProductRequest productRequest);
 	
 }

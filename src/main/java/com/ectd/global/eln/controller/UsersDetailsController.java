@@ -46,8 +46,8 @@ public class UsersDetailsController extends BaseController {
 	}
 
 	@DeleteMapping("/delete-users-details")
-	public ResponseEntity<String> deleteUsersDetails(@RequestParam Integer userId) throws Exception {
-		return getResponseEntity(usersDetailsService.deleteUsersDetails(userId), "Users Details Delete");
+	public ResponseEntity<String> deleteUsersDetails(@RequestBody UsersDetailsRequest usersDetailsRequest) throws Exception {
+		return getResponseEntity(usersDetailsService.deleteUsersDetails(usersDetailsRequest), "Users Details Delete");
 	}
 
 }

@@ -3,9 +3,10 @@ package com.ectd.global.eln.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
+import com.ectd.global.eln.dto.DosageTestDto;
 import com.ectd.global.eln.dto.TestDto;
 import com.ectd.global.eln.request.DosageTestRequest;
 import com.ectd.global.eln.request.TestRequest;
@@ -37,30 +40,30 @@ public class LabTestDaoImpl implements LabTestDao {
 	@Qualifier("namedParameterJdbcTemplate")
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Value(value="${getTestById}")
-	private String getTestByIdQuery;
+	@Value(value="${get.test.by.id}")
+	private String GET_TEST_BY_ID_QUERY;
 
-	@Value(value="${getTestList}")
-	private String getTestListQuery;
+	@Value(value="${get.test.list}")
+	private String GET_TEST_LIST_QUERY;
 
-	@Value(value="${createTest}")
-	private String createTestQuery;
+	@Value(value="${create.test}")
+	private String CREATE_TEST_QUERY;
 
-	@Value(value="${updateTest}")
-	private String updateTestQuery;
+	@Value(value="${update.test}")
+	private String UPDATE_TEST_QUERY;
 
-	@Value(value="${deleteTest}")
-	private String deleteTestQuery;
+	@Value(value="${delete.test}")
+	private String DELETE_TEST_QUERY;
 
-	@Value(value="${createDosageTest}")
-	private String createDosageTestQuery;
+	@Value(value="${create.dosage.test}")
+	private String CREATE_DOSAGE_TEST_QUERY;
 
-	@Value(value="${deleteDosageTest}")
-	private String deleteDosageTestQuery;
-
+	@Value(value="${update.dosage.test}")
+	private String UPDATE_DOSAGE_TEST_QUERY;
+	
 	@Override
 	public TestDto getTestById(Integer testId) {
-		List<TestDto> tests = jdbcTemplate.query(getTestByIdQuery + testId,
+		List<TestDto> tests = jdbcTemplate.query(GET_TEST_BY_ID_QUERY + testId,
 				new TestRowMapper());
 
 		if(tests.isEmpty()) {
@@ -72,7 +75,7 @@ public class LabTestDaoImpl implements LabTestDao {
 
 	@Override
 	public List<TestDto> getTests() {
-		return jdbcTemplate.query(getTestListQuery, new TestRowMapper());
+		return jdbcTemplate.query(GET_TEST_LIST_QUERY, new TestRowMapper());
 	}
 
 	@Override
@@ -87,7 +90,7 @@ public class LabTestDaoImpl implements LabTestDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp(), Types.TIMESTAMP);
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		namedParameterJdbcTemplate.update(createTestQuery, parameters, keyHolder);
+		namedParameterJdbcTemplate.update(CREATE_TEST_QUERY, parameters, keyHolder);
 
 		return keyHolder.getKey().intValue();
 	}
@@ -103,12 +106,12 @@ public class LabTestDaoImpl implements LabTestDao {
 		parameters.addValue("updateUser", testRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
-		return namedParameterJdbcTemplate.update(updateTestQuery, parameters);
+		return namedParameterJdbcTemplate.update(UPDATE_TEST_QUERY, parameters);
 	}
 
 	@Override
 	public Integer deleteTest(Integer testId) {
-		return jdbcTemplate.update(deleteTestQuery, new Object[] {testId});
+		return jdbcTemplate.update(DELETE_TEST_QUERY, new Object[] {testId});
 	}
 
 	@Override
@@ -117,7 +120,7 @@ public class LabTestDaoImpl implements LabTestDao {
 		for(TestRequest request: testRequests) {
 			Integer testId = this.createTest(request);
 
-			request.getDosageTestReqeustList().stream().forEach(dt -> {
+			request.getDosageTests().stream().forEach(dt -> {
 				dt.setTestId(testId);
 				dt.setInsertDate(ElnUtils.getTimeStamp());
 				dt.setInsertUser("ELN");
@@ -125,7 +128,7 @@ public class LabTestDaoImpl implements LabTestDao {
 				dt.setUpdateUser("ELN");
 			});
 
-			this.batchExecution(request.getDosageTestReqeustList(), createDosageTestQuery);
+			this.batchExecution(request.getDosageTests(), CREATE_DOSAGE_TEST_QUERY);
 		}
 
 		return true;
@@ -134,37 +137,51 @@ public class LabTestDaoImpl implements LabTestDao {
 	@Override
 	public Boolean updateTests(TestRequest testRequest) {
 
-		Integer count = this.deleteTest(testRequest.getTestId());
-		if(count > 0) {
-			testRequest.getDosageTestReqeustList().stream().forEach(dt -> {
+		this.updateTest(testRequest);
+
+		List<DosageTestRequest> updateDosageTests = testRequest.getDosageTests().stream().filter(dt -> !(ObjectUtils.isEmpty(dt.getTestId())) ).collect(Collectors.toList());
+		List<DosageTestRequest> insertDosageTests = testRequest.getDosageTests().stream().filter(dt -> ObjectUtils.isEmpty(dt.getTestId())).collect(Collectors.toList());
+
+		int[] updatedRows = null;
+		if(!CollectionUtils.isEmpty(updateDosageTests)) {
+
+			updateDosageTests.stream().forEach(dt -> {
 				dt.setUpdateDate(ElnUtils.getTimeStamp());
 				dt.setUpdateUser("ELN");
 			});
 
-			this.batchExecution(testRequest.getDosageTestReqeustList(), deleteDosageTestQuery);
+			updatedRows = this.batchExecution(testRequest.getDosageTests(), UPDATE_DOSAGE_TEST_QUERY);;
 		}
-		
-		this.createTests(Arrays.asList(testRequest));
-		
-		return true;
+
+		if(!CollectionUtils.isEmpty(insertDosageTests)) {
+			insertDosageTests.stream().forEach(dt -> {
+				dt.setUpdateDate(ElnUtils.getTimeStamp());
+				dt.setUpdateUser("ELN");
+				dt.setInsertUser("ELN");
+				dt.setInsertDate(ElnUtils.getTimeStamp());
+			});
+			this.batchExecution(testRequest.getDosageTests(), CREATE_DOSAGE_TEST_QUERY);
+		}
+
+
+		if(updatedRows != null && updatedRows.length > 0) {
+			return true;
+		}
+
+		return false;
 	}
 	
 	@Override
 	public Boolean deleteTests(TestRequest testRequest) {
 
-//		testRequest.getDosageTestReqeustList().stream().forEach(dt -> {
-//			dt.setUpdateDate(ElnUtils.getTimeStamp());
-//			dt.setUpdateUser("ELN");
-//		});
-
-		int[] count = this.batchExecution(testRequest.getDosageTestReqeustList(), deleteDosageTestQuery);
+		int[] count = this.batchExecution(testRequest.getDosageTests(), UPDATE_DOSAGE_TEST_QUERY);
 	
 		if(count.length > 0) {	
 			this.deleteTest(testRequest.getTestId());
 		}
 		return true;
 	}
-
+	
 	private int[] batchExecution(List<DosageTestRequest> dosageTestRequests, String query) {
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(dosageTestRequests.toArray());
 		return this.namedParameterJdbcTemplate.batchUpdate(query, batch);
@@ -180,7 +197,18 @@ public class LabTestDaoImpl implements LabTestDao {
 			testDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			testDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			testDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
-
+			
+			DosageTestDto dosageTestDto = new DosageTestDto();
+			
+			dosageTestDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
+			dosageTestDto.setTestId(resultSet.getInt("DT_TEST_ID"));
+			dosageTestDto.setStatus(resultSet.getString("DT_STATUS"));
+			dosageTestDto.setInsertUser(resultSet.getString("DT_INSERT_USER"));
+			dosageTestDto.setInsertDate(resultSet.getDate("DT_INSERT_DATE"));
+			dosageTestDto.setUpdateUser(resultSet.getString("DT_UPDATE_USER"));
+			dosageTestDto.setUpdateDate(resultSet.getDate("DT_UPDATE_DATE"));
+			
+			testDto.setDosageTest(dosageTestDto);
 			return testDto;
 		};
 	}

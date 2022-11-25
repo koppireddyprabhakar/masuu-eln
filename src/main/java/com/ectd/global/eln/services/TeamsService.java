@@ -15,7 +15,7 @@ public interface TeamsService {
 	
 	Integer updateTeams(TeamsRequest teamsRequest);
 	
-	Integer deleteTeams(Integer teamsId);
+	Integer deleteTeams(TeamsRequest teamsRequest);
 
 	List<TeamsDto> getFormulationTeams();
 	

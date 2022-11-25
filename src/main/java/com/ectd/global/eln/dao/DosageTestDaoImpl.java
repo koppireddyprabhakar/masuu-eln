@@ -67,9 +67,9 @@ public class DosageTestDaoImpl implements DosageTestDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("testId", dosageTestRequest.getTestId());
 		parameters.addValue("dosageId", dosageTestRequest.getDosageId());
-		parameters.addValue("insertUser", dosageTestRequest.getInsertUser());
+		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateUser", dosageTestRequest.getUpdateUser());
+		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
 		return namedParameterJdbcTemplate.update(createDosageTestQuery, parameters);

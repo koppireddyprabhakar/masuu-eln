@@ -15,7 +15,7 @@ public interface DosageService {
 	
 	Integer updateDosage(DosageRequest dosageRequest);
 	
-	Integer deleteDosage(Integer dosageId);
+	Boolean deleteDosage(DosageRequest dosageRequest);
 	
 	List<DosageDto> getDosagesAndFormulations();
 	

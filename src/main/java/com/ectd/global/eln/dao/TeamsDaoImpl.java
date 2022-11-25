@@ -3,9 +3,7 @@ package com.ectd.global.eln.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +17,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dto.TeamsDto;
 import com.ectd.global.eln.request.TeamDosage;
@@ -38,11 +35,11 @@ public class TeamsDaoImpl implements TeamsDao {
 	@Qualifier("namedParameterJdbcTemplate")
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Value(value="${getTeamsById}")
-	private String getTeamsByIdQuery;
+	@Value(value="${get.teams.by.id}")
+	private String GET_TEAMS_BY_ID_QUERY;
 
-	@Value(value="${getTeamsList}")
-	private String getTeamsListQuery;
+	@Value(value="${get.teams.list}")
+	private String GET_TEAMS_LIST_QUERY;
 
 	@Value(value="${createTeams}")
 	private String createTeamsQuery;
@@ -64,7 +61,7 @@ public class TeamsDaoImpl implements TeamsDao {
 
 	@Override
 	public TeamsDto getTeamsById(Integer teamsId) {
-		List<TeamsDto> teamsList = jdbcTemplate.query(getTeamsByIdQuery + teamsId,
+		List<TeamsDto> teamsList = jdbcTemplate.query(GET_TEAMS_BY_ID_QUERY + teamsId,
 				new TeamsRowMapper());
 
 		if(teamsList.isEmpty()) {
@@ -76,7 +73,7 @@ public class TeamsDaoImpl implements TeamsDao {
 
 	@Override
 	public List<TeamsDto> getTeamsList() {
-		return jdbcTemplate.query(getTeamsListQuery, new TeamsRowMapper());
+		return jdbcTemplate.query(GET_TEAMS_LIST_QUERY, new TeamsRowMapper());
 	}
 
 	@Override
@@ -100,9 +97,9 @@ public class TeamsDaoImpl implements TeamsDao {
 		parameters.addValue("teamName", teamsRequest.getTeamName());
 		parameters.addValue("deptId", teamsRequest.getDeptId());
 		parameters.addValue("status", teamsRequest.getStatus());
-		parameters.addValue("insertUser", teamsRequest.getInsertUser());
+		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateUser", teamsRequest.getUpdateUser());
+		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(createTeamsQuery, parameters, keyHolder);
@@ -110,7 +107,7 @@ public class TeamsDaoImpl implements TeamsDao {
 		return keyHolder.getKey().intValue();
 	}
 
-	private int[] batchInsert(List<TeamDosage> teamDosages, Integer teamId) {
+	public int[] batchInsert(List<TeamDosage> teamDosages, Integer teamId) {
 
 		teamDosages.forEach(td -> 
 		{	
@@ -127,42 +124,19 @@ public class TeamsDaoImpl implements TeamsDao {
 
 	@Override
 	public Integer updateTeams(TeamsRequest teamsRequest) {
-		this.update(teamsRequest);
-
-		List<TeamDosage> updateTeamDosages = teamsRequest.getTeamDosages().stream().filter(td -> !(ObjectUtils.isEmpty(td.getTeamId())) ).collect(Collectors.toList());
-		List<TeamDosage> insertTeamDosages = teamsRequest.getTeamDosages().stream().filter(td -> ObjectUtils.isEmpty(td.getTeamId())).collect(Collectors.toList());
-
-		int[] updatedRows = null;
-
-		if(!CollectionUtils.isEmpty(updateTeamDosages)) {
-			updatedRows = this.batchUpdate(updateTeamDosages);
-		}
-
-		if(!CollectionUtils.isEmpty(insertTeamDosages)) {
-			this.batchInsert(insertTeamDosages, teamsRequest.getTeamId());
-		}
-
-		if(updatedRows != null && updatedRows.length > 0) {
-			return updatedRows.length;
-		}
-
-		return 0;
-	}
-
-	private Integer update(TeamsRequest teamsRequest) {
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("teamId", teamsRequest.getTeamId());
 		parameters.addValue("teamName", teamsRequest.getTeamName());
 		parameters.addValue("deptId", teamsRequest.getDeptId());
 		parameters.addValue("status", teamsRequest.getStatus());
-		parameters.addValue("updateUser", teamsRequest.getUpdateUser());
+		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateTeamsQuery, parameters);
 	}
 
-	private int[] batchUpdate(List<TeamDosage> teamDosages) {
+	public int[] batchUpdate(List<TeamDosage> teamDosages) {
 
 		teamDosages.forEach(td -> {
 			td.setUpdateUser("ELN");
@@ -191,11 +165,9 @@ public class TeamsDaoImpl implements TeamsDao {
 			teams.setTeamName(resultSet.getString("TEAM_NAME"));
 			teams.setDeptId(resultSet.getInt("DEPT_ID"));
 			teams.setStatus(resultSet.getString("STATUS"));
-			teams.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			teams.setInsertUser(resultSet.getString("INSERT_USER"));
-			teams.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			teams.setUpdateUser(resultSet.getString("UPDATE_USER"));
-
+			teams.setDosageId(resultSet.getInt("DOSAGE_ID"));
+			teams.setDosageName(resultSet.getString("DOSAGE_NAME"));
+			teams.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
 			return  teams;
 		};
 	}

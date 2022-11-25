@@ -46,8 +46,8 @@ public class ProductController extends BaseController {
 	}
 	
 	@DeleteMapping("/delete-product")
-	public ResponseEntity<String> deleteProduct(@RequestParam Integer productId) throws Exception {
-		return getResponseEntity(productService.deleteProduct(productId), "Product Delete");
+	public ResponseEntity<String> deleteProduct(@RequestBody ProductRequest productRequest) {
+		return getResponseEntity(productService.deleteProduct(productRequest), "Product Delete");
 	}
 	
 }

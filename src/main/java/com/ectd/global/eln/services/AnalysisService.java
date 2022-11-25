@@ -16,5 +16,7 @@ public interface AnalysisService {
 	Integer updateAnalysis(AnalysisRequest analysisRequest);
 	
 	Integer deleteAnalysis(Integer analysisId);
+	
+	Integer deleteAnalysisDetails(AnalysisRequest analysisRequest);
 
 }

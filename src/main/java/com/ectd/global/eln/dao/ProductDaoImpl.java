@@ -69,7 +69,7 @@ public class ProductDaoImpl implements ProductDao {
 		parameters.addValue("productName", productRequest.getProductName());
 		parameters.addValue("productCode", productRequest.getProductCode());
 		parameters.addValue("status", productRequest.getStatus());
-		parameters.addValue("insertUser", productRequest.getInsertUser());
+		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(createProductQuery, parameters);
@@ -87,8 +87,8 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public Integer deleteProduct(Integer productId) {
-		return jdbcTemplate.update(deleteProductQuery, new Object[] {productId});
+	public Integer deleteProduct(ProductRequest productRequest) {
+		return this.updateProduct(productRequest);
 	}
 
 	class ProductRowMapper implements RowMapper<ProductDto> {

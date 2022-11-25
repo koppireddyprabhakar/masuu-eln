@@ -43,13 +43,8 @@ public class DosageServiceImpl implements DosageService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer deleteDosage(Integer dosageId) {
-		
-		if(this.getDosageById(dosageId) != null) {
-			return dosageDao.deleteDosage(dosageId);
-		}
-
-		return null;
+	public Boolean deleteDosage(DosageRequest dosageRequest) {
+		return this.updateDosageWithFormulations(dosageRequest);
 	}
 
 	@Override
