@@ -10,4 +10,7 @@ public class ElnUtils {
 		return new Timestamp(System.currentTimeMillis());
 	}
 	
+	public static enum STATUS {
+		ACTIVE, INACTIVE
+	}
 }

@@ -14,13 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.FormulationDto;
-import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.request.FormulationRequest;
-import com.ectd.global.eln.services.ExperimentService;
 import com.ectd.global.eln.services.FormulationService;
-import com.ectd.global.eln.services.ProjectService;
 
 @RestController
 @RequestMapping("/formulation")
@@ -28,12 +24,6 @@ public class FormulationController extends BaseController {
 	
 	@Autowired
 	FormulationService formulationService;
-	
-	@Autowired
-	ProjectService projectService;
-	
-	@Autowired
-	ExperimentService experimentService;
 	
 	@GetMapping("/get-formulation-by-id")
 	public ResponseEntity<FormulationDto> getFormulationById(@RequestParam Integer formulationId) throws Exception {
@@ -58,17 +48,6 @@ public class FormulationController extends BaseController {
 	@DeleteMapping("/delete-formulation")
 	public ResponseEntity<String> deleteFormulation(@RequestParam Integer formulationId) throws Exception {
 		return getResponseEntity(formulationService.deleteFormulation(formulationId), "Formulation Delete");
-	}
-	
-	@GetMapping("/get-projects-by-dosage-or-team-id")
-	public ResponseEntity<List<ProjectDto>> getProjectsByDosageId(@RequestParam(required = false) Integer dosageId, 
-			@RequestParam(required = false) Integer teamId) {
-		return new ResponseEntity<List<ProjectDto>>(projectService.getProjects(dosageId, teamId), HttpStatus.OK);
-	}
-	
-	@GetMapping("/get-experiments-by-user-id")
-	public ResponseEntity<List<ExperimentDto>> getExperimentsByUserId(@RequestParam(required = false) Integer userId) {
-		return new ResponseEntity<List<ExperimentDto>>(experimentService.getExperiments(userId), HttpStatus.OK);
 	}
 	
 }

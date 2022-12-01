@@ -58,6 +58,18 @@ public class ExperimentServiceImpl implements ExperimentService {
 		return this.update(experimentRequest);
 	}
 	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public List<ExperimentDto> getExperimentsWithProject() {
+		return experimentDao.getExperimentsWithProject();
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public List<ExperimentDto> getExperimentsInfo(Integer experimentId) {
+		return experimentDao.getExperimentsInfo(experimentId);
+	}
+	
 	private Integer update(ExperimentRequest experimentRequest) {
 		
 		experimentDao.updateExperiment(experimentRequest);

@@ -2,6 +2,7 @@ package com.ectd.global.eln.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,11 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dto.ExperimentDto;
+import com.ectd.global.eln.dto.ExperimentExcipientDto;
+import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
@@ -61,7 +65,13 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	private String UPDATE_EXPERIMENT_EXCIPIENT_QUERY;
 
 	@Value(value="${update.experiment.details}")
-	private String UPDATE_EXPERIMENT_DETAILS;
+	private String UPDATE_EXPERIMENT_DETAILS_QUERY;
+	
+	@Value("${get.experiment.project}")
+	private String GET_EXPERIMENT_PROJECT_QUERY;
+	
+	@Value("${get.experiment.info}")
+	private String GET_EXPERIMENT_INFO_QUERY;
 
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
@@ -160,7 +170,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(experimentDetails);
-		return this.namedParameterJdbcTemplate.batchUpdate(UPDATE_EXPERIMENT_DETAILS, batch);
+		return this.namedParameterJdbcTemplate.batchUpdate(UPDATE_EXPERIMENT_DETAILS_QUERY, batch);
 	}
 
 	@Override
@@ -187,21 +197,130 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 	class ExperimentRowMapper implements RowMapper<ExperimentDto> {
 		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			ExperimentDto experimentDto = new ExperimentDto();
-			experimentDto.setExpId(resultSet.getInt("EXP_ID"));
-			experimentDto.setExperimentName(resultSet.getString("EXPERIMENT_NAME"));
-			experimentDto.setProjectId(resultSet.getInt("PROJECT_ID"));
-			experimentDto.setTeamId(resultSet.getInt("TEAM_ID"));
-			experimentDto.setUserId(resultSet.getInt("USER_ID"));
-			experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
-			experimentDto.setSummary(resultSet.getString("SUMMARY"));
-			experimentDto.setStatus(resultSet.getString("STATUS"));
-			experimentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			experimentDto.setInsertUser(resultSet.getString("INSERT_USER"));
-			experimentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			experimentDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+			return getExperimentDto(resultSet);
+		};
+	}
 
+	@Override
+	public List<ExperimentDto> getExperimentsWithProject() {
+		return jdbcTemplate.query(GET_EXPERIMENT_PROJECT_QUERY, new ExperimentProjectRowMapper());
+	}
+
+	@Override
+	public List<ExperimentDto> getExperimentsInfo(Integer experimentId) {
+		
+		return jdbcTemplate.query(GET_EXPERIMENT_INFO_QUERY + experimentId, new ExperimentIdRowMapper());
+	}
+	
+	class ExperimentProjectRowMapper implements RowMapper<ExperimentDto> {
+		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			
+			ExperimentDto experimentDto = getExperimentDto(resultSet);
+			
+			experimentDto.setProject(getProject(resultSet));
+			
 			return experimentDto;
 		};
 	}
+	
+	class ExperimentIdRowMapper implements RowMapper<ExperimentDto> {
+		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			
+			ExperimentDto experimentDto = getExperimentDto(resultSet);
+			experimentDto.setProject(getProject(resultSet));
+			
+			List<ExperimentDetails> experimentDetailsList = new ArrayList<>();
+		    List<ExperimentExcipientDto> excipients = new ArrayList<>();
+			
+		    ExperimentDetails experimentDetails = getExperimentDetails(resultSet);
+		    ExperimentExcipientDto experimentExcipientDto = getExperimentExcipientDto(resultSet);
+		    
+		    if(CollectionUtils.isEmpty( experimentDto.getExperimentDetailsList())) {
+		    	experimentDetailsList.add(experimentDetails);
+		    	experimentDto.setExperimentDetailsList(experimentDetailsList);
+		    } else {
+		    	experimentDto.getExperimentDetailsList().add(experimentDetails);
+		    }
+		    
+		    if(CollectionUtils.isEmpty( experimentDto.getExperimentExcipientList())) {
+		    	excipients.add(experimentExcipientDto);
+		    	experimentDto.setExperimentExcipientList(excipients);
+		    } else {
+		    	experimentDto.getExperimentExcipientList().add(experimentExcipientDto);
+		    }
+		    
+			return experimentDto;
+		};
+	}
+	
+	private ExperimentDto getExperimentDto(ResultSet resultSet) throws SQLException {
+		
+		ExperimentDto experimentDto = new ExperimentDto();
+		experimentDto.setExpId(resultSet.getInt("EXP_ID"));
+		experimentDto.setExperimentName(resultSet.getString("EXPERIMENT_NAME"));
+		experimentDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+		experimentDto.setTeamId(resultSet.getInt("TEAM_ID"));
+		experimentDto.setUserId(resultSet.getInt("USER_ID"));
+		experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
+		experimentDto.setSummary(resultSet.getString("SUMMARY"));
+		experimentDto.setStatus(resultSet.getString("STATUS"));
+		experimentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+		experimentDto.setInsertUser(resultSet.getString("INSERT_USER"));
+		experimentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
+		experimentDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+
+		return experimentDto;
+	}
+	
+	private ProjectDto getProject(ResultSet resultSet) throws SQLException {
+		ProjectDto projectDto = new ProjectDto();
+		projectDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+		projectDto.setProjectName(resultSet.getString("PROJECT_NAME"));
+		projectDto.setProductId(resultSet.getInt("PRODUCT_ID"));
+		projectDto.setProductName(resultSet.getString("PRODUCT_NAME"));
+		projectDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
+		projectDto.setStatus(resultSet.getString("STATUS"));
+		projectDto.setStrength(resultSet.getString("STRENGTH"));
+		projectDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
+		projectDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
+		projectDto.setFormulationId(resultSet.getInt("FORMULATION_ID"));
+		projectDto.setFormulationName(resultSet.getString("FORMULATION_NAME"));
+		projectDto.setTeamId(resultSet.getInt("TEAM_ID"));
+		projectDto.setTeamName(resultSet.getString("TEAM_NAME"));
+		projectDto.setMarketId(resultSet.getInt("MARKET_ID"));
+		projectDto.setMarkertName(resultSet.getString("MARKET_NAME"));
+		
+		return projectDto;
+	}
+	
+	private ExperimentExcipientDto getExperimentExcipientDto(ResultSet resultSet) throws SQLException {
+		
+		ExperimentExcipientDto experimentExcipientDto = new ExperimentExcipientDto();
+		experimentExcipientDto.setExcipientId(resultSet.getInt("EXCIPIENT_ID"));
+		experimentExcipientDto.setExperimentId(resultSet.getInt("EXP_ID"));
+//		experimentExcipientDto.setExcipientsName(resultSet.getString("EXCIPIENTS_NAME"));
+		experimentExcipientDto.setMaterialType(resultSet.getString("MATERIAL_TYPE"));
+		experimentExcipientDto.setMaterialName(resultSet.getString("MATERIAL_NAME"));
+		experimentExcipientDto.setBatchNo(resultSet.getString("BATCH_NO"));
+		experimentExcipientDto.setSourceName(resultSet.getString("SOURCE_NAME"));
+		experimentExcipientDto.setPotency(resultSet.getString("POTENCY"));
+		experimentExcipientDto.setGrade(resultSet.getString("GRADE"));
+		experimentExcipientDto.setStatus(resultSet.getString("STATUS"));
+		
+		return experimentExcipientDto;
+	}
+	
+	private ExperimentDetails getExperimentDetails(ResultSet resultSet) throws SQLException {
+		
+		ExperimentDetails experimentDetails = new ExperimentDetails();
+		experimentDetails.setExperimentDetailId(resultSet.getInt("EXP_DETAIL_ID"));
+		experimentDetails.setExperimentId(resultSet.getInt("EXP_ID"));
+		experimentDetails.setName(resultSet.getString("NAME"));
+		experimentDetails.setFileContent(resultSet.getBytes("LOB_DETAILS"));
+		experimentDetails.setStatus(resultSet.getString("STATUS"));
+		
+		return experimentDetails;
+		
+	}
+	
 }

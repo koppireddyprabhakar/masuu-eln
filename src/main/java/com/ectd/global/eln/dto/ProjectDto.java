@@ -3,6 +3,7 @@ package com.ectd.global.eln.dto;
 import java.io.Serializable;
 
 import com.ectd.global.eln.request.Base;
+import com.ectd.global.eln.request.ProjectTeamRequest;
 
 public class ProjectDto extends Base implements Serializable {
 
@@ -23,6 +24,8 @@ public class ProjectDto extends Base implements Serializable {
     private String teamName;
     private Integer marketId;
     private String markertName;
+    
+    private ProjectTeamRequest projectTeam;
     
     public Integer getProjectId() {
 		return projectId;
@@ -127,6 +130,13 @@ public class ProjectDto extends Base implements Serializable {
 	}
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
+	}
+	
+	public ProjectTeamRequest getProjectTeam() {
+		return projectTeam;
+	}
+	public void setProjectTeam(ProjectTeamRequest projectTeam) {
+		this.projectTeam = projectTeam;
 	}
 	
 }

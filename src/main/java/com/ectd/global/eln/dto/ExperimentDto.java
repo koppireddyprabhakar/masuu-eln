@@ -1,8 +1,10 @@
 package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.ectd.global.eln.request.Base;
+import com.ectd.global.eln.request.ExperimentDetails;
 
 public class ExperimentDto extends Base implements Serializable {
 
@@ -15,6 +17,10 @@ public class ExperimentDto extends Base implements Serializable {
     private String experimentName;
     private String experimentStatus;
     private String summary;
+    
+    private List<ExperimentDetails> experimentDetailsList;
+    private List<ExperimentExcipientDto> experimentExcipientList;
+    private ProjectDto project;
 
     public Integer getExpId() {
 		return expId;
@@ -63,6 +69,27 @@ public class ExperimentDto extends Base implements Serializable {
 	}
 	public void setSummary(String summary) {
 		this.summary = summary;
+	}
+	
+	public List<ExperimentDetails> getExperimentDetailsList() {
+		return experimentDetailsList;
+	}
+	public void setExperimentDetailsList(List<ExperimentDetails> experimentDetailsList) {
+		this.experimentDetailsList = experimentDetailsList;
+	}
+		
+	public ProjectDto getProject() {
+		return project;
+	}
+	public void setProject(ProjectDto project) {
+		this.project = project;
+	}
+	
+	public List<ExperimentExcipientDto> getExperimentExcipientList() {
+		return experimentExcipientList;
+	}
+	public void setExperimentExcipientList(List<ExperimentExcipientDto> experimentExcipientList) {
+		this.experimentExcipientList = experimentExcipientList;
 	}
 
 }

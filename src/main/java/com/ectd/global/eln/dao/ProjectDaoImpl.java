@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.request.ProjectRequest;
+import com.ectd.global.eln.request.ProjectTeamRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
@@ -77,14 +78,14 @@ public class ProjectDaoImpl implements ProjectDao {
 		StringBuilder sb = new StringBuilder(GET_PROJECT_LIST_QUERY);
 
 		if(dosageId != null) {
-			sb.append(" AND DOSAGE_ID = ").append(dosageId);
+			sb.append(" AND P.DOSAGE_ID = ").append(dosageId);
 		}
 		
 		if(teamId != null) {
-			sb.append(" AND TEAM_ID = ").append(teamId);
+			sb.append(" AND P.TEAM_ID = ").append(teamId);
 		}
 		
-		sb.append(" ORDER BY INSERT_DATE DESC");
+		sb.append(" ORDER BY P.INSERT_DATE DESC");
 
 		return jdbcTemplate.query(sb.toString(), new ProjectRowMapper());
 	}
@@ -117,7 +118,8 @@ public class ProjectDaoImpl implements ProjectDao {
 		
 		Integer projectId = keyHolder.getKey().intValue();
 		
-		this.createProjectTeam(projectId, projectRequest.getTeamId());
+		projectRequest.getProjectTeam().setProjectId(projectId);
+		this.createProjectTeam(projectRequest.getProjectTeam());
 		
 		return projectId;
 	}
@@ -146,14 +148,14 @@ public class ProjectDaoImpl implements ProjectDao {
 
 		namedParameterJdbcTemplate.update(UPDATE_PROJECT_QUERY, parameters);
 		
-		return this.updateProjectTeam(projectRequest.getProjectId(), projectRequest.getTeamId());
+		return this.updateProjectTeam(projectRequest.getProjectTeam());
 	}
 	
-	private Integer updateProjectTeam(Integer projectId, Integer teamId) {
+	private Integer updateProjectTeam(ProjectTeamRequest projectTeamRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("projectId", projectId);
-		parameters.addValue("teamId", teamId);
-		parameters.addValue("status", "ACTIVE");
+		parameters.addValue("projectId",  projectTeamRequest.getProjectId());
+		parameters.addValue("teamId", projectTeamRequest.getTeamId());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.name());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 
@@ -165,20 +167,20 @@ public class ProjectDaoImpl implements ProjectDao {
 		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectRequest.getProjectId());
-		parameters.addValue("status", "INACTIVE");
+		parameters.addValue("status", ElnUtils.STATUS.INACTIVE.name());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		
 		namedParameterJdbcTemplate.update(INACTIVATE_PROJECT_QUERY, parameters);
 		
-		return this.inActivateProjectTeam(projectRequest);
+		return this.inActivateProjectTeam(projectRequest.getProjectTeam());
 	}
 	
-	private Integer inActivateProjectTeam(ProjectRequest projectRequest) {
+	private Integer inActivateProjectTeam(ProjectTeamRequest projectTeamRequest) {
 		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("projectId", projectRequest.getProjectId());
-		parameters.addValue("status", "INACTIVE");
+		parameters.addValue("projectId", projectTeamRequest.getProjectId());
+		parameters.addValue("status", ElnUtils.STATUS.INACTIVE.name());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		
@@ -191,11 +193,11 @@ public class ProjectDaoImpl implements ProjectDao {
 	}
 	
 //	@Override
-	private Integer createProjectTeam(Integer projectId, Integer teamId) {
+	private Integer createProjectTeam(ProjectTeamRequest projectTeamRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("projectId", projectId);
-		parameters.addValue("teamId", teamId);
-		parameters.addValue("status", "ACTIVE");
+		parameters.addValue("projectId", projectTeamRequest.getProjectId());
+		parameters.addValue("teamId", projectTeamRequest.getTeamId());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.name());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
@@ -228,6 +230,12 @@ public class ProjectDaoImpl implements ProjectDao {
 			projectDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			projectDto.setInsertUser(resultSet.getString("INSERT_USER"));
 
+			ProjectTeamRequest projectTeamRequest = new ProjectTeamRequest();
+			projectTeamRequest.setProjectTeamId(resultSet.getInt("PROJECT_TEAM_ID"));
+			projectTeamRequest.setProjectId(resultSet.getInt("PROJECTID"));
+			projectTeamRequest.setTeamId(resultSet.getInt("TEAMID"));
+			projectDto.setProjectTeam(projectTeamRequest);
+			
 			return  projectDto;
 		};
 	}

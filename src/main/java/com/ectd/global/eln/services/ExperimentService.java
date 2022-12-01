@@ -17,4 +17,8 @@ public interface ExperimentService {
 
 	Integer deleteExperiment(ExperimentRequest experimentRequest);
 	
+	List<ExperimentDto> getExperimentsWithProject();
+
+	List<ExperimentDto> getExperimentsInfo(Integer experimentId);
+	
 }
