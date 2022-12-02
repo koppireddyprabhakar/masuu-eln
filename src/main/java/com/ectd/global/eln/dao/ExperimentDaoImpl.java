@@ -110,6 +110,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("experimentName", experimentRequest.getExperimentName());
 		parameters.addValue("experimentStatus", experimentRequest.getExperimentStatus());
 		parameters.addValue("summary", experimentRequest.getSummary());
+		parameters.addValue("batchSize", experimentRequest.getBatchSize());
+		parameters.addValue("batchNumber", experimentRequest.getBatchNumber());
 		parameters.addValue("status", experimentRequest.getStatus());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
@@ -183,6 +185,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("experimentName", experimentRequest.getExperimentName());
 		parameters.addValue("experimentStatus", experimentRequest.getExperimentStatus());
 		parameters.addValue("summary", experimentRequest.getSummary());
+		parameters.addValue("batchSize", experimentRequest.getBatchSize());
+		parameters.addValue("batchNumber", experimentRequest.getBatchNumber());
 		parameters.addValue("status", experimentRequest.getStatus());
 		parameters.addValue("updateUser", experimentRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
@@ -263,6 +267,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		experimentDto.setUserId(resultSet.getInt("USER_ID"));
 		experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
 		experimentDto.setSummary(resultSet.getString("SUMMARY"));
+		experimentDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
+		experimentDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
 		experimentDto.setStatus(resultSet.getString("STATUS"));
 		experimentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 		experimentDto.setInsertUser(resultSet.getString("INSERT_USER"));

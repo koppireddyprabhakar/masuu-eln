@@ -17,6 +17,8 @@ public class ExperimentDto extends Base implements Serializable {
     private String experimentName;
     private String experimentStatus;
     private String summary;
+    private String batchSize;
+    private String batchNumber;
     
     private List<ExperimentDetails> experimentDetailsList;
     private List<ExperimentExcipientDto> experimentExcipientList;
@@ -83,6 +85,20 @@ public class ExperimentDto extends Base implements Serializable {
 	}
 	public void setProject(ProjectDto project) {
 		this.project = project;
+	}
+	
+	public String getBatchSize() {
+		return batchSize;
+	}
+	public void setBatchSize(String batchSize) {
+		this.batchSize = batchSize;
+	}
+	
+	public String getBatchNumber() {
+		return batchNumber;
+	}
+	public void setBatchNumber(String batchNumber) {
+		this.batchNumber = batchNumber;
 	}
 	
 	public List<ExperimentExcipientDto> getExperimentExcipientList() {
