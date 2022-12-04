@@ -55,12 +55,16 @@ public class ExcipientServiceImpl implements ExcipientService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer saveExcipient(ExcipientRequest excipientRequest) {
-		if(excipientRequest.getExcipientId() == null) {
-			this.createExcipient(excipientRequest);
-		} else {
-			this.updateExcipient(excipientRequest);
-		}
+	public Integer saveExcipient(List<ExcipientRequest> excipientRequests) {
+		
+		excipientRequests.stream().forEach(e -> {
+			if(e.getExcipientId() == null) {
+				this.createExcipient(e);
+			} else {
+				this.updateExcipient(e);
+			}
+		});
+		
 		return 1;
 	}
 

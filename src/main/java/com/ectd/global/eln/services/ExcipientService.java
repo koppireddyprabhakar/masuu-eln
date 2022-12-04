@@ -19,5 +19,5 @@ public interface ExcipientService {
 
 	List<ExcipientDto> getExcipientsByMaterialName(String materialName);
 	
-	Integer saveExcipient(ExcipientRequest excipientRequest);
+	Integer saveExcipient(List<ExcipientRequest> excipientRequests);
 }

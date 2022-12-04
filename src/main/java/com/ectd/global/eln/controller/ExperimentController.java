@@ -122,8 +122,8 @@ public class ExperimentController extends BaseController {
 	}
 	
 	@PostMapping("/save-excipient")
-	public ResponseEntity<String> saveExcipient(@RequestBody ExcipientRequest excipientRequest) {
-		return getResponseEntity(excipientService.saveExcipient(excipientRequest), "Excipient Create");
+	public ResponseEntity<String> saveExcipient(@RequestBody List<ExcipientRequest> excipientRequests) {
+		return getResponseEntity(excipientService.saveExcipient(excipientRequests), "Excipient Create");
 	}
 	
 }
