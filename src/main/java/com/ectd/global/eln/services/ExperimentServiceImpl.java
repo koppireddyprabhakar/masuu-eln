@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dto.ExperimentDto;
@@ -35,14 +36,18 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 		Integer expermentId = experimentDao.createExperiment(experimentRequest);
 		
+		if(!CollectionUtils.isEmpty(experimentRequest.getExperimentDetailsList())) {
 		experimentRequest.getExperimentDetailsList()
 		.stream().forEach(ed -> ed.setExperimentId(expermentId));
 		experimentDao.batchInsert(experimentRequest.getExperimentDetailsList());
+		}
 		
+		if(!CollectionUtils.isEmpty(experimentRequest.getExcipients())) {
 		experimentRequest.getExcipients().stream().forEach(e -> e.setExperimentId(expermentId));
 		experimentDao.batchExcipientInsert(experimentRequest.getExcipients());
-
-		return 1;
+		}
+		
+		return expermentId;
 	}
 
 	@Override

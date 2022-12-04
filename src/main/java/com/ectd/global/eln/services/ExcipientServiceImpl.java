@@ -53,4 +53,15 @@ public class ExcipientServiceImpl implements ExcipientService {
 		return excipientDao.getExcipientsByMaterialName(materialName);
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer saveExcipient(ExcipientRequest excipientRequest) {
+		if(excipientRequest.getExcipientId() == null) {
+			this.createExcipient(excipientRequest);
+		} else {
+			this.updateExcipient(excipientRequest);
+		}
+		return 1;
+	}
+
 }

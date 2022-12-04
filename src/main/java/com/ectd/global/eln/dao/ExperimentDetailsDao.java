@@ -11,7 +11,7 @@ public interface ExperimentDetailsDao {
 
 	List<ExperimentDetailsDto> getExperimentDetails();
 
-	Integer createExperimentDetails(ExperimentDetailsDto experimentDetails);
+	Integer createExperimentDetails(ExperimentDetails experimentDetails);
 
 	Integer updateExperimentDetails(ExperimentDetails experimentDetails);
 

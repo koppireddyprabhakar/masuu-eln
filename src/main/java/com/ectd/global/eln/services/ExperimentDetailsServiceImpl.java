@@ -31,7 +31,7 @@ public class ExperimentDetailsServiceImpl implements ExperimentDetailsService{
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer createExperimentDetails(ExperimentDetailsDto experimentDetails) {
+	public Integer createExperimentDetails(ExperimentDetails experimentDetails) {
 		return experimentDetailsDao.createExperimentDetails(experimentDetails);
 	}
 
@@ -46,5 +46,19 @@ public class ExperimentDetailsServiceImpl implements ExperimentDetailsService{
 	public Integer deleteExperimentDetails(ExperimentDetails experimentDetails) {
 		return experimentDetailsDao.deleteExperimentDetails(experimentDetails);
 	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer saveExperimentDetails(ExperimentDetails experimentDetails) {
+
+		if(experimentDetails.getExperimentDetailId() == null) {
+			this.createExperimentDetails(experimentDetails);
+		} else {
+			this.updateExperimentDetails(experimentDetails);
+		}
+		
+		return 1;
+	}
+
 
 }

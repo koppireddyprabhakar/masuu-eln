@@ -64,7 +64,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 	}
 
 	@Override
-	public Integer createExperimentDetails(ExperimentDetailsDto experimentDetails) {
+	public Integer createExperimentDetails(ExperimentDetails experimentDetails) {
 		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		KeyHolder keyHolder = new GeneratedKeyHolder();
