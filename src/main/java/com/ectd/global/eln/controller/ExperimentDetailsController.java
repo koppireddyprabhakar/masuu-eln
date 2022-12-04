@@ -37,7 +37,7 @@ public class ExperimentDetailsController extends BaseController {
 	}
 
 	@PostMapping("/create-experiment-details")
-	public ResponseEntity<String> createExperimentDetails(@RequestBody ExperimentDetailsDto experimentDetails) {
+	public ResponseEntity<String> createExperimentDetails(@RequestBody ExperimentDetails experimentDetails) {
 		return getResponseEntity(experimentDetailsService.createExperimentDetails(experimentDetails), "Experiment details created");		
 	}
 

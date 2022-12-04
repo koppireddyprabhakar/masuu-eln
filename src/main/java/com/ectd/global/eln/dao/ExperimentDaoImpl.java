@@ -262,8 +262,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		ExperimentDto experimentDto = new ExperimentDto();
 		experimentDto.setExpId(resultSet.getInt("EXP_ID"));
 		experimentDto.setExperimentName(resultSet.getString("EXPERIMENT_NAME"));
-		experimentDto.setProjectId(resultSet.getInt("PROJECT_ID"));
-		experimentDto.setTeamId(resultSet.getInt("TEAM_ID"));
+		experimentDto.setProjectId(resultSet.getInt("PROJECTID"));
+		experimentDto.setTeamId(resultSet.getInt("TEAMID"));
 		experimentDto.setUserId(resultSet.getInt("USER_ID"));
 		experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
 		experimentDto.setSummary(resultSet.getString("SUMMARY"));
