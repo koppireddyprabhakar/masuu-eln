@@ -2,6 +2,7 @@ package com.ectd.global.eln.request;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class TestRequestFormRequest extends Base implements Serializable {
 
@@ -9,18 +10,20 @@ public class TestRequestFormRequest extends Base implements Serializable {
     
 	private Integer testRequestFormId;
 	private Integer expId;  
-    private Integer projectId;  
-    private Integer analysisId;  
+//    private Integer projectId;
+//    private Integer analysisId;
     private String testRequestFormStatus;  
     private String condition;  
     private String stage;  
-    private String packaging;  
-    private Integer quantity;  
-    private Date manufacturingDate;  
-    private Date expireDate;  
-
+    private String packaging;
+    private String labelClaim;
+    private Integer quantity;
+    private Date manufacturingDate;
+    private Date expireDate;
+    
+    private List<TrfTestResultRequest> trfTestResults;
+    
 	public TestRequestFormRequest() {
-		// Needed empty constructor for serialization
 	}
 
 	public Integer getTestRequestFormId() {
@@ -37,19 +40,19 @@ public class TestRequestFormRequest extends Base implements Serializable {
 		this.expId = expId;
 	}
 	
-	public Integer getProjectId() {
-		return this.projectId;
-	}
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
-	}
-	
-	public Integer getAnalysisId() {
-		return this.analysisId;
-	}
-	public void setAnalysisId(Integer analysisId) {
-		this.analysisId = analysisId;
-	}
+//	public Integer getProjectId() {
+//		return this.projectId;
+//	}
+//	public void setProjectId(Integer projectId) {
+//		this.projectId = projectId;
+//	}
+//	
+//	public Integer getAnalysisId() {
+//		return this.analysisId;
+//	}
+//	public void setAnalysisId(Integer analysisId) {
+//		this.analysisId = analysisId;
+//	}
 	
 	public String getTestRequestFormStatus() {
 		return testRequestFormStatus;
@@ -99,6 +102,26 @@ public class TestRequestFormRequest extends Base implements Serializable {
 	}
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
+	}
+	
+	public List<TrfTestResultRequest> getTrfTestResults() {
+		return trfTestResults;
+	}
+
+	public void setTrfTestResults(List<TrfTestResultRequest> trfTestResults) {
+		this.trfTestResults = trfTestResults;
+	}
+	
+	public String getLabelClaim() {
+		return labelClaim;
+	}
+
+	public void setLabelClaim(String labelClaim) {
+		this.labelClaim = labelClaim;
+	}
+	
+	public static enum TRF_STATUS {
+		NEW, INPROGRESS, COMPLETED, CLOSED
 	}
 
 }

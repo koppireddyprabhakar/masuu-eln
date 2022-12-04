@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ectd.global.eln.dto.ExperimentAttachmentDto;
+import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.request.ExperimentAttachment;
+import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.services.ExperimentAttachmentService;
+import com.ectd.global.eln.services.ExperimentDetailsService;
 import com.ectd.global.eln.services.ExperimentService;
 
 @RestController
@@ -30,6 +33,9 @@ public class ExperimentController extends BaseController {
 	
 	@Autowired
 	ExperimentAttachmentService experimentAttachmentService;
+	
+	@Autowired
+	ExperimentDetailsService experimentDetailsService;
 	
 	@GetMapping("/get-experiment-by-id")
 	public ResponseEntity<ExperimentDto> getExperimentById(@RequestParam Integer experimentId) throws Exception {
@@ -83,5 +89,30 @@ public class ExperimentController extends BaseController {
 		return getResponseEntity(experimentAttachmentService.deleteExperimentAttachment(experimentAttachment), "Experiment Delete");
 	}
 	
+	//Experiment Details
+	@GetMapping("/get-experiment-details-by-id")
+	public ResponseEntity<ExperimentDetailsDto> getExperimentDetailsById(@RequestParam Integer experimentDetailsId) {
+		return new ResponseEntity<>(experimentDetailsService.getExperimentDetailsById(experimentDetailsId), HttpStatus.OK);
+	}
+
+	@GetMapping("/get-experiment-details")
+	public ResponseEntity<List<ExperimentDetailsDto>> getExperimentDetails() {
+		return new ResponseEntity<>(experimentDetailsService.getExperimentDetails(), HttpStatus.OK);
+	}
+
+	@PostMapping("/create-experiment-details")
+	public ResponseEntity<String> createExperimentDetails(@RequestBody ExperimentDetailsDto experimentDetails) {
+		return getResponseEntity(experimentDetailsService.createExperimentDetails(experimentDetails), "Experiment details created");		
+	}
+
+	@PutMapping("/update-experiment-details")
+	public ResponseEntity<String> updateExperimentDetails(@RequestBody ExperimentDetails experimentDetails) {
+		return getResponseEntity(experimentDetailsService.updateExperimentDetails(experimentDetails), "Experiment details updated");	
+	}
+
+	@DeleteMapping("/delete-experiment-details")
+	public ResponseEntity<String> deleteExperimentDetails(@RequestBody ExperimentDetails experimentDetails) {
+		return getResponseEntity(experimentDetailsService.deleteExperimentDetails(experimentDetails), "Experiment details deleted");
+	}
 	
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.TestRequestFormRequest;
+import com.ectd.global.eln.request.TrfTestResultRequest;
 
 public interface TestRequestFormDao {
 
@@ -15,6 +16,10 @@ public interface TestRequestFormDao {
 	
 	Integer updateTestRequestForm(TestRequestFormRequest testRequestFormRequest);
 
-	Integer deleteTestRequestForm(Integer testRequestFormId);
+	Integer deleteTestRequestForm(TestRequestFormRequest testRequestFormRequest);
+	
+	int[] batchInsert(List<TrfTestResultRequest> trfTestResultRequestList);
+	
+	int[] batchUpdate(List<TrfTestResultRequest> trfTestResultRequestList);
 	
 }

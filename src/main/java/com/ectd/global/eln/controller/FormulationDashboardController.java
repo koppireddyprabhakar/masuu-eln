@@ -1,6 +1,7 @@
 package com.ectd.global.eln.controller;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,11 @@ public class FormulationDashboardController extends BaseController {
 	@GetMapping("/get-experiment-by-id")
 	public ResponseEntity<List<ExperimentDto>> getExperimentById(@RequestParam Integer experimentId) {
 		return new ResponseEntity<List<ExperimentDto>>(experimentService.getExperimentsInfo(experimentId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-batch-number")
+	public ResponseEntity<String> getBatchNumber() {
+		return new ResponseEntity<String>("TEST" + new Random().nextInt(), HttpStatus.OK);
 	}
 	
 }

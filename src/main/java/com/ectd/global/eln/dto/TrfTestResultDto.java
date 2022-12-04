@@ -12,6 +12,11 @@ public class TrfTestResultDto  extends Base implements Serializable {
     private Integer trfId;
     private Integer testId;
     private String testStatus;
+    private String testName;
+    private String testNumber;
+    private String testResult;
+    
+    //TEST_NAME = :, TEST_NUMBER = :, TEST_RESULT = :,
 
     public Integer getTrfTestId() {
 		return trfTestId;
@@ -39,6 +44,27 @@ public class TrfTestResultDto  extends Base implements Serializable {
 	}
 	public void setTestStatus(String testStatus) {
 		this.testStatus = testStatus;
+	}
+	
+	public String getTestName() {
+		return testName;
+	}
+	public void setTestName(String testName) {
+		this.testName = testName;
+	}
+	
+	public String getTestNumber() {
+		return testNumber;
+	}
+	public void setTestNumber(String testNumber) {
+		this.testNumber = testNumber;
+	}
+	
+	public String getTestResult() {
+		return testResult;
+	}
+	public void setTestResult(String testResult) {
+		this.testResult = testResult;
 	}
 	
 }
