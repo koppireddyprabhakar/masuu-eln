@@ -59,7 +59,7 @@ public class FormulationDashboardController extends BaseController {
 	
 	@GetMapping("/get-batch-number")
 	public ResponseEntity<String> getBatchNumber() {
-		return new ResponseEntity<String>("TEST" + new Random().nextInt(), HttpStatus.OK);
+		return new ResponseEntity<String>(this.getJson("TEST" + new Random().nextInt()), HttpStatus.OK);
 	}
 	
 }

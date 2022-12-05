@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.TestRequestFormDao;
 import com.ectd.global.eln.dto.TestRequestFormDto;
@@ -35,12 +34,12 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 	public Integer createTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
 		Integer testRequestFormId = testRequestFormDao.createTestRequestForm(testRequestFormRequest);
 		
-		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {
-			testRequestFormRequest.getTrfTestResults().stream().forEach(tr -> tr.setTrfId(testRequestFormId));
-			testRequestFormDao.batchInsert(testRequestFormRequest.getTrfTestResults());
-		}
+//		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {
+//			testRequestFormRequest.getTrfTestResults().stream().forEach(tr -> tr.setTrfId(testRequestFormId));
+//			testRequestFormDao.batchInsert(testRequestFormRequest.getTrfTestResults());
+//		}
 		
-		return 1;
+		return testRequestFormId;
 	}
 
 	@Override
@@ -48,9 +47,9 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 	public Integer updateTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
 		testRequestFormDao.updateTestRequestForm(testRequestFormRequest);
 		
-		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {
-			testRequestFormDao.batchUpdate(testRequestFormRequest.getTrfTestResults());
-		}
+//		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {
+//			testRequestFormDao.batchUpdate(testRequestFormRequest.getTrfTestResults());
+//		}
 		
 		return 1;
 	}

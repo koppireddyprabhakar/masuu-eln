@@ -2,7 +2,6 @@ package com.ectd.global.eln.request;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 public class TestRequestFormRequest extends Base implements Serializable {
 
@@ -20,8 +19,13 @@ public class TestRequestFormRequest extends Base implements Serializable {
     private Integer quantity;
     private Date manufacturingDate;
     private Date expireDate;
+    private Integer testId;
+    private String testName;
+    private String testNumber;
+    private String testResult;
+    private String testStatus;
     
-    private List<TrfTestResultRequest> trfTestResults;
+//    private List<TrfTestResultRequest> trfTestResults;
     
 	public TestRequestFormRequest() {
 	}
@@ -104,13 +108,13 @@ public class TestRequestFormRequest extends Base implements Serializable {
 		this.expireDate = expireDate;
 	}
 	
-	public List<TrfTestResultRequest> getTrfTestResults() {
-		return trfTestResults;
-	}
-
-	public void setTrfTestResults(List<TrfTestResultRequest> trfTestResults) {
-		this.trfTestResults = trfTestResults;
-	}
+//	public List<TrfTestResultRequest> getTrfTestResults() {
+//		return trfTestResults;
+//	}
+//
+//	public void setTrfTestResults(List<TrfTestResultRequest> trfTestResults) {
+//		this.trfTestResults = trfTestResults;
+//	}
 	
 	public String getLabelClaim() {
 		return labelClaim;
@@ -122,6 +126,46 @@ public class TestRequestFormRequest extends Base implements Serializable {
 	
 	public static enum TRF_STATUS {
 		NEW, INPROGRESS, COMPLETED, CLOSED
+	}
+
+	public Integer getTestId() {
+		return testId;
+	}
+
+	public void setTestId(Integer testId) {
+		this.testId = testId;
+	}
+
+	public String getTestName() {
+		return testName;
+	}
+
+	public void setTestName(String testName) {
+		this.testName = testName;
+	}
+
+	public String getTestNumber() {
+		return testNumber;
+	}
+
+	public void setTestNumber(String testNumber) {
+		this.testNumber = testNumber;
+	}
+
+	public String getTestResult() {
+		return testResult;
+	}
+
+	public void setTestResult(String testResult) {
+		this.testResult = testResult;
+	}
+
+	public String getTestStatus() {
+		return testStatus;
+	}
+
+	public void setTestStatus(String testStatus) {
+		this.testStatus = testStatus;
 	}
 
 }

@@ -81,17 +81,17 @@ public class ExperimentController extends BaseController {
 	}
 	
 	@PostMapping("/create-experiment-attachment")
-	public ResponseEntity<String> createExperiment(@RequestBody ExperimentAttachment experimentAttachment) {
+	public ResponseEntity<String> createExperimentAttachment(@RequestBody ExperimentAttachment experimentAttachment) {
 		return getResponseEntity(experimentAttachmentService.createExperimentAttachment(experimentAttachment), "Experiment Attachment Create") ;
 	}
 	
 	@PutMapping("/update-experiment-attachment")
-	public ResponseEntity<String> updateExperiment(@RequestBody ExperimentAttachment experimentAttachment) {
+	public ResponseEntity<String> updateExperimentAttachment(@RequestBody ExperimentAttachment experimentAttachment) {
 		return getResponseEntity(experimentAttachmentService.updateExperimentAttachment(experimentAttachment), "Experiment Update");
 	}
 	
 	@DeleteMapping("/delete-experiment-attachment")
-	public ResponseEntity<String> deleteExperiment(@RequestBody ExperimentAttachment experimentAttachment) throws Exception {
+	public ResponseEntity<String> deleteExperimentAttachment(@RequestBody ExperimentAttachment experimentAttachment) throws Exception {
 		return getResponseEntity(experimentAttachmentService.deleteExperimentAttachment(experimentAttachment), "Experiment Delete");
 	}
 	
