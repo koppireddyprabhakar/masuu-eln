@@ -55,7 +55,7 @@ public class ExperimentController extends BaseController {
 	@PostMapping("/create-experiment")
 	public ResponseEntity<String> createExperiment(@RequestBody ExperimentRequest experimentRequest) {
 		Integer experimentId = experimentService.createExperiment(experimentRequest);
-		return getResponseEntity(experimentId, ""+experimentId) ;
+		return new ResponseEntity<String>(this.getJson(experimentId+""), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update-experiment")

@@ -322,7 +322,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		experimentDetails.setExperimentDetailId(resultSet.getInt("EXP_DETAIL_ID"));
 		experimentDetails.setExperimentId(resultSet.getInt("EXP_ID"));
 		experimentDetails.setName(resultSet.getString("NAME"));
-		experimentDetails.setFileContent(resultSet.getBytes("LOB_DETAILS"));
+		experimentDetails.setFileContent(resultSet.getString("LOB_DETAILS"));
 		experimentDetails.setStatus(resultSet.getString("STATUS"));
 		
 		return experimentDetails;

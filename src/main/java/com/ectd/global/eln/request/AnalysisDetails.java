@@ -9,7 +9,7 @@ public class AnalysisDetails extends Base implements Serializable  {
 	private Integer analysisDetailId;
 	private Integer analysisId;
 	private String name;
-	private byte[] fileContent;
+	private String fileContent;
 	
 	public Integer getAnalysisDetailId() {
 		return analysisDetailId;
@@ -29,10 +29,10 @@ public class AnalysisDetails extends Base implements Serializable  {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public byte[] getFileContent() {
+	public String getFileContent() {
 		return fileContent;
 	}
-	public void setFileContent(byte[] fileContent) {
+	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
 	}
 	

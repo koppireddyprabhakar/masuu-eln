@@ -11,7 +11,7 @@ public class ExperimentDetailsDto extends Base implements Serializable{
 	private Integer experimentDetailId;
 	private Integer experimentId;
 	private String name;
-	private byte[] fileContent;
+	private String fileContent;
 	
 	public Integer getExperimentDetailId() {
 		return experimentDetailId;

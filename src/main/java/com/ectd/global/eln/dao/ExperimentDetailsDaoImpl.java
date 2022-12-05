@@ -112,7 +112,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 			experimentDetailsDto.setExperimentDetailId(rs.getInt("EXP_DETAIL_ID"));
 			experimentDetailsDto.setExperimentId(rs.getInt("EXP_ID"));
 			experimentDetailsDto.setName(rs.getString("NAME"));
-			experimentDetailsDto.setFileContent(rs.getBytes("LOB_DETAILS"));
+			experimentDetailsDto.setFileContent(rs.getString("LOB_DETAILS"));
 			experimentDetailsDto.setStatus(rs.getString("STATUS"));
 			experimentDetailsDto.setInsertUser(rs.getString("INSERT_USER"));
 			experimentDetailsDto.setInsertDate(rs.getDate("INSERT_DATE"));
