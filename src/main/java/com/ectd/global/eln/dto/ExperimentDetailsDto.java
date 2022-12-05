@@ -34,10 +34,10 @@ public class ExperimentDetailsDto extends Base implements Serializable{
 		this.name = name;
 	}
 	
-	public byte[] getFileContent() {
+	public String getFileContent() {
 		return fileContent;
 	}
-	public void setFileContent(byte[] fileContent) {
+	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
 	}
 

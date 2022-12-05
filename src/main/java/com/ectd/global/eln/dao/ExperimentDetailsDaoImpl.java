@@ -70,7 +70,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 //		parameters.addValue("experimentDetailId", experimentDetails.getExperimentDetailId());
 		parameters.addValue("experimentId", experimentDetails.getExperimentId());
-		parameters.addValue("fileContent", experimentDetails.getFileContent());
+		parameters.addValue("fileContent", experimentDetails.getFileContent().getBytes());
 		parameters.addValue("name", experimentDetails.getName());
 		parameters.addValue("status", experimentDetails.getStatus());
 		parameters.addValue("insertUser", "ELN");
@@ -112,7 +112,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 			experimentDetailsDto.setExperimentDetailId(rs.getInt("EXP_DETAIL_ID"));
 			experimentDetailsDto.setExperimentId(rs.getInt("EXP_ID"));
 			experimentDetailsDto.setName(rs.getString("NAME"));
-			experimentDetailsDto.setFileContent(rs.getString("LOB_DETAILS"));
+			experimentDetailsDto.setFileContent(new String(rs.getBytes("LOB_DETAILS")));
 			experimentDetailsDto.setStatus(rs.getString("STATUS"));
 			experimentDetailsDto.setInsertUser(rs.getString("INSERT_USER"));
 			experimentDetailsDto.setInsertDate(rs.getDate("INSERT_DATE"));
