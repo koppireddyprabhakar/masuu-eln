@@ -2,6 +2,7 @@ package com.ectd.global.eln.request;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class TestRequestFormRequest extends Base implements Serializable {
 
@@ -25,7 +26,7 @@ public class TestRequestFormRequest extends Base implements Serializable {
     private String testResult;
     private String testStatus;
     
-//    private List<TrfTestResultRequest> trfTestResults;
+    private List<TrfTestResultRequest> trfTestResults;
     
 	public TestRequestFormRequest() {
 	}
@@ -108,13 +109,13 @@ public class TestRequestFormRequest extends Base implements Serializable {
 		this.expireDate = expireDate;
 	}
 	
-//	public List<TrfTestResultRequest> getTrfTestResults() {
-//		return trfTestResults;
-//	}
-//
-//	public void setTrfTestResults(List<TrfTestResultRequest> trfTestResults) {
-//		this.trfTestResults = trfTestResults;
-//	}
+	public List<TrfTestResultRequest> getTrfTestResults() {
+		return trfTestResults;
+	}
+
+	public void setTrfTestResults(List<TrfTestResultRequest> trfTestResults) {
+		this.trfTestResults = trfTestResults;
+	}
 	
 	public String getLabelClaim() {
 		return labelClaim;
