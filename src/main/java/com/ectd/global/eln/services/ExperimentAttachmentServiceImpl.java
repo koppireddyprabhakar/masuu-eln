@@ -1,6 +1,5 @@
 package com.ectd.global.eln.services;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -100,11 +99,9 @@ public class ExperimentAttachmentServiceImpl implements ExperimentAttachmentServ
 	private void save(ExperimentAttachment experimentAttachment) {
 		try {
 			String dirPath = this.filePath + "/" + experimentAttachment.getProjectId() + "/" + experimentAttachment.getExperimentId() + "/";
-			File makeDir = new File(dirPath);
-			if(!makeDir.exists()) {
-				makeDir.mkdir();
-			}
 			Path root = Paths.get(dirPath);
+			root = Files.createDirectories(root);
+						
 			Files.copy(experimentAttachment.getFile().getInputStream(), root.resolve(experimentAttachment.getFile().getOriginalFilename()));
 			experimentAttachment.setAttachmentLocation(dirPath + experimentAttachment.getFile().getOriginalFilename());
 		} catch (Exception e) {
