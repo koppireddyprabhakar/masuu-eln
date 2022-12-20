@@ -55,8 +55,17 @@ public class ExperimentAttachmentDaoImpl implements ExperimentAttachmentDao {
 	}
 
 	@Override
-	public List<ExperimentAttachmentDto> getExperimentAttachments() {
-		return jdbcTemplate.query(GET_EXPERIMENT_ATTACHMENT_LIST, new ExperimentAttachmentRowMapper());
+	public List<ExperimentAttachmentDto> getExperimentAttachments(Integer experimentId, String fileName) {
+		StringBuilder sb = new StringBuilder(GET_EXPERIMENT_ATTACHMENT_LIST);
+		
+		if(experimentId != null) {
+			sb.append(" AND EXP_ID = " + experimentId);
+		}
+		if(fileName != null) {
+			sb.append(" AND ATTACHMENT_LOCATION LIKE '%" + fileName +"%'");
+		}
+		
+		return jdbcTemplate.query(sb.toString(), new ExperimentAttachmentRowMapper());
 	}
 
 	@Override

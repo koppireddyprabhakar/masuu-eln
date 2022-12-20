@@ -137,7 +137,21 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 	public Integer deleteTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
 		return this.updateTestRequestForm(testRequestFormRequest);
 	}
+	
+	@Override
+	public int[] batchTestRequestInsert(List<TestRequestFormRequest> testRequestFormRequestList) {
+		testRequestFormRequestList.forEach(ed -> {
+			ed.setInsertDate(ElnUtils.getTimeStamp());
+			ed.setUpdateDate(ElnUtils.getTimeStamp());
+			ed.setInsertUser(ElnUtils.DEFAULT_USER_ID);
+			ed.setUpdateUser(ElnUtils.DEFAULT_USER_ID);
+		});
 
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(testRequestFormRequestList.toArray());
+		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_TEST_REQUEST_FORM_QUERY, batch );
+	}
+
+	@Override
 	public int[] batchInsert(List<TrfTestResultRequest> trfTestResultRequestList) {
 		trfTestResultRequestList.forEach(ed -> {
 			ed.setInsertDate(ElnUtils.getTimeStamp());
@@ -150,6 +164,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_TRF_TEST_RESULT, batch );
 	}
 
+	@Override
 	public int[] batchUpdate(List<TrfTestResultRequest> trfTestResultRequestList) {
 
 		trfTestResultRequestList.forEach(ed -> {

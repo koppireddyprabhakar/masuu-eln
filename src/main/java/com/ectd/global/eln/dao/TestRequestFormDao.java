@@ -22,4 +22,6 @@ public interface TestRequestFormDao {
 	
 	int[] batchUpdate(List<TrfTestResultRequest> trfTestResultRequestList);
 	
+	int[] batchTestRequestInsert(List<TestRequestFormRequest> testRequestFormRequestList);
+	
 }

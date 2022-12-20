@@ -9,7 +9,7 @@ public interface ExperimentAttachmentDao {
 	
 	ExperimentAttachmentDto getExperimentAttachmentById(Integer experimentId);
 
-	List<ExperimentAttachmentDto> getExperimentAttachments();
+	List<ExperimentAttachmentDto> getExperimentAttachments(Integer experimentId, String fileName);
 
 	Integer createExperimentAttachment(ExperimentAttachment experimentAttachment);
 

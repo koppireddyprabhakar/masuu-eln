@@ -1,6 +1,7 @@
 package com.ectd.global.eln.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,14 +33,37 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer createTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
-		Integer testRequestFormId = testRequestFormDao.createTestRequestForm(testRequestFormRequest);
+		
+	List<TestRequestFormRequest> testRequestFormRequestList = testRequestFormRequest.getTrfTestResults().stream().map(tr -> {
+			TestRequestFormRequest testRequest = new TestRequestFormRequest();
+						
+			testRequest.setExpId(testRequestFormRequest.getExpId());
+			testRequest.setTestRequestFormStatus(testRequestFormRequest.getTestRequestFormStatus());
+			testRequest.setCondition(testRequestFormRequest.getCondition());
+			testRequest.setStage(testRequestFormRequest.getStage());
+			testRequest.setPackaging(testRequestFormRequest.getPackaging());
+			testRequest.setLabelClaim(testRequestFormRequest.getLabelClaim());
+			testRequest.setQuantity(testRequestFormRequest.getQuantity());
+			testRequest.setManufacturingDate(testRequestFormRequest.getManufacturingDate());
+			testRequest.setExpireDate(testRequestFormRequest.getExpireDate());
+			
+			testRequest.setTestId(tr.getTestId());
+			testRequest.setTestName(tr.getTestName());
+			testRequest.setTestNumber(tr.getTestNumber());
+			testRequest.setTestResult(tr.getTestResult());
+			testRequest.setTestStatus(tr.getTestStatus());
+			
+			return testRequest;
+		}).collect(Collectors.toList());
+		int[] rowsEffected = testRequestFormDao.batchTestRequestInsert(testRequestFormRequestList);
+//		Integer testRequestFormId = testRequestFormDao.createTestRequestForm(testRequestFormRequest);
 		
 //		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {
 //			testRequestFormRequest.getTrfTestResults().stream().forEach(tr -> tr.setTrfId(testRequestFormId));
 //			testRequestFormDao.batchInsert(testRequestFormRequest.getTrfTestResults());
 //		}
 		
-		return testRequestFormId;
+		return rowsEffected[0];
 	}
 
 	@Override
