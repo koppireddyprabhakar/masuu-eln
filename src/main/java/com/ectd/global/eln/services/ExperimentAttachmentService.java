@@ -22,6 +22,6 @@ public interface ExperimentAttachmentService {
 	
 	List<FileInfo> getExperimentAttachments(Integer experimentId);
 	
-	Resource getExperimentAttachmentContent(String filename, Integer experimentId);
+	Resource getExperimentAttachmentContent(String filename, Integer experimentId, Integer projectId);
 	
 }

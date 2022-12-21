@@ -146,11 +146,11 @@ public class ExperimentController extends BaseController {
 		return ResponseEntity.status(HttpStatus.OK).body(fileInfoList);
 	}
 
-	@GetMapping("/get-experiment-attachment-content/{fileName:.+}/{experimentId}")
+	@GetMapping("/get-experiment-attachment-content/{fileName:.+}/{experimentId}/{projectId}")
 	@ResponseBody
 	public ResponseEntity<Resource> getExperimentAttachmentContent(@PathVariable String fileName, 
-			@PathVariable Integer experimentId) {
-		Resource file = experimentAttachmentService.getExperimentAttachmentContent(fileName, experimentId);
+			@PathVariable Integer experimentId, @PathVariable Integer projectId) {
+		Resource file = experimentAttachmentService.getExperimentAttachmentContent(fileName, experimentId, projectId);
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
 	}

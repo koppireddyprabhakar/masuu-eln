@@ -79,9 +79,9 @@ public class ExperimentAttachmentServiceImpl implements ExperimentAttachmentServ
 	}
 	
 	@Override
-	public Resource getExperimentAttachmentContent(String fileName, Integer experimentId) {
+	public Resource getExperimentAttachmentContent(String fileName, Integer experimentId, Integer projectId) {
 		try {
-			Path root = Paths.get(this.filePath + "/" + experimentId + "/") ;
+			Path root = Paths.get(this.filePath + "/" +projectId +"/" + experimentId + "/") ;
 			Path file = root.resolve(fileName);
 			Resource resource = new UrlResource(file.toUri());
 
