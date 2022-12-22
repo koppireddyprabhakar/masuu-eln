@@ -22,4 +22,6 @@ public interface LabTestService {
 	Boolean updateTests(TestRequest testRequest);
 	
 	Boolean deleteTests(TestRequest testRequest);
+	
+	List<TestDto> getTestByDosageId(Integer dosageId);
 }

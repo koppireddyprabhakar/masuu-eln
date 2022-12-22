@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ProjectDto;
+import com.ectd.global.eln.dto.TestDto;
 import com.ectd.global.eln.services.ExperimentService;
+import com.ectd.global.eln.services.LabTestService;
 import com.ectd.global.eln.services.ProjectService;
 
 @RestController
@@ -25,6 +27,9 @@ public class FormulationDashboardController extends BaseController {
 	
 	@Autowired
 	ExperimentService experimentService;
+	
+	@Autowired
+	LabTestService labTestService;
 
 	@GetMapping("/get-projects")
 	public ResponseEntity<List<ProjectDto>> getProjects() throws Exception {
@@ -60,6 +65,11 @@ public class FormulationDashboardController extends BaseController {
 	@GetMapping("/get-batch-number")
 	public ResponseEntity<String> getBatchNumber() {
 		return new ResponseEntity<String>(this.getJson("TEST" + new Random().nextInt()), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-test-by-dosage-id")
+	public ResponseEntity<List<TestDto>> getTestByDosageId(Integer dosageId) {
+		return new ResponseEntity<List<TestDto>>(labTestService.getTestByDosageId(dosageId), HttpStatus.OK);
 	}
 	
 }

@@ -64,4 +64,9 @@ public class LabTestServiceImpl implements LabTestService {
 	public Boolean deleteTests(TestRequest testRequest) {
 		return labTestDao.updateTests(testRequest);
 	}
+
+	@Override
+	public List<TestDto> getTestByDosageId(Integer dosageId) {
+		return labTestDao.getTestByDosageId(dosageId);
+	}
 }
