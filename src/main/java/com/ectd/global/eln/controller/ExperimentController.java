@@ -99,7 +99,7 @@ public class ExperimentController extends BaseController {
 
 	@DeleteMapping("/delete-experiment-attachment")
 	public ResponseEntity<String> deleteExperimentAttachment(@RequestBody ExperimentAttachment experimentAttachment) throws Exception {
-		return getResponseEntity(experimentAttachmentService.deleteExperimentAttachment(experimentAttachment), "Experiment Delete");
+		return getResponseEntity(experimentAttachmentService.deleteExperimentAttachment(experimentAttachment), "Experiment Attachment Delete");
 	}
 
 	//Experiment Details

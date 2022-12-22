@@ -18,7 +18,7 @@ public interface ExperimentAttachmentService {
 
 	Integer updateExperimentAttachment(ExperimentAttachment experimentAttachment);
 
-	Integer deleteExperimentAttachment(ExperimentAttachment experimentAttachment);
+	Boolean deleteExperimentAttachment(ExperimentAttachment experimentAttachment);
 	
 	List<FileInfo> getExperimentAttachments(Integer experimentId);
 	

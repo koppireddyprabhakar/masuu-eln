@@ -1,5 +1,6 @@
 package com.ectd.global.eln.services;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -54,8 +55,16 @@ public class ExperimentAttachmentServiceImpl implements ExperimentAttachmentServ
 	}
 
 	@Override
-	public Integer deleteExperimentAttachment(ExperimentAttachment experimentAttachment) {
-		return expermentAttachmentDao.deleteExperimentAttachment(experimentAttachment);
+	public Boolean deleteExperimentAttachment(ExperimentAttachment experimentAttachment) {
+		ExperimentAttachmentDto experimentAttachmentDto = this.getExperimentAttachmentById(experimentAttachment.getExperimentAttachmentId());
+		boolean result = false;
+		try {
+			result = Files.deleteIfExists(Paths.get(experimentAttachmentDto.getAttachmentLocation()));
+		} catch (IOException e) {
+			throw new RuntimeException("Could not delete the file!");
+		}
+		expermentAttachmentDao.deleteExperimentAttachment(experimentAttachment);
+		return result;
 	}
 
 	@Override
@@ -77,7 +86,7 @@ public class ExperimentAttachmentServiceImpl implements ExperimentAttachmentServ
 
 		return files;
 	}
-	
+
 	@Override
 	public Resource getExperimentAttachmentContent(String fileName, Integer experimentId, Integer projectId) {
 		try {
@@ -95,13 +104,13 @@ public class ExperimentAttachmentServiceImpl implements ExperimentAttachmentServ
 		}
 	}
 
-	
+
 	private void save(ExperimentAttachment experimentAttachment) {
 		try {
 			String dirPath = this.filePath + "/" + experimentAttachment.getProjectId() + "/" + experimentAttachment.getExperimentId() + "/";
 			Path root = Paths.get(dirPath);
 			root = Files.createDirectories(root);
-						
+
 			Files.copy(experimentAttachment.getFile().getInputStream(), root.resolve(experimentAttachment.getFile().getOriginalFilename()));
 			experimentAttachment.setAttachmentLocation(dirPath + experimentAttachment.getFile().getOriginalFilename());
 		} catch (Exception e) {
