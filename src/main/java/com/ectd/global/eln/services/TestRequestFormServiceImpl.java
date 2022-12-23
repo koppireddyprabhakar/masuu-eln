@@ -84,4 +84,9 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 		return testRequestFormDao.deleteTestRequestForm(testRequestFormRequest);
 	}
 
+	@Override
+	public List<TestRequestFormDto> getTestRequestFormData() {
+		return testRequestFormDao.getTestRequestFormData();
+	}
+
 }

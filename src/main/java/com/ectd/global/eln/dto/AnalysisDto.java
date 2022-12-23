@@ -13,7 +13,7 @@ public class AnalysisDto extends Base implements Serializable {
     private Integer teamId;  
     private Integer expId;  
     private String analysisName;  
-    private String summary;  
+    private String summary;
     
 	// Constructor
 	public AnalysisDto() {

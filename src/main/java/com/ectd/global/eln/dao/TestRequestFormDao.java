@@ -24,4 +24,6 @@ public interface TestRequestFormDao {
 	
 	int[] batchTestRequestInsert(List<TestRequestFormRequest> testRequestFormRequestList);
 	
+	List<TestRequestFormDto> getTestRequestFormData();
+	
 }

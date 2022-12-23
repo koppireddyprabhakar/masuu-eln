@@ -17,4 +17,6 @@ public interface TestRequestFormService {
 
 	Integer deleteTestRequestForm(TestRequestFormRequest testRequestFormRequest);
 	
+	List<TestRequestFormDto> getTestRequestFormData();
+	
 }

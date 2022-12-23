@@ -2,6 +2,7 @@ package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.ectd.global.eln.request.Base;
 
@@ -10,15 +11,15 @@ public class TestRequestFormDto extends Base implements Serializable {
 	private static final long serialVersionUID = 4941879037777082219L;
 
 	private Integer testRequestFormId;
-    private Integer expId;  
+    private Integer expId;
 //    private Integer projectId;  
 //    private Integer analysisId;  
-    private String testRequestFormStatus;  
-    private String condition;  
-    private String stage;  
+    private String testRequestFormStatus;
+    private String condition;
+    private String stage;
     private String packaging;  
     private String labelClaim;
-    private Integer quantity;  
+    private Integer quantity;
     private Date manufacturingDate;  
     private Date expireDate;
     private Integer testId;
@@ -27,7 +28,10 @@ public class TestRequestFormDto extends Base implements Serializable {
     private String testResult;
     private String testStatus;
 
-//    private List<TrfTestResultRequest> trfTestResults;    
+    ProjectDto project = new ProjectDto();
+    ExperimentDto experiment = new ExperimentDto();
+    
+    private List<TrfTestResultDto> trfTestResults;    
     
 	public TestRequestFormDto() {}
 
@@ -108,13 +112,13 @@ public class TestRequestFormDto extends Base implements Serializable {
 		this.expireDate = expireDate;
 	}
 	
-//	public List<TrfTestResultRequest> getTrfTestResults() {
-//		return trfTestResults;
-//	}
-//
-//	public void setTrfTestResults(List<TrfTestResultRequest> trfTestResults) {
-//		this.trfTestResults = trfTestResults;
-//	}
+	public List<TrfTestResultDto> getTrfTestResults() {
+		return trfTestResults;
+	}
+
+	public void setTrfTestResults(List<TrfTestResultDto> trfTestResults) {
+		this.trfTestResults = trfTestResults;
+	}
 
 	public String getLabelClaim() {
 		return labelClaim;
@@ -163,5 +167,21 @@ public class TestRequestFormDto extends Base implements Serializable {
 	public void setTestStatus(String testStatus) {
 		this.testStatus = testStatus;
 	}
-	
+
+	public ProjectDto getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectDto project) {
+		this.project = project;
+	}
+
+	public ExperimentDto getExperiment() {
+		return experiment;
+	}
+
+	public void setExperiment(ExperimentDto experiment) {
+		this.experiment = experiment;
+	}
+
 }

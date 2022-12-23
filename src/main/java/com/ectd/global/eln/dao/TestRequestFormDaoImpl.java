@@ -18,6 +18,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.ectd.global.eln.dto.ExperimentDto;
+import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.request.TrfTestResultRequest;
@@ -55,6 +57,9 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 
 	@Value("${update.trf.test.result}")
 	private String UPDATE_TRF_TEST_RESULT;
+	
+	@Value("${get.test.request.form.data}")
+	private String GET_TEST_REQUEST_FORM_DATA;
 
 	@Override
 	public TestRequestFormDto getTestRequestFormById(Integer testRequestFormId) {
@@ -137,7 +142,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 	public Integer deleteTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
 		return this.updateTestRequestForm(testRequestFormRequest);
 	}
-	
+
 	@Override
 	public int[] batchTestRequestInsert(List<TestRequestFormRequest> testRequestFormRequestList) {
 		testRequestFormRequestList.forEach(ed -> {
@@ -201,6 +206,66 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			testRequestFormDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			testRequestFormDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+
+			return testRequestFormDto;
+		};
+	}
+
+	@Override
+	public List<TestRequestFormDto> getTestRequestFormData() {
+		return jdbcTemplate.query(GET_TEST_REQUEST_FORM_DATA, new TestRequestFormDetailsRowMapper());
+	}
+	
+	
+	class TestRequestFormDetailsRowMapper implements RowMapper<TestRequestFormDto> {
+		
+		public TestRequestFormDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+
+			TestRequestFormDto testRequestFormDto = new TestRequestFormDto();
+			testRequestFormDto.setTestRequestFormId(resultSet.getInt("TRF_ID"));
+			testRequestFormDto.setExpId(resultSet.getInt("EXP_ID"));
+			testRequestFormDto.setTestRequestFormStatus(resultSet.getString("TRF_STATUS"));
+			testRequestFormDto.setCondition(resultSet.getString("CONDITION"));
+			testRequestFormDto.setStage(resultSet.getString("STAGE"));
+			testRequestFormDto.setPackaging(resultSet.getString("PACKAGING"));
+			testRequestFormDto.setLabelClaim(resultSet.getString("LABEL_CLAIM"));
+			testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
+			testRequestFormDto.setManufacturingDate(resultSet.getDate("MANUFACTURING_DATE"));
+			testRequestFormDto.setExpireDate(resultSet.getDate("EXPIRE_DATE"));
+			testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));
+			testRequestFormDto.setTestName(resultSet.getString("TEST_NAME"));
+			testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
+			testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
+			testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
+			testRequestFormDto.setStatus(resultSet.getString("STATUS"));
+
+			ProjectDto projectDto = new ProjectDto();
+			projectDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+			projectDto.setProjectName(resultSet.getString("PROJECT_NAME"));
+			projectDto.setProductId(resultSet.getInt("PRODUCT_ID"));
+			projectDto.setProductName(resultSet.getString("PRODUCT_NAME"));
+			projectDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
+			projectDto.setStatus(resultSet.getString("STATUS"));
+			projectDto.setStrength(resultSet.getString("STRENGTH"));
+			projectDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
+			projectDto.setFormulationName(resultSet.getString("FORMULATION_NAME"));
+			projectDto.setTeamName(resultSet.getString("TEAM_NAME"));
+			projectDto.setMarkertName(resultSet.getString("MARKET_NAME"));
+			testRequestFormDto.setProject(projectDto);
+
+			ExperimentDto experimentDto = new ExperimentDto();
+			experimentDto.setExpId(resultSet.getInt("EXP_ID"));
+			experimentDto.setExperimentName(resultSet.getString("EXPERIMENT_NAME"));
+			experimentDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+			experimentDto.setTeamId(resultSet.getInt("TEAM_ID"));
+			experimentDto.setUserId(resultSet.getInt("USER_ID"));
+			experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
+			experimentDto.setSummary(resultSet.getString("SUMMARY"));
+			experimentDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
+			experimentDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
+			experimentDto.setStatus(resultSet.getString("STATUS"));
+
+			testRequestFormDto.setExperiment(experimentDto);
 
 			return testRequestFormDto;
 		};
