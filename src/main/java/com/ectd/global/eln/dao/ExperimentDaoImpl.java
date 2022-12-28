@@ -235,8 +235,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 				
 				if(CollectionUtils.contains(experimentDtoList.iterator(), experimentDto)) {
 					int index = experimentDtoList.indexOf(experimentDto);
-					experimentDtoList.get(index).getExperimentDetailsSet().add(experimentDetails);
-					experimentDtoList.get(index).getExperimentExcipientSet().add(experimentExcipientDto);
+					experimentDtoList.get(index).getExperimentDetails().add(experimentDetails);
+					experimentDtoList.get(index).getExperimentExcipients().add(experimentExcipientDto);
 				} else {
 
 					Set<ExperimentDetailsDto> experimentDetailsList = new HashSet<>();
@@ -245,8 +245,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 				    experimentDetailsList.add(experimentDetails);
 				    excipients.add(experimentExcipientDto);
 					
-				    experimentDto.setExperimentDetailsSet(experimentDetailsList);
-				    experimentDto.setExperimentExcipientSet(excipients);
+				    experimentDto.setExperimentDetails(experimentDetailsList);
+				    experimentDto.setExperimentExcipients(excipients);
 
 				    experimentDtoList.add(experimentDto);
 				}
@@ -279,18 +279,18 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		    ExperimentDetailsDto experimentDetails = getExperimentDetails(resultSet);
 		    ExperimentExcipientDto experimentExcipientDto = getExperimentExcipientDto(resultSet);
 		    
-		    if(CollectionUtils.isEmpty( experimentDto.getExperimentDetailsSet())) {
+		    if(CollectionUtils.isEmpty( experimentDto.getExperimentDetails())) {
 		    	experimentDetailsList.add(experimentDetails);
-		    	experimentDto.setExperimentDetailsSet(experimentDetailsList);
+		    	experimentDto.setExperimentDetails(experimentDetailsList);
 		    } else {
-		    	experimentDto.getExperimentDetailsSet().add(experimentDetails);
+		    	experimentDto.getExperimentDetails().add(experimentDetails);
 		    }
 		    
-		    if(CollectionUtils.isEmpty( experimentDto.getExperimentExcipientSet())) {
+		    if(CollectionUtils.isEmpty( experimentDto.getExperimentExcipients())) {
 		    	excipients.add(experimentExcipientDto);
-		    	experimentDto.setExperimentExcipientSet(excipients);
+		    	experimentDto.setExperimentExcipients(excipients);
 		    } else {
-		    	experimentDto.getExperimentExcipientSet().add(experimentExcipientDto);
+		    	experimentDto.getExperimentExcipients().add(experimentExcipientDto);
 		    }
 		    
 			return experimentDto;

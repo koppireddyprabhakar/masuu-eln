@@ -20,8 +20,8 @@ public class ExperimentDto extends Base implements Serializable {
     private String batchSize;
     private String batchNumber;
     
-    private Set<ExperimentDetailsDto> experimentDetailsSet = new HashSet<ExperimentDetailsDto>();
-    private Set<ExperimentExcipientDto> experimentExcipientSet = new HashSet<ExperimentExcipientDto>();
+    private Set<ExperimentDetailsDto> experimentDetails = new HashSet<ExperimentDetailsDto>();
+    private Set<ExperimentExcipientDto> experimentExcipients = new HashSet<ExperimentExcipientDto>();
     private ProjectDto project;
 
     public Integer getExpId() {
@@ -94,18 +94,18 @@ public class ExperimentDto extends Base implements Serializable {
 		this.batchNumber = batchNumber;
 	}
 
-	public Set<ExperimentDetailsDto> getExperimentDetailsSet() {
-		return experimentDetailsSet;
+	public Set<ExperimentDetailsDto> getExperimentDetails() {
+		return experimentDetails;
 	}
-	public void setExperimentDetailsSet(Set<ExperimentDetailsDto> experimentDetailsSet) {
-		this.experimentDetailsSet = experimentDetailsSet;
+	public void setExperimentDetails(Set<ExperimentDetailsDto> experimentDetails) {
+		this.experimentDetails = experimentDetails;
 	}
-	
-	public Set<ExperimentExcipientDto> getExperimentExcipientSet() {
-		return experimentExcipientSet;
+
+	public Set<ExperimentExcipientDto> getExperimentExcipients() {
+		return experimentExcipients;
 	}
-	public void setExperimentExcipientSet(Set<ExperimentExcipientDto> experimentExcipientSet) {
-		this.experimentExcipientSet = experimentExcipientSet;
+	public void setExperimentExcipients(Set<ExperimentExcipientDto> experimentExcipients) {
+		this.experimentExcipients = experimentExcipients;
 	}
 	
 	public String toString() {
@@ -114,7 +114,6 @@ public class ExperimentDto extends Base implements Serializable {
 		sb.append(experimentName); 
 		return sb.toString();
 	}
-	
 	
 	@Override
 	public boolean equals(Object o) {
