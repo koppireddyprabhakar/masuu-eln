@@ -80,4 +80,35 @@ public class ExperimentExcipientDto  extends Base implements Serializable {
 	public void setExperimentId(Integer experimentId) {
 		this.experimentId = experimentId;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(experimentId); 
+		sb.append(excipientId); 
+		return sb.toString();
+	}
+	
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof ExperimentExcipientDto))
+	        return false;
+	    ExperimentExcipientDto other = (ExperimentExcipientDto)o;
+	    return this.experimentId == other.experimentId && this.excipientId == other.excipientId;
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (experimentId != null) {
+	        result = 31 * result + experimentId.hashCode();
+	    }
+	    if (excipientId != null) {
+	        result = 31 * result + excipientId.hashCode();
+	    }
+	    return result;
+	}
+	
 }

@@ -40,5 +40,37 @@ public class ExperimentDetailsDto extends Base implements Serializable{
 	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(experimentDetailId); 
+		sb.append(name); 
+		return sb.toString();
+	}
+	
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof ExperimentDetailsDto))
+	        return false;
+	    ExperimentDetailsDto other = (ExperimentDetailsDto)o;
+	    boolean nameEquals = (this.name == null && other.name == null)
+	      || (this.name != null && this.name.equals(other.name));
+	    return this.experimentDetailId == other.experimentDetailId && nameEquals;
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (experimentDetailId != null) {
+	        result = 31 * result + experimentDetailId.hashCode();
+	    }
+	    if (name != null) {
+	        result = 31 * result + name.hashCode();
+	    }
+	    return result;
+	}
 
 }

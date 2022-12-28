@@ -1,10 +1,10 @@
 package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.ectd.global.eln.request.Base;
-import com.ectd.global.eln.request.ExperimentDetails;
 
 public class ExperimentDto extends Base implements Serializable {
 
@@ -20,8 +20,8 @@ public class ExperimentDto extends Base implements Serializable {
     private String batchSize;
     private String batchNumber;
     
-    private List<ExperimentDetails> experimentDetailsList;
-    private List<ExperimentExcipientDto> experimentExcipientList;
+    private Set<ExperimentDetailsDto> experimentDetailsSet = new HashSet<ExperimentDetailsDto>();
+    private Set<ExperimentExcipientDto> experimentExcipientSet = new HashSet<ExperimentExcipientDto>();
     private ProjectDto project;
 
     public Integer getExpId() {
@@ -72,13 +72,6 @@ public class ExperimentDto extends Base implements Serializable {
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
-	
-	public List<ExperimentDetails> getExperimentDetailsList() {
-		return experimentDetailsList;
-	}
-	public void setExperimentDetailsList(List<ExperimentDetails> experimentDetailsList) {
-		this.experimentDetailsList = experimentDetailsList;
-	}
 		
 	public ProjectDto getProject() {
 		return project;
@@ -100,12 +93,51 @@ public class ExperimentDto extends Base implements Serializable {
 	public void setBatchNumber(String batchNumber) {
 		this.batchNumber = batchNumber;
 	}
-	
-	public List<ExperimentExcipientDto> getExperimentExcipientList() {
-		return experimentExcipientList;
+
+	public Set<ExperimentDetailsDto> getExperimentDetailsSet() {
+		return experimentDetailsSet;
 	}
-	public void setExperimentExcipientList(List<ExperimentExcipientDto> experimentExcipientList) {
-		this.experimentExcipientList = experimentExcipientList;
+	public void setExperimentDetailsSet(Set<ExperimentDetailsDto> experimentDetailsSet) {
+		this.experimentDetailsSet = experimentDetailsSet;
+	}
+	
+	public Set<ExperimentExcipientDto> getExperimentExcipientSet() {
+		return experimentExcipientSet;
+	}
+	public void setExperimentExcipientSet(Set<ExperimentExcipientDto> experimentExcipientSet) {
+		this.experimentExcipientSet = experimentExcipientSet;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(expId); 
+		sb.append(experimentName); 
+		return sb.toString();
+	}
+	
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof ExperimentDto))
+	        return false;
+	    ExperimentDto other = (ExperimentDto)o;
+	    boolean experimentNameEquals = (this.experimentName == null && other.experimentName == null)
+	      || (this.experimentName != null && this.experimentName.equals(other.experimentName));
+	    return this.expId == other.expId && experimentNameEquals;
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (expId != null) {
+	        result = 31 * result + expId.hashCode();
+	    }
+	    if (experimentName != null) {
+	        result = 31 * result + experimentName.hashCode();
+	    }
+	    return result;
 	}
 
 }
