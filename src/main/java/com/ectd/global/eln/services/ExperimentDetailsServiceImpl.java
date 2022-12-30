@@ -12,7 +12,7 @@ import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.request.ExperimentDetails;
 
 @Service
-public class ExperimentDetailsServiceImpl implements ExperimentDetailsService{
+public class ExperimentDetailsServiceImpl implements ExperimentDetailsService {
 
 	@Autowired
 	ExperimentDetailsDao experimentDetailsDao;

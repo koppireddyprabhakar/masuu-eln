@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ectd.global.eln.dao.AnalysisAttachmentDao;
 import com.ectd.global.eln.dto.AnalysisAttachmentDto;
@@ -31,16 +33,19 @@ public class AnalysisAttachmentServiceImpl implements AnalysisAttachmentService 
 	String filePath;
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public AnalysisAttachmentDto getAnalysisAttachmentById(Integer analysisAttachmentId) {
 		return analysisAttachmentDao.getAnalysisAttachmentById(analysisAttachmentId);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<AnalysisAttachmentDto> getAnalysisAttachments() {
 		return analysisAttachmentDao.getAnalysisAttachments(null, null);
 	}
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public List<FileInfo> createAnalysisAttachment(AnalysisAttachment analysisAttachment) {
 		this.save(analysisAttachment);
 		analysisAttachmentDao.createAnalysisAttachment(analysisAttachment);
@@ -48,11 +53,13 @@ public class AnalysisAttachmentServiceImpl implements AnalysisAttachmentService 
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateAnalysisAttachment(AnalysisAttachment analysisAttachment) {
 		return analysisAttachmentDao.updateAnalysisAttachment(analysisAttachment);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean deleteAnalysisAttachment(AnalysisAttachment analysisAttachment) {
 		AnalysisAttachmentDto experimentAttachmentDto = this.getAnalysisAttachmentById(analysisAttachment.getAnalysisAttachmentId());
 		boolean result = false;
@@ -66,6 +73,7 @@ public class AnalysisAttachmentServiceImpl implements AnalysisAttachmentService 
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<FileInfo> getAnalysisAttachments(Integer experimentId) {
 		List<AnalysisAttachmentDto> experimentAttachments = analysisAttachmentDao.getAnalysisAttachments(experimentId, null);
 		List<FileInfo> files = new ArrayList<FileInfo>();
@@ -85,6 +93,7 @@ public class AnalysisAttachmentServiceImpl implements AnalysisAttachmentService 
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public Resource getAnalysisAttachmentContent(String fileName, Integer experimentId, Integer projectId) {
 		try {
 			Path root = Paths.get(this.filePath + "/" +projectId +"/" + experimentId + "/") ;

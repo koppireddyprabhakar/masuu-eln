@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.AnalysisDao;
 import com.ectd.global.eln.dto.AnalysisDto;
+import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
 
 @Service
@@ -25,19 +27,24 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<AnalysisDto> getAnalysisList() {
-		return analysisDao.getAnalysisList();
+	public List<AnalysisDto> getAnalysisList(Integer teamId) {
+		return analysisDao.getAnalysisList(teamId);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer createAnalysis(AnalysisRequest analysisRequest) {
-		analysisDao.createAnalysis(analysisRequest);
+		Integer analysisId = analysisDao.createAnalysis(analysisRequest);
 
+		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
 		analysisDao.batchAnalysisDetailsInsert(analysisRequest.getAnalysisDetailsList());
+		}
+		
+		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
 		analysisDao.batchExcipientInsert(analysisRequest.getExcipients());
-
-		return 1;
+		}
+		
+		return analysisId;
 
 	}
 
@@ -49,12 +56,8 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer deleteAnalysis(Integer analysisId) {
-		if(this.getAnalysisById(analysisId) != null) {
-			return analysisDao.deleteAnalysis(analysisId);
-		}
-
-		return null;
+	public Integer deleteAnalysis(AnalysisRequest analysisRequest) {
+			return analysisDao.updateAnalysis(analysisRequest);
 	}
 	
 	@Override
@@ -67,9 +70,39 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 		analysisDao.updateAnalysis(analysisRequest);
 
+		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
 		analysisDao.batchAnalysisDetailsUpdate(analysisRequest.getAnalysisDetailsList());
+		}
+		
+		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
 		analysisDao.batchExcipientUpdate(analysisRequest.getExcipients());
+		}
+		
+		return 1;
+	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer createAnalysisExcipient(AnalysisExcipient analysisExcipient) {
+		return analysisDao.createAnalysisExcipient(analysisExcipient);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer updateAnalysisExcipient(AnalysisExcipient analysisExcipient) {
+		return analysisDao.updateAnalysisExcipient(analysisExcipient);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer saveAnalysisExcipients(AnalysisExcipient analysisExcipient) {
+		
+		if(analysisExcipient.getAnalysisExcipientId() == null) {
+			this.createAnalysisExcipient(analysisExcipient);
+		} else {
+			this.updateAnalysisExcipient(analysisExcipient);
+		}
+		
 		return 1;
 	}
 

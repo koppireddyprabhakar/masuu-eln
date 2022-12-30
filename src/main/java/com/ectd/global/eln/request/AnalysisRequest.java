@@ -11,12 +11,11 @@ public class AnalysisRequest extends Base implements Serializable {
 	private Integer analysisId;  
     private Integer projectId;  
     private Integer teamId;  
-    private Integer expId;  
     private String analysisName;  
     private String summary;  
     
     private List<AnalysisDetails> analysisDetailsList;
-    private List<ExcipientRequest> excipients;
+    private List<AnalysisExcipient> excipients;
     
 	// Constructor
 	public AnalysisRequest() {
@@ -44,13 +43,6 @@ public class AnalysisRequest extends Base implements Serializable {
 		this.teamId = teamId;
 	}
 	
-	public Integer getExpId() {
-		return this.expId;
-	}
-	public void setExpId(Integer expId) {
-		this.expId = expId;
-	}
-	
 	public String getAnalysisName() {
 		return this.analysisName;
 	}
@@ -73,11 +65,11 @@ public class AnalysisRequest extends Base implements Serializable {
 		this.analysisDetailsList = analysisDetailsList;
 	}
 
-	public List<ExcipientRequest> getExcipients() {
+	public List<AnalysisExcipient> getExcipients() {
 		return excipients;
 	}
 
-	public void setExcipients(List<ExcipientRequest> excipients) {
+	public void setExcipients(List<AnalysisExcipient> excipients) {
 		this.excipients = excipients;
 	}
 	

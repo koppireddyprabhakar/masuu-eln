@@ -24,12 +24,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisAttachment;
+import com.ectd.global.eln.request.AnalysisDetails;
+import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
 import com.ectd.global.eln.request.FileInfo;
 import com.ectd.global.eln.services.AnalysisAttachmentService;
+import com.ectd.global.eln.services.AnalysisExpeimentDetailsService;
 import com.ectd.global.eln.services.AnalysisService;
 import com.ectd.global.eln.services.TestRequestFormService;
 
@@ -39,12 +43,15 @@ public class AnalysisController extends BaseController {
 
 	@Autowired
 	AnalysisService analysisService;
-	
+
 	@Autowired
 	TestRequestFormService testRequestFormService;
-	
+
 	@Autowired
 	AnalysisAttachmentService analysisAttachmentService;
+
+	@Autowired
+	AnalysisExpeimentDetailsService analysisExpeimentDetailsService;
 
 	@GetMapping("/get-analysis-by-id")
 	public ResponseEntity<AnalysisDto> getAnalysisById(@RequestParam Integer analysisId) throws Exception {
@@ -53,16 +60,20 @@ public class AnalysisController extends BaseController {
 
 	@GetMapping("/get-analysis-list")
 	public ResponseEntity<List<AnalysisDto>> getAnalysisList() throws Exception {
-		return new ResponseEntity<>(analysisService.getAnalysisList(), HttpStatus.OK);
+		return new ResponseEntity<>(analysisService.getAnalysisList(null), HttpStatus.OK);
+	}
+
+	@GetMapping("/get-analysis-by-team-id")
+	public ResponseEntity<List<AnalysisDto>> getAnalysisByTeamId(@RequestParam Integer teamId) throws Exception {
+		return new ResponseEntity<>(analysisService.getAnalysisList(teamId), HttpStatus.OK);
 	}
 
 	@PostMapping("/create-analysis")
 	public ResponseEntity<String> createAnalysis(@RequestBody AnalysisRequest analysisRequest,
 			Authentication authentication) {
-
 		authentication.getUsername();
-
-		return getResponseEntity(analysisService.createAnalysis(analysisRequest), "Analysis Create");
+		Integer analysisId = analysisService.createAnalysis(analysisRequest);
+		return new ResponseEntity<String>(this.getJson(analysisId+""), HttpStatus.OK);
 	}
 
 	@PutMapping("/update-analysis")
@@ -72,23 +83,49 @@ public class AnalysisController extends BaseController {
 	}
 
 	@DeleteMapping("/delete-analysis")
-	public ResponseEntity<String> deleteAnalysis(@RequestParam Integer analysisId, HttpServletRequest httpRequest)
+	public ResponseEntity<String> deleteAnalysis(@RequestBody AnalysisRequest analysisRequest, HttpServletRequest httpRequest)
 			throws Exception {
 		httpRequest.getUserPrincipal().getName();
-		return getResponseEntity(analysisService.deleteAnalysis(analysisId), "Analysis Delete");
+		return getResponseEntity(analysisService.deleteAnalysis(analysisRequest), "Analysis Delete");
 	}
-	
+
 	@GetMapping("/get-test-request-form-data")
 	public ResponseEntity<List<TestRequestFormDto>> getTestRequestFormData() throws Exception {
 		return new ResponseEntity<>(testRequestFormService.getTestRequestFormData(), HttpStatus.OK);
 	}
-	
+
+	//Analaysis Details
+	@GetMapping("/get-analysis-details-by-id")
+	public ResponseEntity<AnalysisDetailsDto> getAnalysisDetailsById(@RequestParam Integer analysisDetailsId) {
+		return new ResponseEntity<>(analysisExpeimentDetailsService.getAnalysisDetailsById(analysisDetailsId), HttpStatus.OK);
+	}
+
+	@GetMapping("/get-analysis-details")
+	public ResponseEntity<List<AnalysisDetailsDto>> getAnalysisDetails() {
+		return new ResponseEntity<>(analysisExpeimentDetailsService.getAnalysisDetails(), HttpStatus.OK);
+	}
+
+	@PostMapping("/save-analysis-details")
+	public ResponseEntity<String> saveAnalysisDetails(@RequestBody AnalysisDetails analysisDetails) {
+		return getResponseEntity(analysisExpeimentDetailsService.saveAnalysisDetails(analysisDetails), "Analysis details created");		
+	}
+
+	@PutMapping("/update-analysis-details")
+	public ResponseEntity<String> updateAnalysisDetails(@RequestBody AnalysisDetails analysisDetails) {
+		return getResponseEntity(analysisExpeimentDetailsService.updateAnalysisDetails(analysisDetails), "Analysis details updated");	
+	}
+
+	@DeleteMapping("/delete-analysis-details")
+	public ResponseEntity<String> deleteAnalysisDetails(@RequestBody AnalysisDetails analysisDetails) {
+		return getResponseEntity(analysisExpeimentDetailsService.deleteAnalysisDetails(analysisDetails), "Analysis details deleted");
+	}
+
 	@PostMapping("/save-analysis-attachment")
 	public ResponseEntity<List<FileInfo>> saveAnalysisAttachment(@ModelAttribute  AnalysisAttachment analysisAttachment) throws IOException {
 		List<FileInfo> fileInfoList = analysisAttachmentService.createAnalysisAttachment(analysisAttachment) ;
 		return ResponseEntity.status(HttpStatus.OK).body(fileInfoList);
 	}
-	
+
 	@GetMapping("/search-analysis-attachments")
 	public ResponseEntity<List<FileInfo>> searchAnalysisAttachments(Integer experimentId) {
 		List<FileInfo> fileInfoList = analysisAttachmentService.getAnalysisAttachments(experimentId);
@@ -103,5 +140,20 @@ public class AnalysisController extends BaseController {
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
 	}
-	
+
+	@PostMapping("/create-analysis-excipient")
+	public ResponseEntity<String> createAnalysisExcipient(AnalysisExcipient analysisExcipient) {
+		return getResponseEntity(analysisService.createAnalysisExcipient(analysisExcipient), "Analysis Excipient Create");
+	}
+
+	@PutMapping("/update-analysis-excipient")
+	public ResponseEntity<String> updateAnalysisExcipient(AnalysisExcipient analysisExcipient) {
+		return getResponseEntity(analysisService.updateAnalysisExcipient(analysisExcipient), "Analysis Excipient Update");
+	}
+
+	@PostMapping("/save-analysis-excipient")
+	public ResponseEntity<String> saveAnalysisExcipients(AnalysisExcipient analysisExcipient) {
+		return getResponseEntity(analysisService.saveAnalysisExcipients(analysisExcipient), "Analysis Excipient Create");
+	}
+
 }

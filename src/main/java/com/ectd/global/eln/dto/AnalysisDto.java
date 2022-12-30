@@ -1,6 +1,7 @@
 package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import com.ectd.global.eln.request.Base;
 
@@ -11,9 +12,11 @@ public class AnalysisDto extends Base implements Serializable {
 	private Integer analysisId;  
     private Integer projectId;  
     private Integer teamId;  
-    private Integer expId;  
     private String analysisName;  
     private String summary;
+    
+    private Set<AnalysisDetailsDto> analysisDetails;
+    private Set<AnalysisExcipientDto> analysisExcipients;
     
 	// Constructor
 	public AnalysisDto() {
@@ -41,13 +44,6 @@ public class AnalysisDto extends Base implements Serializable {
 		this.teamId = teamId;
 	}
 	
-	public Integer getExpId() {
-		return this.expId;
-	}
-	public void setExpId(Integer expId) {
-		this.expId = expId;
-	}
-	
 	public String getAnalysisName() {
 		return this.analysisName;
 	}
@@ -61,5 +57,51 @@ public class AnalysisDto extends Base implements Serializable {
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
+
+	public Set<AnalysisDetailsDto> getAnalysisDetails() {
+		return analysisDetails;
+	}
+
+	public void setAnalysisDetails(Set<AnalysisDetailsDto> analysisDetails) {
+		this.analysisDetails = analysisDetails;
+	}
+
+	public Set<AnalysisExcipientDto> getAnalysisExcipients() {
+		return analysisExcipients;
+	}
+
+	public void setAnalysisExcipients(Set<AnalysisExcipientDto> analysisExcipients) {
+		this.analysisExcipients = analysisExcipients;
+	}
 	
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(analysisId); 
+		sb.append(projectId); 
+		return sb.toString();
+	}
+	
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof AnalysisDto))
+	        return false;
+	    AnalysisDto other = (AnalysisDto)o;
+	    return this.analysisId == other.analysisId && this.projectId == other.projectId;
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (analysisId != null) {
+	        result = 31 * result + analysisId.hashCode();
+	    }
+	    if (projectId != null) {
+	        result = 31 * result + projectId.hashCode();
+	    }
+	    return result;
+	}
+
 }

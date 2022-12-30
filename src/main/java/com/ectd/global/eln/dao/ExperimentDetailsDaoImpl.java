@@ -87,7 +87,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("experimentDetailId", experimentDetails.getExperimentDetailId());
 		parameters.addValue("experimentId", experimentDetails.getExperimentId());
-		parameters.addValue("fileContent", experimentDetails.getFileContent());
+		parameters.addValue("fileContent", experimentDetails.getFileContent().getBytes());
 		parameters.addValue("name", experimentDetails.getName());
 		parameters.addValue("status", experimentDetails.getStatus());
 		parameters.addValue("insertUser", "ELN");
