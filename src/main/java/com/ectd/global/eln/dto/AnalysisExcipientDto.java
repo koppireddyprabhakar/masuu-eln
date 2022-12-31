@@ -88,5 +88,34 @@ public class AnalysisExcipientDto extends Base implements Serializable {
 	public void setAnalysisId(Integer analysisId) {
 		this.analysisId = analysisId;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(analysisExcipientId); 
+		sb.append(analysisId); 
+		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof AnalysisExcipientDto))
+	        return false;
+	    AnalysisExcipientDto other = (AnalysisExcipientDto)o;
+	    return this.analysisExcipientId == other.analysisExcipientId && this.analysisId == other.analysisId;
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (analysisExcipientId != null) {
+	        result = 31 * result + analysisExcipientId.hashCode();
+	    }
+	    if (analysisId != null) {
+	        result = 31 * result + analysisId.hashCode();
+	    }
+	    return result;
+	}
 
 }

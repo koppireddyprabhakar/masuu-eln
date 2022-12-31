@@ -184,4 +184,33 @@ public class TestRequestFormDto extends Base implements Serializable {
 		this.experiment = experiment;
 	}
 
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(testRequestFormId); 
+		sb.append(expId); 
+		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof TestRequestFormDto))
+	        return false;
+	    TestRequestFormDto other = (TestRequestFormDto)o;
+	    return this.testRequestFormId == other.testRequestFormId && this.expId == other.expId;
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (testRequestFormId != null) {
+	        result = 31 * result + testRequestFormId.hashCode();
+	    }
+	    if (expId != null) {
+	        result = 31 * result + expId.hashCode();
+	    }
+	    return result;
+	}
+	
 }

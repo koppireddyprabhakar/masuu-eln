@@ -6,6 +6,7 @@ import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.TestRequestFormRequest;
 
 public interface AnalysisDao {
 	
@@ -31,4 +32,6 @@ public interface AnalysisDao {
 
 	Integer updateAnalysisExcipient(AnalysisExcipient analysisExcipient);
 
+	int[] batchTRFUpdate(List<TestRequestFormRequest> testRequestFormList, Integer analysisExperimentId);
+	
 }

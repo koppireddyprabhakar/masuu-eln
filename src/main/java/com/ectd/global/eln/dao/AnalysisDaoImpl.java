@@ -1,5 +1,6 @@
 package com.ectd.global.eln.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,9 +29,11 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
+import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
@@ -71,6 +75,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	@Value(value="${update.analysis.excipient}")
 	private String UPDATE_ANALYSIS_EXCIPIENT_QUERY;
 
+	@Value("${update.trf}")
+	private String UPDATE_TRF;
+
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_QUERY + analysisId,
@@ -85,15 +92,15 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 	@Override
 	public List<AnalysisDto> getAnalysisList(Integer teamId) {
-		
+
 		StringBuilder sb = new StringBuilder(GET_ANALYSIS_LIST_QUERY);
-		
+
 		if(teamId != null) {
 			sb.append("TEAM_ID = " + teamId);
 		}
-		
+
 		sb.append("ORDER BY INSERT_DATE DESC");
-		
+
 		return jdbcTemplate.query(sb.toString(), new AnalysisRowMapper());
 	}
 
@@ -112,7 +119,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(CREATE_ANALYSIS_QUERY, parameters, keyHolder);
-		
+
 		return keyHolder.getKey().intValue();
 	}
 
@@ -207,11 +214,36 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(analysisDetails);
 		return this.namedParameterJdbcTemplate.batchUpdate(UPDATE_ANALYSIS_DETAILS_QUERY, batch);
 	}
-	
+
+	@Override
+	public int[] batchTRFUpdate(List<TestRequestFormRequest> testRequestFormList, Integer analysisExperimentId) {
+
+		testRequestFormList.stream().forEach(e -> {
+			e.setUpdateDate(ElnUtils.getTimeStamp());
+			e.setUpdateUser(ElnUtils.DEFAULT_USER_ID);
+		});
+
+		return this.jdbcTemplate.batchUpdate(UPDATE_TRF, 
+				new BatchPreparedStatementSetter() {
+			public void setValues(PreparedStatement ps, int i) 
+					throws SQLException {
+				ps.setInt(1, analysisExperimentId);
+				ps.setString(2, ElnUtils.DEFAULT_USER_ID);
+				ps.setTimestamp(3, ElnUtils.getTimeStamp());
+				ps.setInt(4, testRequestFormList.get(i).getTestRequestFormId());
+			}
+
+			public int getBatchSize() {
+				return testRequestFormList.size();
+			}
+		}
+				);
+	}
+
 	@Override
 	public Integer createAnalysisExcipient(AnalysisExcipient analysisExcipient) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		
+
 		parameters.addValue("analysisId", analysisExcipient.getAnalysisId());
 		parameters.addValue("excipientId", analysisExcipient.getExcipientId());
 		parameters.addValue("materialType", analysisExcipient.getMaterialType());
@@ -225,7 +257,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
-		
+
 		return namedParameterJdbcTemplate.update(CREATE_ANALYSIS_EXCIPIENT_QUERY, parameters);
 	}
 
@@ -245,10 +277,10 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("status", analysisExcipient.getStatus());
 		parameters.addValue("updateUser", analysisExcipient.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
-		
+
 		return namedParameterJdbcTemplate.update(UPDATE_ANALYSIS_EXCIPIENT_QUERY, parameters);
 	}
-	
+
 	class AnalysisExtractor implements ResultSetExtractor<List<AnalysisDto>> {
 
 		@Override
@@ -257,76 +289,95 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 			while(resultSet.next()) {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
-				
-			    AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
-			    AnalysisExcipientDto analysisExcipientDto = getAnalysisExcipientDto(resultSet);
+
+				AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
+				AnalysisExcipientDto analysisExcipientDto = getAnalysisExcipientDto(resultSet);
+				TestRequestFormDto testRequestFormDto = getTestRequestFormDto(resultSet);
 				
 				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
 					int index = analysisDtoList.indexOf(analysisDto);
 					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);
 					analysisDtoList.get(index).getAnalysisExcipients().add(analysisExcipientDto);
+					analysisDtoList.get(index).getTestRequestForms().add(testRequestFormDto);
 				} else {
 
 					Set<AnalysisDetailsDto> analysisDetailsList = new HashSet<>();
 					Set<AnalysisExcipientDto> excipients = new HashSet<>();
-				    
-					analysisDetailsList.add(analysisDetails);
-				    excipients.add(analysisExcipientDto);
-					
-				    analysisDto.setAnalysisDetails(analysisDetailsList);
-				    analysisDto.setAnalysisExcipients(excipients);
+					Set<TestRequestFormDto> trfs = new HashSet<>();
 
-				    analysisDtoList.add(analysisDto);
+					analysisDetailsList.add(analysisDetails);
+					excipients.add(analysisExcipientDto);
+					trfs.add(testRequestFormDto);
+					
+					analysisDto.setAnalysisDetails(analysisDetailsList);
+					analysisDto.setAnalysisExcipients(excipients);
+					analysisDto.setTestRequestForms(trfs);
+					
+					analysisDtoList.add(analysisDto);
 				}
-			    
-				}
+
+			}
 			return analysisDtoList;
 		};
 	}
-	
-private AnalysisDto getAnalysisDto(ResultSet resultSet) throws SQLException {
-		
-	AnalysisDto analysisDto = new AnalysisDto();
-	analysisDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
-	analysisDto.setAnalysisName(resultSet.getString("ANALYSIS_NAME"));
-	analysisDto.setProjectId(resultSet.getInt("PROJECT_ID"));
-	analysisDto.setTeamId(resultSet.getInt("TEAM_ID"));
-	analysisDto.setSummary(resultSet.getString("SUMMARY"));
-	analysisDto.setStatus(resultSet.getString("STATUS"));
-//	analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-//	analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));
-//	analysisDto.setUpdateDate(resultSet.getDate("INSERT_DATE"));
-//	analysisDto.setUpdateUser(resultSet.getString("INSERT_USER"));
-	
-	return  analysisDto;
+
+	private AnalysisDto getAnalysisDto(ResultSet resultSet) throws SQLException {
+
+		AnalysisDto analysisDto = new AnalysisDto();
+		analysisDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+		analysisDto.setAnalysisName(resultSet.getString("ANALYSIS_NAME"));
+		analysisDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+		analysisDto.setTeamId(resultSet.getInt("TEAM_ID"));
+		analysisDto.setSummary(resultSet.getString("SUMMARY"));
+		analysisDto.setStatus(resultSet.getString("STATUS"));
+		//	analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+		//	analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));
+		//	analysisDto.setUpdateDate(resultSet.getDate("INSERT_DATE"));
+		//	analysisDto.setUpdateUser(resultSet.getString("INSERT_USER"));
+
+		return  analysisDto;
 	}
 
-private AnalysisDetailsDto getAnalysisDetailsWithOutContent(ResultSet resultSet) throws SQLException {
-	
-	AnalysisDetailsDto analysisDetails = new AnalysisDetailsDto();
-	analysisDetails.setAnalysisDetailId(resultSet.getInt("ANALYSIS_EXP_DTL_ID"));
-	analysisDetails.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
-	analysisDetails.setName(resultSet.getString("NAME"));
-	analysisDetails.setStatus(resultSet.getString("STATUS"));
-	
-	return analysisDetails;
-}
+	private AnalysisDetailsDto getAnalysisDetailsWithOutContent(ResultSet resultSet) throws SQLException {
+
+		AnalysisDetailsDto analysisDetails = new AnalysisDetailsDto();
+		analysisDetails.setAnalysisDetailId(resultSet.getInt("ANALYSIS_EXP_DTL_ID"));
+		analysisDetails.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+		analysisDetails.setName(resultSet.getString("NAME"));
+		analysisDetails.setStatus(resultSet.getString("STATUS"));
+
+		return analysisDetails;
+	}
 
 	private AnalysisExcipientDto getAnalysisExcipientDto(ResultSet resultSet) throws SQLException {
-	
-	AnalysisExcipientDto analysisExcipientDto = new AnalysisExcipientDto();
-	analysisExcipientDto.setAnalysisExcipientId(resultSet.getInt("ANALYSIS_EXCIPIENT_ID"));
-	analysisExcipientDto.setExcipientId(resultSet.getInt("EXCIPIENT_ID"));
-	analysisExcipientDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
-	analysisExcipientDto.setMaterialType(resultSet.getString("MATERIAL_TYPE"));
-	analysisExcipientDto.setMaterialName(resultSet.getString("MATERIAL_NAME"));
-	analysisExcipientDto.setBatchNo(resultSet.getString("BATCH_NO"));
-	analysisExcipientDto.setSourceName(resultSet.getString("SOURCE_NAME"));
-	analysisExcipientDto.setPotency(resultSet.getString("POTENCY"));
-	analysisExcipientDto.setGrade(resultSet.getString("GRADE"));
-	analysisExcipientDto.setStatus(resultSet.getString("STATUS"));
-	
-	return analysisExcipientDto;
-}
+
+		AnalysisExcipientDto analysisExcipientDto = new AnalysisExcipientDto();
+		analysisExcipientDto.setAnalysisExcipientId(resultSet.getInt("ANALYSIS_EXCIPIENT_ID"));
+		analysisExcipientDto.setExcipientId(resultSet.getInt("EXCIPIENT_ID"));
+		analysisExcipientDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+		analysisExcipientDto.setMaterialType(resultSet.getString("MATERIAL_TYPE"));
+		analysisExcipientDto.setMaterialName(resultSet.getString("MATERIAL_NAME"));
+		analysisExcipientDto.setBatchNo(resultSet.getString("BATCH_NO"));
+		analysisExcipientDto.setSourceName(resultSet.getString("SOURCE_NAME"));
+		analysisExcipientDto.setPotency(resultSet.getString("POTENCY"));
+		analysisExcipientDto.setGrade(resultSet.getString("GRADE"));
+		analysisExcipientDto.setStatus(resultSet.getString("STATUS"));
+
+		return analysisExcipientDto;
+	}
+
+	private TestRequestFormDto getTestRequestFormDto(ResultSet resultSet) throws SQLException {
+
+		TestRequestFormDto testRequestFormDto = new TestRequestFormDto();
+		testRequestFormDto.setTestRequestFormId(resultSet.getInt("TRF_ID"));
+		testRequestFormDto.setExpId(resultSet.getInt("EXP_ID"));
+		testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));
+		testRequestFormDto.setTestName(resultSet.getString("TEST_NAME"));
+		testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
+		testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
+		testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
+
+		return testRequestFormDto;
+	}
 
 }

@@ -44,8 +44,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 		analysisDao.batchExcipientInsert(analysisRequest.getExcipients());
 		}
 		
+		if(!CollectionUtils.isEmpty(analysisRequest.getTestRequestFormList())) {
+			analysisDao.batchTRFUpdate(analysisRequest.getTestRequestFormList(), analysisId);
+		}
+		
 		return analysisId;
-
 	}
 
 	@Override

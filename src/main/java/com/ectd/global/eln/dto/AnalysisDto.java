@@ -17,6 +17,7 @@ public class AnalysisDto extends Base implements Serializable {
     
     private Set<AnalysisDetailsDto> analysisDetails;
     private Set<AnalysisExcipientDto> analysisExcipients;
+    private Set<TestRequestFormDto> testRequestForms;
     
 	// Constructor
 	public AnalysisDto() {
@@ -73,6 +74,14 @@ public class AnalysisDto extends Base implements Serializable {
 	public void setAnalysisExcipients(Set<AnalysisExcipientDto> analysisExcipients) {
 		this.analysisExcipients = analysisExcipients;
 	}
+
+	public Set<TestRequestFormDto> getTestRequestForms() {
+		return testRequestForms;
+	}
+
+	public void setTestRequestForms(Set<TestRequestFormDto> testRequestForms) {
+		this.testRequestForms = testRequestForms;
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
@@ -80,7 +89,6 @@ public class AnalysisDto extends Base implements Serializable {
 		sb.append(projectId); 
 		return sb.toString();
 	}
-	
 	
 	@Override
 	public boolean equals(Object o) {
