@@ -96,10 +96,10 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		StringBuilder sb = new StringBuilder(GET_ANALYSIS_LIST_QUERY);
 
 		if(teamId != null) {
-			sb.append("TEAM_ID = " + teamId);
+			sb.append(" AND TEAM_ID = " + teamId);
 		}
 
-		sb.append("ORDER BY INSERT_DATE DESC");
+		sb.append(" ORDER BY INSERT_DATE DESC");
 
 		return jdbcTemplate.query(sb.toString(), new AnalysisRowMapper());
 	}
