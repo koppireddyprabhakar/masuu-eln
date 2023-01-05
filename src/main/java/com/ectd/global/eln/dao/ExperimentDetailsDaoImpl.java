@@ -78,7 +78,9 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
-		return namedParameterJdbcTemplate.update(CREATE_EXPERIMENT_DETAILS_QUERY, parameters, keyHolder);
+		namedParameterJdbcTemplate.update(CREATE_EXPERIMENT_DETAILS_QUERY, parameters, keyHolder);
+		
+		return keyHolder.getKey().intValue();
 	}
 
 	@Override

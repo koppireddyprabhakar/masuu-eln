@@ -113,7 +113,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("teamId", experimentRequest.getTeamId());
 		parameters.addValue("userId", experimentRequest.getUserId());
 		parameters.addValue("experimentName", experimentRequest.getExperimentName());
-		parameters.addValue("experimentStatus", experimentRequest.getExperimentStatus());
+		parameters.addValue("experimentStatus", ExperimentRequest.EXPERIMENT_STATUS.INPROGRESS.name());
 		parameters.addValue("summary", experimentRequest.getSummary());
 		parameters.addValue("batchSize", experimentRequest.getBatchSize());
 		parameters.addValue("batchNumber", experimentRequest.getBatchNumber());

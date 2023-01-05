@@ -52,12 +52,12 @@ public class ExperimentDetailsServiceImpl implements ExperimentDetailsService {
 	public Integer saveExperimentDetails(ExperimentDetails experimentDetails) {
 
 		if(experimentDetails.getExperimentDetailId() == null) {
-			this.createExperimentDetails(experimentDetails);
+			return this.createExperimentDetails(experimentDetails);
 		} else {
 			this.updateExperimentDetails(experimentDetails);
 		}
 		
-		return 1;
+		return experimentDetails.getExperimentDetailId();
 	}
 
 

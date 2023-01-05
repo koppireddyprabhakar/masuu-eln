@@ -112,7 +112,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("projectId", analysisRequest.getProjectId());
 		parameters.addValue("teamId", analysisRequest.getTeamId());
 		parameters.addValue("summary", analysisRequest.getProjectId());
-		parameters.addValue("status", analysisRequest.getStatus());
+		parameters.addValue("status", AnalysisRequest.ANALYSIS_STATUS.INPROGRESS.name());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
