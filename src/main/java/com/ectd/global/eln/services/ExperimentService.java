@@ -21,4 +21,6 @@ public interface ExperimentService {
 
 	List<ExperimentDto> getExperimentsInfo(Integer experimentId);
 	
+	Integer updateExperimentStatus(Integer experimentId, String status);
+	
 }

@@ -107,7 +107,8 @@ public class AnalysisController extends BaseController {
 
 	@PostMapping("/save-analysis-details")
 	public ResponseEntity<String> saveAnalysisDetails(@RequestBody AnalysisDetails analysisDetails) {
-		return getResponseEntity(analysisExpeimentDetailsService.saveAnalysisDetails(analysisDetails), "Analysis details created");		
+		 Integer analysisDetailsId = analysisExpeimentDetailsService.saveAnalysisDetails(analysisDetails);	
+			return new ResponseEntity<String>(this.getJson(analysisDetailsId+""), HttpStatus.OK);
 	}
 
 	@PutMapping("/update-analysis-details")

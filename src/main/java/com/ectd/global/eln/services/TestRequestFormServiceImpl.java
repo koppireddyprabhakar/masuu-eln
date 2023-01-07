@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ectd.global.eln.dao.TestRequestFormDao;
 import com.ectd.global.eln.dto.TestRequestFormDto;
+import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 
 @Service
@@ -18,6 +19,9 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 	@Autowired
 	private TestRequestFormDao testRequestFormDao;
 
+	@Autowired
+	private ExperimentService experimentService;
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public TestRequestFormDto getTestRequestFormById(Integer testRequestFormId) {
@@ -56,6 +60,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 			return testRequest;
 		}).collect(Collectors.toList());
 		int[] rowsEffected = testRequestFormDao.batchTestRequestInsert(testRequestFormRequestList);
+		experimentService.updateExperimentStatus(testRequestFormRequest.getExpId(), ExperimentRequest.EXPERIMENT_STATUS.CREATED_TRF.name());
 //		Integer testRequestFormId = testRequestFormDao.createTestRequestForm(testRequestFormRequest);
 		
 //		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {

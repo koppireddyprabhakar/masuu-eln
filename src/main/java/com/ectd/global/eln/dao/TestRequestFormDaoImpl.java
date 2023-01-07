@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
+import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.request.TrfTestResultRequest;
 import com.ectd.global.eln.utils.ElnUtils;
@@ -259,7 +260,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			experimentDto.setProjectId(resultSet.getInt("PROJECT_ID"));
 			experimentDto.setTeamId(resultSet.getInt("TEAM_ID"));
 			experimentDto.setUserId(resultSet.getInt("USER_ID"));
-			experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
+			experimentDto.setExperimentStatus(ExperimentRequest.EXPERIMENT_STATUS.valueOf(resultSet.getString("EXPERIMENT_STATUS")).getValue());
 			experimentDto.setSummary(resultSet.getString("SUMMARY"));
 			experimentDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
 			experimentDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));

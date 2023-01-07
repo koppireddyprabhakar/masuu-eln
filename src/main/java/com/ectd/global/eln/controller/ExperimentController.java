@@ -70,6 +70,11 @@ public class ExperimentController extends BaseController {
 		return getResponseEntity(experimentService.updateExperiment(experimentRequest), "Experiment Update");
 	}
 
+	@PutMapping("/update-experiment-status")
+	public ResponseEntity<String> updateExperimentStatus(@RequestParam Integer experimentId, @RequestParam String status) {
+		return getResponseEntity(experimentService.updateExperimentStatus(experimentId, status), "Experiment Update");
+	}
+	
 	@DeleteMapping("/delete-experiment")
 	public ResponseEntity<String> deleteExperiment(@RequestBody ExperimentRequest experimentRequest) throws Exception {
 		return getResponseEntity(experimentService.deleteExperiment(experimentRequest), "Experiment Delete");

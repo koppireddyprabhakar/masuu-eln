@@ -71,12 +71,15 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 	@Value(value="${update.experiment.details}")
 	private String UPDATE_EXPERIMENT_DETAILS_QUERY;
-	
+
 	@Value("${get.experiment.project}")
 	private String GET_EXPERIMENT_PROJECT_QUERY;
-	
+
 	@Value("${get.experiment.info}")
 	private String GET_EXPERIMENT_INFO_QUERY;
+
+	@Value("${update.experiment.status}")
+	private String UPDATE_EXPERIMENT_STATUS_QUERY;
 
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
@@ -124,7 +127,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(CREATE_EXPERIMENT_QUERY, parameters, keyHolder);
-		
+
 		return keyHolder.getKey().intValue();
 	}
 
@@ -211,16 +214,26 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 	@Override
 	public List<ExperimentDto> getExperimentsInfo(Integer experimentId) {
-		
+
 		return jdbcTemplate.query(GET_EXPERIMENT_INFO_QUERY + experimentId, new ExperimentIdRowMapper());
 	}
-	
+
+	@Override
+	public Integer updateExperimentStatus(Integer experimentId, String status) {
+
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("experimentId", experimentId);
+		parameters.addValue("experimentStatus", status);
+
+		return namedParameterJdbcTemplate.update(UPDATE_EXPERIMENT_STATUS_QUERY, parameters);
+	}
+
 	class ExperimentRowMapper implements RowMapper<ExperimentDto> {
 		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			return getExperimentDto(resultSet);
 		};
 	}
-	
+
 	class ExperimentExtractor implements ResultSetExtractor<List<ExperimentDto>> {
 
 		@Override
@@ -229,10 +242,10 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 			while(resultSet.next()) {
 				ExperimentDto experimentDto = getExperimentDto(resultSet);
-				
-			    ExperimentDetailsDto experimentDetails = getExperimentDetailsWithOutContent(resultSet);
-			    ExperimentExcipientDto experimentExcipientDto = getExperimentExcipientDto(resultSet);
-				
+
+				ExperimentDetailsDto experimentDetails = getExperimentDetailsWithOutContent(resultSet);
+				ExperimentExcipientDto experimentExcipientDto = getExperimentExcipientDto(resultSet);
+
 				if(CollectionUtils.contains(experimentDtoList.iterator(), experimentDto)) {
 					int index = experimentDtoList.indexOf(experimentDto);
 					experimentDtoList.get(index).getExperimentDetails().add(experimentDetails);
@@ -241,71 +254,71 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 					Set<ExperimentDetailsDto> experimentDetailsList = new HashSet<>();
 					Set<ExperimentExcipientDto> excipients = new HashSet<>();
-				    
-				    experimentDetailsList.add(experimentDetails);
-				    excipients.add(experimentExcipientDto);
-					
-				    experimentDto.setExperimentDetails(experimentDetailsList);
-				    experimentDto.setExperimentExcipients(excipients);
 
-				    experimentDtoList.add(experimentDto);
+					experimentDetailsList.add(experimentDetails);
+					excipients.add(experimentExcipientDto);
+
+					experimentDto.setExperimentDetails(experimentDetailsList);
+					experimentDto.setExperimentExcipients(excipients);
+
+					experimentDtoList.add(experimentDto);
 				}
-			    
-				}
+
+			}
 			return experimentDtoList;
 		};
 	}
-	
+
 	class ExperimentProjectRowMapper implements RowMapper<ExperimentDto> {
 		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			
+
 			ExperimentDto experimentDto = getExperimentDto(resultSet);
-			
+
 			experimentDto.setProject(getProject(resultSet));
-			
+
 			return experimentDto;
 		};
 	}
-	
+
 	class ExperimentIdRowMapper implements RowMapper<ExperimentDto> {
 		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			
+
 			ExperimentDto experimentDto = getExperimentDto(resultSet);
 			experimentDto.setProject(getProject(resultSet));
-			
+
 			Set<ExperimentDetailsDto> experimentDetailsList = new HashSet<>();
-		    Set<ExperimentExcipientDto> excipients = new HashSet<>();
-			
-		    ExperimentDetailsDto experimentDetails = getExperimentDetails(resultSet);
-		    ExperimentExcipientDto experimentExcipientDto = getExperimentExcipientDto(resultSet);
-		    
-		    if(CollectionUtils.isEmpty( experimentDto.getExperimentDetails())) {
-		    	experimentDetailsList.add(experimentDetails);
-		    	experimentDto.setExperimentDetails(experimentDetailsList);
-		    } else {
-		    	experimentDto.getExperimentDetails().add(experimentDetails);
-		    }
-		    
-		    if(CollectionUtils.isEmpty( experimentDto.getExperimentExcipients())) {
-		    	excipients.add(experimentExcipientDto);
-		    	experimentDto.setExperimentExcipients(excipients);
-		    } else {
-		    	experimentDto.getExperimentExcipients().add(experimentExcipientDto);
-		    }
-		    
+			Set<ExperimentExcipientDto> excipients = new HashSet<>();
+
+			ExperimentDetailsDto experimentDetails = getExperimentDetails(resultSet);
+			ExperimentExcipientDto experimentExcipientDto = getExperimentExcipientDto(resultSet);
+
+			if(CollectionUtils.isEmpty( experimentDto.getExperimentDetails())) {
+				experimentDetailsList.add(experimentDetails);
+				experimentDto.setExperimentDetails(experimentDetailsList);
+			} else {
+				experimentDto.getExperimentDetails().add(experimentDetails);
+			}
+
+			if(CollectionUtils.isEmpty( experimentDto.getExperimentExcipients())) {
+				excipients.add(experimentExcipientDto);
+				experimentDto.setExperimentExcipients(excipients);
+			} else {
+				experimentDto.getExperimentExcipients().add(experimentExcipientDto);
+			}
+
 			return experimentDto;
 		};
 	}
-	
+
 	private ExperimentDto getExperimentDto(ResultSet resultSet) throws SQLException {
-		
+
 		ExperimentDto experimentDto = new ExperimentDto();
 		experimentDto.setExpId(resultSet.getInt("EXP_ID"));
 		experimentDto.setExperimentName(resultSet.getString("EXPERIMENT_NAME"));
 		experimentDto.setProjectId(resultSet.getInt("PROJECTID"));
 		experimentDto.setTeamId(resultSet.getInt("TEAMID"));
 		experimentDto.setUserId(resultSet.getInt("USER_ID"));
-		experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
+		experimentDto.setExperimentStatus(ExperimentRequest.EXPERIMENT_STATUS.valueOf(resultSet.getString("EXPERIMENT_STATUS")).getValue());
 		experimentDto.setSummary(resultSet.getString("SUMMARY"));
 		experimentDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
 		experimentDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
@@ -317,7 +330,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 		return experimentDto;
 	}
-	
+
 	private ProjectDto getProject(ResultSet resultSet) throws SQLException {
 		ProjectDto projectDto = new ProjectDto();
 		projectDto.setProjectId(resultSet.getInt("PROJECT_ID"));
@@ -335,16 +348,16 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		projectDto.setTeamName(resultSet.getString("TEAM_NAME"));
 		projectDto.setMarketId(resultSet.getInt("MARKET_ID"));
 		projectDto.setMarkertName(resultSet.getString("MARKET_NAME"));
-		
+
 		return projectDto;
 	}
-	
+
 	private ExperimentExcipientDto getExperimentExcipientDto(ResultSet resultSet) throws SQLException {
-		
+
 		ExperimentExcipientDto experimentExcipientDto = new ExperimentExcipientDto();
 		experimentExcipientDto.setExcipientId(resultSet.getInt("EXCIPIENT_ID"));
 		experimentExcipientDto.setExperimentId(resultSet.getInt("EXP_ID"));
-//		experimentExcipientDto.setExcipientsName(resultSet.getString("EXCIPIENTS_NAME"));
+		//		experimentExcipientDto.setExcipientsName(resultSet.getString("EXCIPIENTS_NAME"));
 		experimentExcipientDto.setMaterialType(resultSet.getString("MATERIAL_TYPE"));
 		experimentExcipientDto.setMaterialName(resultSet.getString("MATERIAL_NAME"));
 		experimentExcipientDto.setBatchNo(resultSet.getString("BATCH_NO"));
@@ -352,32 +365,32 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		experimentExcipientDto.setPotency(resultSet.getString("POTENCY"));
 		experimentExcipientDto.setGrade(resultSet.getString("GRADE"));
 		experimentExcipientDto.setStatus(resultSet.getString("STATUS"));
-		
+
 		return experimentExcipientDto;
 	}
-	
+
 	private ExperimentDetailsDto getExperimentDetails(ResultSet resultSet) throws SQLException {
-		
+
 		ExperimentDetailsDto experimentDetails = new ExperimentDetailsDto();
 		experimentDetails.setExperimentDetailId(resultSet.getInt("EXP_DETAIL_ID"));
 		experimentDetails.setExperimentId(resultSet.getInt("EXP_ID"));
 		experimentDetails.setName(resultSet.getString("NAME"));
 		experimentDetails.setFileContent(resultSet.getString("LOB_DETAILS"));
 		experimentDetails.setStatus(resultSet.getString("STATUS"));
-		
+
 		return experimentDetails;
-		
+
 	}
-	
+
 	private ExperimentDetailsDto getExperimentDetailsWithOutContent(ResultSet resultSet) throws SQLException {
-		
+
 		ExperimentDetailsDto experimentDetails = new ExperimentDetailsDto();
 		experimentDetails.setExperimentDetailId(resultSet.getInt("EXP_DETAIL_ID"));
 		experimentDetails.setExperimentId(resultSet.getInt("EXP_ID"));
 		experimentDetails.setName(resultSet.getString("NAME"));
 		experimentDetails.setStatus(resultSet.getString("STATUS"));
-		
+
 		return experimentDetails;
 	}
-	
+
 }

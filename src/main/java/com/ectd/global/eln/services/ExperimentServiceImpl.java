@@ -75,6 +75,12 @@ public class ExperimentServiceImpl implements ExperimentService {
 		return experimentDao.getExperimentsInfo(experimentId);
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public Integer updateExperimentStatus(Integer experimentId, String status) {
+		return experimentDao.updateExperimentStatus(experimentId, status);
+	}
+
 	private Integer update(ExperimentRequest experimentRequest) {
 
 		experimentDao.updateExperiment(experimentRequest);
