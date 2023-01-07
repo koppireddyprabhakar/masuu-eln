@@ -114,8 +114,9 @@ public class ExperimentController extends BaseController {
 	}
 
 	@PostMapping("/save-experiment-details")
-	public ResponseEntity<Integer> saveExperimentDetails(@RequestBody ExperimentDetails experimentDetails) {
-		return new ResponseEntity<>(experimentDetailsService.saveExperimentDetails(experimentDetails), HttpStatus.OK);		
+	public ResponseEntity<String> saveExperimentDetails(@RequestBody ExperimentDetails experimentDetails) {
+		Integer experimentDetailsId = experimentDetailsService.saveExperimentDetails(experimentDetails);	
+		return new ResponseEntity<String>(this.getJson(experimentDetailsId+""), HttpStatus.OK);
 	}
 
 	@PutMapping("/update-experiment-details")

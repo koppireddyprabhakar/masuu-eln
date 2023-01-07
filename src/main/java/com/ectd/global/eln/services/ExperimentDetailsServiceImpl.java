@@ -60,5 +60,4 @@ public class ExperimentDetailsServiceImpl implements ExperimentDetailsService {
 		return experimentDetails.getExperimentDetailId();
 	}
 
-
 }
