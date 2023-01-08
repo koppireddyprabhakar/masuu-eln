@@ -178,7 +178,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	}
 
 	@Override
-	public int[] batchExcipientInsert(List<AnalysisExcipient> excipients) {
+	public Integer batchExcipientInsert(List<AnalysisExcipient> excipients) {
 
 		excipients.stream().forEach(e -> {
 			e.setInsertDate(ElnUtils.getTimeStamp());
@@ -188,7 +188,8 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(excipients.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_ANALYSIS_EXCIPIENT_QUERY, batch);
+		int[] effectedRows = this.namedParameterJdbcTemplate.batchUpdate(CREATE_ANALYSIS_EXCIPIENT_QUERY, batch);
+		return effectedRows.length;
 	}
 
 	@Override

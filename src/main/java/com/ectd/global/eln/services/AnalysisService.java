@@ -24,6 +24,6 @@ public interface AnalysisService {
 
 	Integer updateAnalysisExcipient(AnalysisExcipient analysisExcipient);
 	
-	Integer saveAnalysisExcipients(AnalysisExcipient analysisExcipient);
+	Integer saveAnalysisExcipients(List<AnalysisExcipient> analysisExcipient);
 
 }

@@ -22,7 +22,7 @@ public interface AnalysisDao {
 	
 	int[] batchAnalysisDetailsInsert(List<AnalysisDetails> analysisDetailsList);
 	
-	int[] batchExcipientInsert(List<AnalysisExcipient> excipients);
+	Integer batchExcipientInsert(List<AnalysisExcipient> excipients);
 	
 	int[] batchExcipientUpdate(List<AnalysisExcipient> excipients);
 	

@@ -9,7 +9,7 @@ public class AnalysisAttachmentDto extends Base implements Serializable {
 	private static final long serialVersionUID = -6940360422541430151L;
 
 	private Integer analysisAttachmentId;
-	private Integer experimentId;
+	private Integer analysisExperimentId;
 	private String attachmentLocation;
 	
 	public Integer getAnalysisAttachmentId() {
@@ -19,18 +19,18 @@ public class AnalysisAttachmentDto extends Base implements Serializable {
 		this.analysisAttachmentId = analysisAttachmentId;
 	}
 	
-	public Integer getExperimentId() {
-		return experimentId;
-	}
-	public void setExperimentId(Integer experimentId) {
-		this.experimentId = experimentId;
-	}
-	
 	public String getAttachmentLocation() {
 		return attachmentLocation;
 	}
 	public void setAttachmentLocation(String attachmentLocation) {
 		this.attachmentLocation = attachmentLocation;
+	}
+
+	public Integer getAnalysisExperimentId() {
+		return analysisExperimentId;
+	}
+	public void setAnalysisExperimentId(Integer analysisExperimentId) {
+		this.analysisExperimentId = analysisExperimentId;
 	}
 	
 }

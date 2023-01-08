@@ -1,5 +1,7 @@
 package com.ectd.global.eln.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.ectd.global.eln.dto.AnalysisAttachmentDto;
+import com.ectd.global.eln.dto.ExcipientDto;
 import com.ectd.global.eln.request.AnalysisAttachment;
 import com.ectd.global.eln.utils.ElnUtils;
 
@@ -42,7 +46,7 @@ public class AnalysisAttachmentDaoImpl implements AnalysisAttachmentDao {
 
 	@Override
 	public AnalysisAttachmentDto getAnalysisAttachmentById(Integer analysisExperimentId) {
-		return jdbcTemplate.queryForObject(GET_ANALYSIS_ATTACHMENT_BY_ID, new BeanPropertyRowMapper<AnalysisAttachmentDto>(), analysisExperimentId);
+		return jdbcTemplate.queryForObject(GET_ANALYSIS_ATTACHMENT_BY_ID, new AnalysisAttachmentRowMapper(), analysisExperimentId);
 	}
 
 	@Override
@@ -50,13 +54,13 @@ public class AnalysisAttachmentDaoImpl implements AnalysisAttachmentDao {
 		StringBuilder sb = new StringBuilder(GET_ANALYSIS_ATTACHMENT_LIST);
 
 		if(experimentId != null) {
-			sb.append(" AND EXP_ID = " + experimentId);
+			sb.append(" AND ANALYSIS_EXP_ID = " + experimentId);
 		}
 		if(fileName != null) {
 			sb.append(" AND ATTACHMENT_LOCATION LIKE '%" + fileName +"%'");
 		}
 
-		return jdbcTemplate.query(sb.toString(), new BeanPropertyRowMapper<AnalysisAttachmentDto>());
+		return jdbcTemplate.query(sb.toString(), new AnalysisAttachmentRowMapper());
 	}
 
 	@Override
@@ -94,6 +98,23 @@ public class AnalysisAttachmentDaoImpl implements AnalysisAttachmentDao {
 	@Override
 	public Integer deleteAnalysisAttachment(AnalysisAttachment analysisAttachment) {
 		return this.updateAnalysisAttachment(analysisAttachment);
+	}
+	
+	class AnalysisAttachmentRowMapper implements RowMapper<AnalysisAttachmentDto> {
+		
+		public AnalysisAttachmentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			AnalysisAttachmentDto analysisAttachmentDto = new AnalysisAttachmentDto();
+			analysisAttachmentDto.setAnalysisAttachmentId(resultSet.getInt("ANALYSIS_ATT_ID"));
+			analysisAttachmentDto.setAnalysisExperimentId(resultSet.getInt("ANALYSIS_EXP_ID"));
+			analysisAttachmentDto.setAttachmentLocation(resultSet.getString("ATTACHMENT_LOCATION"));
+			analysisAttachmentDto.setStatus(resultSet.getString("STATUS"));
+			analysisAttachmentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+			analysisAttachmentDto.setInsertUser(resultSet.getString("INSERT_USER"));
+			analysisAttachmentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
+			analysisAttachmentDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+			
+			return analysisAttachmentDto;
+		};
 	}
 
 }

@@ -98,15 +98,15 @@ public class AnalysisServiceImpl implements AnalysisService {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer saveAnalysisExcipients(AnalysisExcipient analysisExcipient) {
+	public Integer saveAnalysisExcipients(List<AnalysisExcipient> analysisExcipients) {
 		
-		if(analysisExcipient.getAnalysisExcipientId() == null) {
-			this.createAnalysisExcipient(analysisExcipient);
-		} else {
-			this.updateAnalysisExcipient(analysisExcipient);
-		}
+//		if(analysisExcipient.getAnalysisExcipientId() == null) {
+//			this.createAnalysisExcipient(analysisExcipient);
+//		} else {
+//			this.updateAnalysisExcipient(analysisExcipient);
+//		}
 		
-		return 1;
+		return analysisDao.batchExcipientInsert(analysisExcipients);
 	}
 
 }

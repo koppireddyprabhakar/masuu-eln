@@ -143,18 +143,18 @@ public class AnalysisController extends BaseController {
 	}
 
 	@PostMapping("/create-analysis-excipient")
-	public ResponseEntity<String> createAnalysisExcipient(AnalysisExcipient analysisExcipient) {
+	public ResponseEntity<String> createAnalysisExcipient(@RequestBody AnalysisExcipient analysisExcipient) {
 		return getResponseEntity(analysisService.createAnalysisExcipient(analysisExcipient), "Analysis Excipient Create");
 	}
 
 	@PutMapping("/update-analysis-excipient")
-	public ResponseEntity<String> updateAnalysisExcipient(AnalysisExcipient analysisExcipient) {
+	public ResponseEntity<String> updateAnalysisExcipient(@RequestBody AnalysisExcipient analysisExcipient) {
 		return getResponseEntity(analysisService.updateAnalysisExcipient(analysisExcipient), "Analysis Excipient Update");
 	}
 
 	@PostMapping("/save-analysis-excipient")
-	public ResponseEntity<String> saveAnalysisExcipients(AnalysisExcipient analysisExcipient) {
-		return getResponseEntity(analysisService.saveAnalysisExcipients(analysisExcipient), "Analysis Excipient Create");
+	public ResponseEntity<String> saveAnalysisExcipients(@RequestBody List<AnalysisExcipient> analysisExcipients) {
+		return getResponseEntity(analysisService.saveAnalysisExcipients(analysisExcipients), "Analysis Excipient Create");
 	}
 
 }

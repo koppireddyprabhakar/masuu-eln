@@ -52,7 +52,7 @@ public class AnalysisExpeimentDetailsServiceImpl implements AnalysisExpeimentDet
 	public Integer saveAnalysisDetails(AnalysisDetails analysisDetails) {
 		
 		if(analysisDetails.getAnalysisDetailId() == null) {
-			return this.createAnalysisDetails(analysisDetails);
+			this.createAnalysisDetails(analysisDetails);
 		} else {
 			this.updateAnalysisDetails(analysisDetails);
 		}
