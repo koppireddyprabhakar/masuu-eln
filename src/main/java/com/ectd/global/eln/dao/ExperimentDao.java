@@ -21,9 +21,9 @@ public interface ExperimentDao {
 
 	int[] batchInsert(List<ExperimentDetails> experimentDetailsList);
 
-	int[] batchExcipientInsert(List<ExcipientRequest> excipients);
+	Integer batchExcipientInsert(List<ExcipientRequest> excipients);
 	
-	int[] batchExcipientUpdate(List<ExcipientRequest> excipients);
+	Integer batchExcipientUpdate(List<ExcipientRequest> excipients);
 	
 	int[] batchUpdate(List<ExperimentDetails> experimentDetails);
 

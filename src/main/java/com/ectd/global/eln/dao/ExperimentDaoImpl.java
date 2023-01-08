@@ -146,7 +146,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	}
 
 	@Override
-	public int[] batchExcipientInsert(List<ExcipientRequest> excipients) {
+	public Integer batchExcipientInsert(List<ExcipientRequest> excipients) {
 
 		excipients.stream().forEach(e -> {
 			e.setInsertDate(ElnUtils.getTimeStamp());
@@ -156,11 +156,14 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(excipients.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_EXPERIMENT_EXCIPIENT_QUERY, batch);
+		
+		int[] excipientsInsert = this.namedParameterJdbcTemplate.batchUpdate(CREATE_EXPERIMENT_EXCIPIENT_QUERY, batch);
+		
+		return excipientsInsert.length;
 	}
 
 	@Override
-	public int[] batchExcipientUpdate(List<ExcipientRequest> excipients) {
+	public Integer batchExcipientUpdate(List<ExcipientRequest> excipients) {
 
 		excipients.stream().forEach(e -> {
 			e.setUpdateDate(ElnUtils.getTimeStamp());
@@ -168,7 +171,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(excipients.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate(UPDATE_EXPERIMENT_EXCIPIENT_QUERY, batch);
+		int[] excipientsUpdatedRows = this.namedParameterJdbcTemplate.batchUpdate(UPDATE_EXPERIMENT_EXCIPIENT_QUERY, batch);
+		
+		return excipientsUpdatedRows.length;
 	}
 
 	@Override

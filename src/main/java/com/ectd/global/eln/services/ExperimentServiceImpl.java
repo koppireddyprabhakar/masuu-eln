@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dto.ExperimentDto;
+import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentRequest;
 
 @Service
@@ -52,8 +53,13 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer updateExperiment(ExperimentRequest experimentRequest) {
+	public Integer saveExcipient(List<ExcipientRequest> excipientRequests) {
+		return	experimentDao.batchExcipientInsert(excipientRequests);
+	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer updateExperiment(ExperimentRequest experimentRequest) {
 		return this.update(experimentRequest);
 	}
 
