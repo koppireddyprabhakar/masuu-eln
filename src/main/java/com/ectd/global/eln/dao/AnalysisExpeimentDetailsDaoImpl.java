@@ -78,8 +78,8 @@ public class AnalysisExpeimentDetailsDaoImpl implements AnalysisExpeimentDetails
 	public Integer updateAnalysisDetails(AnalysisDetails analysisDetails) {
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("experimentDetailId", analysisDetails.getAnalysisDetailId());
-		parameters.addValue("experimentId", analysisDetails.getAnalysisId());
+		parameters.addValue("analysisDetailId", analysisDetails.getAnalysisDetailId());
+		parameters.addValue("analysisId", analysisDetails.getAnalysisId());
 		parameters.addValue("fileContent", analysisDetails.getFileContent().getBytes());
 		parameters.addValue("name", analysisDetails.getName());
 		parameters.addValue("status", analysisDetails.getStatus());
