@@ -1,13 +1,11 @@
 package com.ectd.global.eln.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -69,16 +67,13 @@ public class AnalysisController extends BaseController {
 	}
 
 	@PostMapping("/create-analysis")
-	public ResponseEntity<String> createAnalysis(@RequestBody AnalysisRequest analysisRequest,
-			Authentication authentication) {
-		authentication.getUsername();
+	public ResponseEntity<String> createAnalysis(@RequestBody AnalysisRequest analysisRequest) {
 		Integer analysisId = analysisService.createAnalysis(analysisRequest);
 		return new ResponseEntity<String>(this.getJson(analysisId+""), HttpStatus.OK);
 	}
 
 	@PutMapping("/update-analysis")
-	public ResponseEntity<String> updateAnalysis(@RequestBody AnalysisRequest analysisRequest, Principal principal) {
-		principal.getName();
+	public ResponseEntity<String> updateAnalysis(@RequestBody AnalysisRequest analysisRequest) {
 		return getResponseEntity(analysisService.updateAnalysis(analysisRequest), "Analysis Update");
 	}
 

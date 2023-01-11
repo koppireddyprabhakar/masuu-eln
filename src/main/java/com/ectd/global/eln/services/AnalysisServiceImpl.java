@@ -36,13 +36,13 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public Integer createAnalysis(AnalysisRequest analysisRequest) {
 		Integer analysisId = analysisDao.createAnalysis(analysisRequest);
 
-		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
-		analysisDao.batchAnalysisDetailsInsert(analysisRequest.getAnalysisDetailsList());
-		}
-		
-		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
-		analysisDao.batchExcipientInsert(analysisRequest.getExcipients());
-		}
+//		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
+//		analysisDao.batchAnalysisDetailsInsert(analysisRequest.getAnalysisDetailsList());
+//		}
+//		
+//		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
+//		analysisDao.batchExcipientInsert(analysisRequest.getExcipients());
+//		}
 		
 		if(!CollectionUtils.isEmpty(analysisRequest.getTestRequestFormList())) {
 			analysisDao.batchTRFUpdate(analysisRequest.getTestRequestFormList(), analysisId);

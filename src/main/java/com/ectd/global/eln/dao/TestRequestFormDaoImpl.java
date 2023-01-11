@@ -187,8 +187,8 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			TestRequestFormDto testRequestFormDto = new TestRequestFormDto();
 			testRequestFormDto.setTestRequestFormId(resultSet.getInt("TRF_ID"));
 			testRequestFormDto.setExpId(resultSet.getInt("EXP_ID"));
-			//			testRequestFormDto.setProjectId(resultSet.getInt("PROJECT_ID"));
-			//			testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+			//testRequestFormDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+			//testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
 			testRequestFormDto.setTestRequestFormStatus(resultSet.getString("TRF_STATUS"));
 			testRequestFormDto.setCondition(resultSet.getString("CONDITION"));
 			testRequestFormDto.setStage(resultSet.getString("STAGE"));
@@ -207,6 +207,27 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			testRequestFormDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			testRequestFormDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+
+			ProjectDto project = new ProjectDto();
+			project.setProjectId(resultSet.getInt("PROJECT_ID"));
+			project.setProjectName(resultSet.getString("PROJECT_NAME"));
+			project.setProductCode(resultSet.getString("PRODUCT_CODE"));
+			project.setProductName(resultSet.getString("PRODUCT_NAME"));
+			project.setDosageName(resultSet.getString("DOSAGE_NAME"));
+			project.setFormulationName(resultSet.getString("FORMULATION_NAME"));
+			project.setStrength(resultSet.getString("STRENGTH"));
+			project.setMarkertName(resultSet.getString("MARKET_NAME"));
+
+			ExperimentDto experiment = new ExperimentDto();
+			experiment.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
+			experiment.setBatchSize(resultSet.getString("BATCH_SIZE"));
+			experiment.setExperimentName(resultSet.getString("EXPERIMENT_NAME"));
+			experiment.setTeamId(resultSet.getInt("TEAM_ID"));
+			experiment.setUserId(resultSet.getInt("USER_ID"));
+			experiment.setExpId(resultSet.getInt("EXP_ID"));
+
+			testRequestFormDto.setProject(project);
+			testRequestFormDto.setExperiment(experiment);
 
 			return testRequestFormDto;
 		};

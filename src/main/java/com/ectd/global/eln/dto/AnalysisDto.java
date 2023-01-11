@@ -15,6 +15,8 @@ public class AnalysisDto extends Base implements Serializable {
     private String analysisName;  
     private String summary;
     
+    ProjectDto project;
+    
     private Set<AnalysisDetailsDto> analysisDetails;
     private Set<AnalysisExcipientDto> analysisExcipients;
     private Set<TestRequestFormDto> testRequestForms;
@@ -81,6 +83,14 @@ public class AnalysisDto extends Base implements Serializable {
 
 	public void setTestRequestForms(Set<TestRequestFormDto> testRequestForms) {
 		this.testRequestForms = testRequestForms;
+	}
+	
+	public ProjectDto getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectDto project) {
+		this.project = project;
 	}
 	
 	public String toString() {

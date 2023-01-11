@@ -29,6 +29,7 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
+import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
@@ -96,10 +97,10 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		StringBuilder sb = new StringBuilder(GET_ANALYSIS_LIST_QUERY);
 
 		if(teamId != null) {
-			sb.append(" AND TEAM_ID = " + teamId);
+			sb.append(" AND AE.TEAM_ID = " + teamId);
 		}
 
-		sb.append(" ORDER BY INSERT_DATE DESC");
+		sb.append(" ORDER BY AE.INSERT_DATE DESC");
 
 		return jdbcTemplate.query(sb.toString(), new AnalysisRowMapper());
 	}
@@ -158,6 +159,23 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			analysisDto.setUpdateDate(resultSet.getDate("INSERT_DATE"));
 			analysisDto.setUpdateUser(resultSet.getString("INSERT_USER"));
+			
+			ProjectDto projectDto = new ProjectDto();
+			projectDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+			projectDto.setProjectName(resultSet.getString("PROJECT_NAME"));
+			projectDto.setProductId(resultSet.getInt("PRODUCT_ID"));
+			projectDto.setProductName(resultSet.getString("PRODUCT_NAME"));
+			projectDto.setStrength(resultSet.getString("STRENGTH"));
+			projectDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
+			projectDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
+			projectDto.setFormulationId(resultSet.getInt("FORMULATION_ID"));
+			projectDto.setFormulationName(resultSet.getString("FORMULATION_NAME"));
+			projectDto.setTeamName(resultSet.getString("TEAM_NAME"));
+			projectDto.setMarketId(resultSet.getInt("MARKET_ID"));
+			projectDto.setMarkertName(resultSet.getString("MARKET_NAME"));
+
+			analysisDto.setProject(projectDto);
+			
 			return  analysisDto;
 		};
 	}
