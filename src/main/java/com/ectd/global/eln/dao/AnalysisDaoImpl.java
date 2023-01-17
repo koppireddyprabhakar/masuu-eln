@@ -120,6 +120,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("teamId", analysisRequest.getTeamId());
 		parameters.addValue("summary", analysisRequest.getProjectId());
 		parameters.addValue("status", AnalysisRequest.ANALYSIS_STATUS.INPROGRESS.name());
+		parameters.addValue("userId", analysisRequest.getUserId());
+		parameters.addValue("batchSize", analysisRequest.getBatchSize());
+		parameters.addValue("batchNumber", analysisRequest.getBatchNumber());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
@@ -140,6 +143,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("teamId", analysisRequest.getTeamId());
 		parameters.addValue("summary", analysisRequest.getProjectId());
 		parameters.addValue("status", analysisRequest.getStatus());
+		parameters.addValue("userId", analysisRequest.getUserId());
+		parameters.addValue("batchSize", analysisRequest.getBatchSize());
+		parameters.addValue("batchNumber", analysisRequest.getBatchNumber());
 		parameters.addValue("updateUser", analysisRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
