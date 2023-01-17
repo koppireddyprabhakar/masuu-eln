@@ -3,6 +3,7 @@ package com.ectd.global.eln.services;
 import java.util.List;
 
 import com.ectd.global.eln.dto.AnalysisDto;
+import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
 
@@ -25,5 +26,7 @@ public interface AnalysisService {
 	Integer updateAnalysisExcipient(AnalysisExcipient analysisExcipient);
 	
 	Integer saveAnalysisExcipients(List<AnalysisExcipient> analysisExcipient);
+	
+	List<TestRequestFormDto> getTestRequestByAnalysisId(Integer analysisId);
 
 }

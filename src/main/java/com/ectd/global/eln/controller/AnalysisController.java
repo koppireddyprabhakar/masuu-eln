@@ -152,4 +152,9 @@ public class AnalysisController extends BaseController {
 		return getResponseEntity(analysisService.saveAnalysisExcipients(analysisExcipients), "Analysis Excipient Create");
 	}
 
+	@GetMapping("get-test-requests-by-analysi-id")
+	public ResponseEntity<List<TestRequestFormDto>> getTestRequestByAnalysisId(@RequestParam Integer analysisId) {
+		return new ResponseEntity<>(analysisService.getTestRequestByAnalysisId(analysisId), HttpStatus.OK);
+	}
+	
 }

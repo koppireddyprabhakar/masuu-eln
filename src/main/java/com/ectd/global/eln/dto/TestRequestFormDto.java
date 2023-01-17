@@ -13,7 +13,7 @@ public class TestRequestFormDto extends Base implements Serializable {
 	private Integer testRequestFormId;
     private Integer expId;
 //    private Integer projectId;  
-//    private Integer analysisId;  
+    private Integer analysisId;  
     private String testRequestFormStatus;
     private String condition;
     private String stage;
@@ -55,13 +55,13 @@ public class TestRequestFormDto extends Base implements Serializable {
 //	public void setProjectId(Integer projectId) {
 //		this.projectId = projectId;
 //	}
-//	
-//	public Integer getAnalysisId() {
-//		return this.analysisId;
-//	}
-//	public void setAnalysisId(Integer analysisId) {
-//		this.analysisId = analysisId;
-//	}
+	
+	public Integer getAnalysisId() {
+		return this.analysisId;
+	}
+	public void setAnalysisId(Integer analysisId) {
+		this.analysisId = analysisId;
+	}
 	
 	public String getTestRequestFormStatus() {
 		return this.testRequestFormStatus;
