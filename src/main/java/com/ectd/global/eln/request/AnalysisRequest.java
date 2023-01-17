@@ -11,8 +11,12 @@ public class AnalysisRequest extends Base implements Serializable {
 	private Integer analysisId;  
 	private Integer projectId;  
 	private Integer teamId;  
+	private Integer userId;
 	private String analysisName;  
-	private String summary;  
+	private String status;
+	private String summary;
+	private String batchSize;
+	private String batchNumber;
 
 	private List<AnalysisDetails> analysisDetailsList;
 	private List<AnalysisExcipient> excipients;
@@ -77,6 +81,38 @@ public class AnalysisRequest extends Base implements Serializable {
 
 	public void setTestRequestFormList(List<TestRequestFormRequest> testRequestFormList) {
 		this.testRequestFormList = testRequestFormList;
+	}
+	
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getBatchSize() {
+		return batchSize;
+	}
+
+	public void setBatchSize(String batchSize) {
+		this.batchSize = batchSize;
+	}
+
+	public String getBatchNumber() {
+		return batchNumber;
+	}
+
+	public void setBatchNumber(String batchNumber) {
+		this.batchNumber = batchNumber;
 	}
 	
 	public static enum ANALYSIS_STATUS {

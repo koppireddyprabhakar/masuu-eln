@@ -79,6 +79,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	@Value("${update.trf}")
 	private String UPDATE_TRF;
 
+	@Value("${delete.analysis.excipient}")
+	private String DELETE_ANALSIS_EXCIPIENT_QUERY;
+	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_QUERY + analysisId,
@@ -145,7 +148,13 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	public Integer deleteAnalysis(Integer analysisId) {
 		return jdbcTemplate.update(DELETE_ANALYSIS_QUERY, new Object[] {analysisId});
 	}
-
+	
+	@Override
+	public Integer deleteAnalysisExcipient(Integer analysisId) {
+		return jdbcTemplate.update(DELETE_ANALSIS_EXCIPIENT_QUERY, new Object[] {analysisId});
+	}
+	
+	
 	class AnalysisRowMapper implements RowMapper<AnalysisDto> {
 		public AnalysisDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			AnalysisDto analysisDto = new AnalysisDto();

@@ -1,5 +1,6 @@
 package com.ectd.global.eln.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.AnalysisDao;
 import com.ectd.global.eln.dto.AnalysisDto;
+import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
 
@@ -35,6 +37,27 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer createAnalysis(AnalysisRequest analysisRequest) {
 		Integer analysisId = analysisDao.createAnalysis(analysisRequest);
+		
+		if(CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
+			
+			List<AnalysisDetails> analysisDetailsList = new ArrayList<AnalysisDetails>();
+			
+			AnalysisDetails analysisDetails = new AnalysisDetails();
+			analysisDetails.setAnalysisId(analysisId);
+			analysisDetails.setName("Purpose and Conclusion");
+			analysisDetails.setFileContent("");
+			analysisDetailsList.add(analysisDetails);
+			
+			analysisDetails = new AnalysisDetails();
+			analysisDetails.setAnalysisId(analysisId);
+			analysisDetails.setName("Formulation");
+			analysisDetails.setFileContent("");
+			analysisDetailsList.add(analysisDetails);
+			
+			analysisRequest.setAnalysisDetailsList(analysisDetailsList);
+			
+			analysisDao.batchAnalysisDetailsInsert(analysisRequest.getAnalysisDetailsList());
+		}
 
 //		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
 //		analysisDao.batchAnalysisDetailsInsert(analysisRequest.getAnalysisDetailsList());
@@ -100,12 +123,10 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer saveAnalysisExcipients(List<AnalysisExcipient> analysisExcipients) {
 		
-//		if(analysisExcipient.getAnalysisExcipientId() == null) {
-//			this.createAnalysisExcipient(analysisExcipient);
-//		} else {
-//			this.updateAnalysisExcipient(analysisExcipient);
-//		}
-		
+		if(CollectionUtils.isEmpty(analysisExcipients)) {
+			return 0;
+		}
+		analysisDao.deleteAnalysisExcipient(analysisExcipients.get(0).getAnalysisId());
 		return analysisDao.batchExcipientInsert(analysisExcipients);
 	}
 

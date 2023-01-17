@@ -34,4 +34,6 @@ public interface AnalysisDao {
 
 	int[] batchTRFUpdate(List<TestRequestFormRequest> testRequestFormList, Integer analysisExperimentId);
 	
+	Integer deleteAnalysisExcipient(Integer analysisId);
+	
 }

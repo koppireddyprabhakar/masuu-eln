@@ -1,5 +1,6 @@
 package com.ectd.global.eln.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.request.ExcipientRequest;
+import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
 
 @Service
@@ -37,16 +39,31 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 		Integer expermentId = experimentDao.createExperiment(experimentRequest);
 
-		if(!CollectionUtils.isEmpty(experimentRequest.getExperimentDetailsList())) {
-			experimentRequest.getExperimentDetailsList()
-			.stream().forEach(ed -> ed.setExperimentId(expermentId));
+		if(CollectionUtils.isEmpty(experimentRequest.getExperimentDetailsList())) {
+			
+			List<ExperimentDetails> experimentDetailsList = new ArrayList<ExperimentDetails>();
+			
+			ExperimentDetails experimentDetails = new ExperimentDetails();
+			experimentDetails.setExperimentId(expermentId);
+			experimentDetails.setName("Purpose and Conclusion");
+			experimentDetails.setFileContent("");
+			experimentDetailsList.add(experimentDetails);
+			
+			experimentDetails = new ExperimentDetails();
+			experimentDetails.setExperimentId(expermentId);
+			experimentDetails.setName("Formulation");
+			experimentDetails.setFileContent("");
+			experimentDetailsList.add(experimentDetails);
+			
+			experimentRequest.setExperimentDetailsList(experimentDetailsList);
+			
 			experimentDao.batchInsert(experimentRequest.getExperimentDetailsList());
 		}
 
-		if(!CollectionUtils.isEmpty(experimentRequest.getExcipients())) {
-			experimentRequest.getExcipients().stream().forEach(e -> e.setExperimentId(expermentId));
-			experimentDao.batchExcipientInsert(experimentRequest.getExcipients());
-		}
+//		if(!CollectionUtils.isEmpty(experimentRequest.getExcipients())) {
+//			experimentRequest.getExcipients().stream().forEach(e -> e.setExperimentId(expermentId));
+//			experimentDao.batchExcipientInsert(experimentRequest.getExcipients());
+//		}
 
 		return expermentId;
 	}
@@ -54,6 +71,11 @@ public class ExperimentServiceImpl implements ExperimentService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer saveExcipient(List<ExcipientRequest> excipientRequests) {
+		
+		if(CollectionUtils.isEmpty(excipientRequests)) {
+			return 0;
+		}
+		experimentDao.deleteExperimentExcipient(excipientRequests.get(0).getExperimentId());
 		return	experimentDao.batchExcipientInsert(excipientRequests);
 	}
 

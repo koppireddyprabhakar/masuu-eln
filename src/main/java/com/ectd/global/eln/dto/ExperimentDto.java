@@ -124,7 +124,7 @@ public class ExperimentDto extends Base implements Serializable {
 	    ExperimentDto other = (ExperimentDto)o;
 	    boolean experimentNameEquals = (this.experimentName == null && other.experimentName == null)
 	      || (this.experimentName != null && this.experimentName.equals(other.experimentName));
-	    return this.expId == other.expId && experimentNameEquals;
+	    return this.expId.intValue() == other.expId.intValue() && experimentNameEquals;
 	}
 	
 	@Override

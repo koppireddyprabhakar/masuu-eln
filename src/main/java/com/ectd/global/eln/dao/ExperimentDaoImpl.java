@@ -80,6 +80,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 	@Value("${update.experiment.status}")
 	private String UPDATE_EXPERIMENT_STATUS_QUERY;
+	
+	@Value("${delete.experiment.excipient}")
+	private String DELETE_EXCIPIENT_QUERY;
 
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
@@ -211,7 +214,14 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	public Integer deleteExperiment(Integer experimentId) {
 		return jdbcTemplate.update(DELETE_EXPERIMENT_QUERY, new Object[] {experimentId});
 	}
-
+	
+	
+	@Override
+	public Integer deleteExperimentExcipient(Integer experimentId) {
+		return jdbcTemplate.update(DELETE_EXCIPIENT_QUERY, new Object[] {experimentId});
+	}
+	
+	
 	@Override
 	public List<ExperimentDto> getExperimentsWithProject() {
 		return jdbcTemplate.query(GET_EXPERIMENT_PROJECT_QUERY, new ExperimentProjectRowMapper());
@@ -249,22 +259,22 @@ public class ExperimentDaoImpl implements ExperimentDao {
 				ExperimentDto experimentDto = getExperimentDto(resultSet);
 
 				ExperimentDetailsDto experimentDetails = getExperimentDetailsWithOutContent(resultSet);
-				ExperimentExcipientDto experimentExcipientDto = getExperimentExcipientDto(resultSet);
+//				ExperimentExcipientDto experimentExcipientDto = getExperimentExcipientDto(resultSet);
 
 				if(CollectionUtils.contains(experimentDtoList.iterator(), experimentDto)) {
 					int index = experimentDtoList.indexOf(experimentDto);
 					experimentDtoList.get(index).getExperimentDetails().add(experimentDetails);
-					experimentDtoList.get(index).getExperimentExcipients().add(experimentExcipientDto);
+//					experimentDtoList.get(index).getExperimentExcipients().add(experimentExcipientDto);
 				} else {
 
 					Set<ExperimentDetailsDto> experimentDetailsList = new HashSet<>();
-					Set<ExperimentExcipientDto> excipients = new HashSet<>();
+//					Set<ExperimentExcipientDto> excipients = new HashSet<>();
 
 					experimentDetailsList.add(experimentDetails);
-					excipients.add(experimentExcipientDto);
+//					excipients.add(experimentExcipientDto);
 
 					experimentDto.setExperimentDetails(experimentDetailsList);
-					experimentDto.setExperimentExcipients(excipients);
+//					experimentDto.setExperimentExcipients(excipients);
 
 					experimentDtoList.add(experimentDto);
 				}
