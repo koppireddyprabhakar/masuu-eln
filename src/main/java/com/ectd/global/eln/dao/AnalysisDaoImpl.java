@@ -328,26 +328,26 @@ public class AnalysisDaoImpl implements AnalysisDao {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
 
 				AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
-				AnalysisExcipientDto analysisExcipientDto = getAnalysisExcipientDto(resultSet);
+//				AnalysisExcipientDto analysisExcipientDto = getAnalysisExcipientDto(resultSet);
 				TestRequestFormDto testRequestFormDto = getTestRequestFormDto(resultSet);
 				
 				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
 					int index = analysisDtoList.indexOf(analysisDto);
 					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);
-					analysisDtoList.get(index).getAnalysisExcipients().add(analysisExcipientDto);
+//					analysisDtoList.get(index).getAnalysisExcipients().add(analysisExcipientDto);
 					analysisDtoList.get(index).getTestRequestForms().add(testRequestFormDto);
 				} else {
 
 					Set<AnalysisDetailsDto> analysisDetailsList = new HashSet<>();
-					Set<AnalysisExcipientDto> excipients = new HashSet<>();
+//					Set<AnalysisExcipientDto> excipients = new HashSet<>();
 					Set<TestRequestFormDto> trfs = new HashSet<>();
 
 					analysisDetailsList.add(analysisDetails);
-					excipients.add(analysisExcipientDto);
+//					excipients.add(analysisExcipientDto);
 					trfs.add(testRequestFormDto);
 					
 					analysisDto.setAnalysisDetails(analysisDetailsList);
-					analysisDto.setAnalysisExcipients(excipients);
+//					analysisDto.setAnalysisExcipients(excipients);
 					analysisDto.setTestRequestForms(trfs);
 					
 					analysisDtoList.add(analysisDto);
