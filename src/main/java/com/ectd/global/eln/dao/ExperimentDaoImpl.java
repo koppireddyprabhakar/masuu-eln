@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -267,7 +268,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 //					experimentDtoList.get(index).getExperimentExcipients().add(experimentExcipientDto);
 				} else {
 
-					Set<ExperimentDetailsDto> experimentDetailsList = new HashSet<>();
+					Set<ExperimentDetailsDto> experimentDetailsList = new LinkedHashSet<>();
 //					Set<ExperimentExcipientDto> excipients = new HashSet<>();
 
 					experimentDetailsList.add(experimentDetails);
