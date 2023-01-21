@@ -6,6 +6,7 @@ import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.TestRequestFormRequest;
 
 public interface AnalysisService {
 	
@@ -29,4 +30,6 @@ public interface AnalysisService {
 	
 	List<TestRequestFormDto> getTestRequestByAnalysisId(Integer analysisId);
 
+	Integer updateTestRequestFormResult(List<TestRequestFormRequest> results);
+	
 }

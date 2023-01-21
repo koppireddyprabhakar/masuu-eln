@@ -15,6 +15,7 @@ import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.TestRequestFormRequest;
 
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
@@ -135,6 +136,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<TestRequestFormDto> getTestRequestByAnalysisId(Integer analysisId){
 		return analysisDao.getTestRequestByAnalysisId(analysisId);
+	}
+
+	@Override
+	public Integer updateTestRequestFormResult(List<TestRequestFormRequest> results) {
+		return analysisDao.updateTestRequestFormResult(results);
 	}
 
 }

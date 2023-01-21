@@ -25,6 +25,7 @@ public class TestRequestFormRequest extends Base implements Serializable {
     private String testNumber;
     private String testResult;
     private String testStatus;
+    private Integer analysisId;
     
     private List<TrfTestResultRequest> trfTestResults;
     
@@ -167,6 +168,14 @@ public class TestRequestFormRequest extends Base implements Serializable {
 
 	public void setTestStatus(String testStatus) {
 		this.testStatus = testStatus;
+	}
+
+	public Integer getAnalysisId() {
+		return analysisId;
+	}
+
+	public void setAnalysisId(Integer analysisId) {
+		this.analysisId = analysisId;
 	}
 
 }

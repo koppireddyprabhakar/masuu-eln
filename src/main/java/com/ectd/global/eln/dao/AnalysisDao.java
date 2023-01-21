@@ -39,4 +39,6 @@ public interface AnalysisDao {
 	
 	List<TestRequestFormDto> getTestRequestByAnalysisId(Integer analysisId);
 	
+	Integer updateTestRequestFormResult(List<TestRequestFormRequest> results);
+	
 }

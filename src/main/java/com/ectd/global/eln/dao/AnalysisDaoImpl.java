@@ -85,6 +85,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	@Value("${trfs.by.analysi.id}")
 	private String GET_TRFS_BY_ANALYSIS_ID_QUERY;
 	
+	@Value("${update.test.request.form.results}")
+	private String UPDATE_TEST_REQUEST_FORM_RESULT_QUERY;
+	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_QUERY + analysisId,
@@ -319,6 +322,20 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return namedParameterJdbcTemplate.update(UPDATE_ANALYSIS_EXCIPIENT_QUERY, parameters);
 	}
+	
+	@Override
+	public Integer updateTestRequestFormResult(List<TestRequestFormRequest> results) {
+		results.forEach(ed -> {
+			ed.setUpdateDate(ElnUtils.getTimeStamp());
+			ed.setUpdateUser(ElnUtils.DEFAULT_USER_ID);
+		});
+
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(results);
+		int[] effectedRows =  this.namedParameterJdbcTemplate.batchUpdate(UPDATE_TEST_REQUEST_FORM_RESULT_QUERY, batch);
+		return effectedRows.length;
+	}
+	
+	
 
 	class AnalysisExtractor implements ResultSetExtractor<List<AnalysisDto>> {
 

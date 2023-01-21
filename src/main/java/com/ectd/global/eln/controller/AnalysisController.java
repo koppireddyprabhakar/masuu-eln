@@ -30,6 +30,7 @@ import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
 import com.ectd.global.eln.request.FileInfo;
+import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.services.AnalysisAttachmentService;
 import com.ectd.global.eln.services.AnalysisExpeimentDetailsService;
 import com.ectd.global.eln.services.AnalysisService;
@@ -155,6 +156,11 @@ public class AnalysisController extends BaseController {
 	@GetMapping("get-test-requests-by-analysi-id")
 	public ResponseEntity<List<TestRequestFormDto>> getTestRequestByAnalysisId(@RequestParam Integer analysisId) {
 		return new ResponseEntity<>(analysisService.getTestRequestByAnalysisId(analysisId), HttpStatus.OK);
+	}
+	
+	@PutMapping("/updae-test-request-form-results")
+	public ResponseEntity<String> updateTestRequestFormResult(@RequestBody List<TestRequestFormRequest> results) {
+		return getResponseEntity(analysisService.updateTestRequestFormResult(results), "Analysis Results Update");
 	}
 	
 }
