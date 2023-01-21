@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -357,7 +358,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 					analysisDtoList.get(index).getTestRequestForms().add(testRequestFormDto);
 				} else {
 
-					Set<AnalysisDetailsDto> analysisDetailsList = new HashSet<>();
+					Set<AnalysisDetailsDto> analysisDetailsList = new LinkedHashSet<>();
 //					Set<AnalysisExcipientDto> excipients = new HashSet<>();
 					Set<TestRequestFormDto> trfs = new HashSet<>();
 

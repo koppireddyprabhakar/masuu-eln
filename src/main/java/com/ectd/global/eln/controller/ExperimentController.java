@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ectd.global.eln.dto.ExperimentAttachmentDto;
 import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.dto.ExperimentDto;
+import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentAttachment;
 import com.ectd.global.eln.request.ExperimentDetails;
@@ -159,6 +160,11 @@ public class ExperimentController extends BaseController {
 		Resource file = experimentAttachmentService.getExperimentAttachmentContent(fileName, experimentId, projectId);
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+	}
+	
+	@GetMapping("/get-excipient-by-experimentId")
+	public ResponseEntity<List<ExperimentExcipientDto>> getExcipientByExperimentId(@RequestParam Integer experimentId){
+		return new ResponseEntity<List<ExperimentExcipientDto>>(experimentService.getExcipientByExperimentId(experimentId), HttpStatus.OK);
 	}
 
 }

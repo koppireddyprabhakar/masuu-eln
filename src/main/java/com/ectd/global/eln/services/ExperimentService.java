@@ -3,6 +3,7 @@ package com.ectd.global.eln.services;
 import java.util.List;
 
 import com.ectd.global.eln.dto.ExperimentDto;
+import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentRequest;
 
@@ -25,5 +26,7 @@ public interface ExperimentService {
 	Integer updateExperimentStatus(Integer experimentId, String status);
 	
 	Integer saveExcipient(List<ExcipientRequest> excipientRequests);
+	
+	List<ExperimentExcipientDto> getExcipientByExperimentId(Integer experimentId);
 	
 }

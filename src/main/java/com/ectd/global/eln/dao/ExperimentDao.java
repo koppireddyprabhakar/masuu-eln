@@ -3,6 +3,7 @@ package com.ectd.global.eln.dao;
 import java.util.List;
 
 import com.ectd.global.eln.dto.ExperimentDto;
+import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
@@ -34,5 +35,7 @@ public interface ExperimentDao {
 	Integer updateExperimentStatus(Integer experimentId, String status);
 
 	Integer deleteExperimentExcipient(Integer experimentId);
+
+	List<ExperimentExcipientDto> getExcipientByExperimentId(Integer experimentId);
 	
 }

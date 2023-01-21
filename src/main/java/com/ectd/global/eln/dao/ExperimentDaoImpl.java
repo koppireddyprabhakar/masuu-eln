@@ -84,6 +84,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	
 	@Value("${delete.experiment.excipient}")
 	private String DELETE_EXCIPIENT_QUERY;
+	
+	@Value("${get.excipients.by.experimentId}")
+	private String GET_EXCIPIENTS_BY_EXPERIMENT_ID;
 
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
@@ -243,7 +246,23 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 		return namedParameterJdbcTemplate.update(UPDATE_EXPERIMENT_STATUS_QUERY, parameters);
 	}
-
+	
+	@Override
+	public List<ExperimentExcipientDto> getExcipientByExperimentId(Integer experimentId) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("experimentId", experimentId);
+		return namedParameterJdbcTemplate.query(GET_EXCIPIENTS_BY_EXPERIMENT_ID, parameters, new ExperimentExcipientRowMapper());
+	}
+	
+	class ExperimentExcipientRowMapper implements RowMapper<ExperimentExcipientDto> {
+		public ExperimentExcipientDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			ExperimentExcipientDto excipientDto = getExperimentExcipientDto(resultSet);
+			
+			return excipientDto;
+		};
+	}
+	
+	
 	class ExperimentRowMapper implements RowMapper<ExperimentDto> {
 		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			return getExperimentDto(resultSet);
@@ -373,7 +392,6 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		ExperimentExcipientDto experimentExcipientDto = new ExperimentExcipientDto();
 		experimentExcipientDto.setExcipientId(resultSet.getInt("EXCIPIENT_ID"));
 		experimentExcipientDto.setExperimentId(resultSet.getInt("EXP_ID"));
-		//		experimentExcipientDto.setExcipientsName(resultSet.getString("EXCIPIENTS_NAME"));
 		experimentExcipientDto.setMaterialType(resultSet.getString("MATERIAL_TYPE"));
 		experimentExcipientDto.setMaterialName(resultSet.getString("MATERIAL_NAME"));
 		experimentExcipientDto.setBatchNo(resultSet.getString("BATCH_NO"));

@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dto.ExperimentDto;
+import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
@@ -116,6 +117,11 @@ public class ExperimentServiceImpl implements ExperimentService {
 		experimentDao.batchExcipientUpdate(experimentRequest.getExcipients());
 
 		return 1;
+	}
+
+	@Override
+	public List<ExperimentExcipientDto> getExcipientByExperimentId(Integer experimentId) {
+		return experimentDao.getExcipientByExperimentId(experimentId);
 	}
 
 }
