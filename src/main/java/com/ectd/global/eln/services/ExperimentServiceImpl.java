@@ -48,12 +48,14 @@ public class ExperimentServiceImpl implements ExperimentService {
 			experimentDetails.setExperimentId(expermentId);
 			experimentDetails.setName("Purpose and Conclusion");
 			experimentDetails.setFileContent("");
+			experimentDetails.setStatus("Active");
 			experimentDetailsList.add(experimentDetails);
 			
 			experimentDetails = new ExperimentDetails();
 			experimentDetails.setExperimentId(expermentId);
 			experimentDetails.setName("Formulation");
 			experimentDetails.setFileContent("");
+			experimentDetails.setStatus("Active");
 			experimentDetailsList.add(experimentDetails);
 			
 			experimentRequest.setExperimentDetailsList(experimentDetailsList);

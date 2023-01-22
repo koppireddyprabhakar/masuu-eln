@@ -80,7 +80,7 @@ public class AnalysisExpeimentDetailsDaoImpl implements AnalysisExpeimentDetails
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("analysisDetailId", analysisDetails.getAnalysisDetailId());
 		parameters.addValue("analysisId", analysisDetails.getAnalysisId());
-		parameters.addValue("fileContent", analysisDetails.getFileContent());
+		parameters.addValue("fileContent", analysisDetails.getFileContent().getBytes());
 		parameters.addValue("name", analysisDetails.getName());
 		parameters.addValue("status", analysisDetails.getStatus());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);

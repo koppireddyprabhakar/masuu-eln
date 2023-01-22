@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
+import com.ectd.global.eln.dto.AnalysisExcipientDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisAttachment;
 import com.ectd.global.eln.request.AnalysisDetails;
@@ -161,6 +162,11 @@ public class AnalysisController extends BaseController {
 	@PutMapping("/updae-test-request-form-results")
 	public ResponseEntity<String> updateTestRequestFormResult(@RequestBody List<TestRequestFormRequest> results) {
 		return getResponseEntity(analysisService.updateTestRequestFormResult(results), "Analysis Results Update");
+	}
+	
+	@GetMapping("/get-excipient-by-analysisId")
+	public ResponseEntity<List<AnalysisExcipientDto>> getExcipientByExperimentId(@RequestParam Integer analysisId){
+		return new ResponseEntity<List<AnalysisExcipientDto>>(analysisService.getExcipientByAnalysisId(analysisId), HttpStatus.OK);
 	}
 	
 }

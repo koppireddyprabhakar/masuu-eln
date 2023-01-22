@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.AnalysisDao;
 import com.ectd.global.eln.dto.AnalysisDto;
+import com.ectd.global.eln.dto.AnalysisExcipientDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
@@ -48,12 +49,14 @@ public class AnalysisServiceImpl implements AnalysisService {
 			analysisDetails.setAnalysisId(analysisId);
 			analysisDetails.setName("Purpose and Conclusion");
 			analysisDetails.setFileContent("");
+			analysisDetails.setStatus("Active");
 			analysisDetailsList.add(analysisDetails);
 
 			analysisDetails = new AnalysisDetails();
 			analysisDetails.setAnalysisId(analysisId);
 			analysisDetails.setName("Formulation");
 			analysisDetails.setFileContent("");
+			analysisDetails.setStatus("Active");
 			analysisDetailsList.add(analysisDetails);
 
 			analysisRequest.setAnalysisDetailsList(analysisDetailsList);
@@ -141,6 +144,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Override
 	public Integer updateTestRequestFormResult(List<TestRequestFormRequest> results) {
 		return analysisDao.updateTestRequestFormResult(results);
+	}
+
+	@Override
+	public List<AnalysisExcipientDto> getExcipientByAnalysisId(Integer analysisId) {
+		return analysisDao.getExcipientByAnalysisId(analysisId);
 	}
 
 }

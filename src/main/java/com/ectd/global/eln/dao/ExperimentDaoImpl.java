@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,9 +148,22 @@ public class ExperimentDaoImpl implements ExperimentDao {
 			ed.setInsertUser(ElnUtils.DEFAULT_USER_ID);
 			ed.setUpdateUser(ElnUtils.DEFAULT_USER_ID);
 		});
-
-		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(experimentDetailsList.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_EXPERIMENT_DETAILS_QUERY, batch );
+				
+		List<Map<String, Object>> batchValues = new ArrayList<>(experimentDetailsList.size());
+		for (ExperimentDetails experimentDetails : experimentDetailsList) {
+		    batchValues.add(
+		            new MapSqlParameterSource("experimentId", experimentDetails.getExperimentId())
+		                    .addValue("fileContent", experimentDetails.getFileContent().getBytes())
+		                    .addValue("name", experimentDetails.getName())
+		                    .addValue("status", experimentDetails.getStatus())
+		                    .addValue("insertUser", "ELN")
+		            		.addValue("insertDate", ElnUtils.getTimeStamp())
+		            		.addValue("updateUser", "ELN")
+		            		.addValue("updateDate", ElnUtils.getTimeStamp())
+		                    .getValues());
+		}
+		
+		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_EXPERIMENT_DETAILS_QUERY, batchValues.toArray(new Map[experimentDetailsList.size()]) );
 	}
 
 	@Override
@@ -261,8 +275,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 			return excipientDto;
 		};
 	}
-	
-	
+		
 	class ExperimentRowMapper implements RowMapper<ExperimentDto> {
 		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			return getExperimentDto(resultSet);

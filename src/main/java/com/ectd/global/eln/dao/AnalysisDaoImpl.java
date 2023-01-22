@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 
@@ -88,6 +90,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	@Value("${update.test.request.form.results}")
 	private String UPDATE_TEST_REQUEST_FORM_RESULT_QUERY;
+	
+	@Value("${get.excipients.by.analysisId}")
+	private String GET_EXCIPIENTS_BY_ANALYSISID_QUERY;
 	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -214,9 +219,24 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			ed.setInsertUser(ElnUtils.DEFAULT_USER_ID);
 			ed.setUpdateUser(ElnUtils.DEFAULT_USER_ID);
 		});
+		List<Map<String, Object>> batchValues = new ArrayList<>(analysisDetailsList.size());
+		for (AnalysisDetails analysisDetails : analysisDetailsList) {
+		    batchValues.add(
+		            new MapSqlParameterSource("analysisId", analysisDetails.getAnalysisId())
+		                    .addValue("fileContent", analysisDetails.getFileContent().getBytes())
+		                    .addValue("name", analysisDetails.getName())
+		                    .addValue("status", analysisDetails.getStatus())
+		                    .addValue("insertUser", "ELN")
+		            		.addValue("insertDate", ElnUtils.getTimeStamp())
+		            		.addValue("updateUser", "ELN")
+		            		.addValue("updateDate", ElnUtils.getTimeStamp())
+		                    .getValues());
+		}
+		
+		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_ANALYSIS_DETAILS_QUERY, batchValues.toArray(new Map[analysisDetailsList.size()]) );
 
-		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(analysisDetailsList.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_ANALYSIS_DETAILS_QUERY, batch );
+//		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(analysisDetailsList.toArray());
+//		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_ANALYSIS_DETAILS_QUERY, batch );
 	}
 
 	@Override
@@ -336,6 +356,20 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		return effectedRows.length;
 	}
 	
+	@Override
+	public List<AnalysisExcipientDto> getExcipientByAnalysisId(Integer analysisId) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("analysisId", analysisId);
+		return namedParameterJdbcTemplate.query(GET_EXCIPIENTS_BY_ANALYSISID_QUERY, parameters, new AnalysisExcipientRowMapper());
+	}
+	
+	class AnalysisExcipientRowMapper implements RowMapper<AnalysisExcipientDto> {
+		public AnalysisExcipientDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			AnalysisExcipientDto excipientDto = getAnalysisExcipientDto(resultSet);
+			
+			return excipientDto;
+		};
+	}
 	
 
 	class AnalysisExtractor implements ResultSetExtractor<List<AnalysisDto>> {
