@@ -48,7 +48,6 @@
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
-			<version>8.3.1.jre14-preview</version>
 		</dependency>
 
 		<dependency>
@@ -73,7 +72,6 @@
 			<groupId>fr.xebia.extras</groupId>
 			<artifactId>selma-processor</artifactId>
 			<version>1.0</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
