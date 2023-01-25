@@ -26,4 +26,8 @@ public interface TestRequestFormDao {
 	
 	List<TestRequestFormDto> getTestRequestFormData();
 	
+	int[] batchTestRequestUpdate(List<TestRequestFormRequest> testRequestFormRequestList);
+	
+	TestRequestFormDto getTestRequestFormsByAnalysisId(Integer analysisId);
+	
 }

@@ -36,7 +36,6 @@ import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
-import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 

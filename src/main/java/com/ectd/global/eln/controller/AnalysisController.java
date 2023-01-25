@@ -169,4 +169,19 @@ public class AnalysisController extends BaseController {
 		return new ResponseEntity<List<AnalysisExcipientDto>>(analysisService.getExcipientByAnalysisId(analysisId), HttpStatus.OK);
 	}
 	
+	@PostMapping("/create-test-request-form")
+	public ResponseEntity<String> createTestRequestForm(@RequestBody TestRequestFormRequest testRequestFormRequest) {
+		return getResponseEntity(testRequestFormService.createTestRequestForm(testRequestFormRequest), "Test Request Form Create");
+	}
+	
+	@PutMapping("/update-test-request-form")
+	public ResponseEntity<String> updateTestRequestForm(@RequestBody TestRequestFormRequest testRequestFormRequest) {
+		return getResponseEntity(testRequestFormService.updateTestRequestForm(testRequestFormRequest), "Test Request Form Update");
+	}
+	
+	@GetMapping("/get-test-requests-by-analysisId")
+	public ResponseEntity<TestRequestFormDto> getTestRequestFormsByAnalysisId(@RequestParam Integer analysisId){
+		return new ResponseEntity<TestRequestFormDto>(testRequestFormService.getTestRequestFormsByAnalysisId(analysisId), HttpStatus.OK);
+	}
+	
 }

@@ -37,30 +37,12 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer createTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
+	
+		int[] rowsEffected = testRequestFormDao.batchTestRequestInsert(prepareTestRequest(testRequestFormRequest));
 		
-	List<TestRequestFormRequest> testRequestFormRequestList = testRequestFormRequest.getTrfTestResults().stream().map(tr -> {
-			TestRequestFormRequest testRequest = new TestRequestFormRequest();
-						
-			testRequest.setExpId(testRequestFormRequest.getExpId());
-			testRequest.setTestRequestFormStatus(testRequestFormRequest.getTestRequestFormStatus());
-			testRequest.setCondition(testRequestFormRequest.getCondition());
-			testRequest.setStage(testRequestFormRequest.getStage());
-			testRequest.setPackaging(testRequestFormRequest.getPackaging());
-			testRequest.setLabelClaim(testRequestFormRequest.getLabelClaim());
-			testRequest.setQuantity(testRequestFormRequest.getQuantity());
-			testRequest.setManufacturingDate(testRequestFormRequest.getManufacturingDate());
-			testRequest.setExpireDate(testRequestFormRequest.getExpireDate());
-			
-			testRequest.setTestId(tr.getTestId());
-			testRequest.setTestName(tr.getTestName());
-			testRequest.setTestNumber(tr.getTestNumber());
-			testRequest.setTestResult(tr.getTestResult());
-			testRequest.setTestStatus(tr.getTestStatus());
-			
-			return testRequest;
-		}).collect(Collectors.toList());
-		int[] rowsEffected = testRequestFormDao.batchTestRequestInsert(testRequestFormRequestList);
-		experimentService.updateExperimentStatus(testRequestFormRequest.getExpId(), ExperimentRequest.EXPERIMENT_STATUS.CREATED_TRF.name());
+		if(testRequestFormRequest.getExpId() != null) {
+			experimentService.updateExperimentStatus(testRequestFormRequest.getExpId(), ExperimentRequest.EXPERIMENT_STATUS.CREATED_TRF.name());
+		}
 //		Integer testRequestFormId = testRequestFormDao.createTestRequestForm(testRequestFormRequest);
 		
 //		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {
@@ -74,7 +56,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
-		testRequestFormDao.updateTestRequestForm(testRequestFormRequest);
+		testRequestFormDao.batchTestRequestUpdate(prepareTestRequest(testRequestFormRequest));
 		
 //		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {
 //			testRequestFormDao.batchUpdate(testRequestFormRequest.getTrfTestResults());
@@ -94,4 +76,36 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 		return testRequestFormDao.getTestRequestFormData();
 	}
 
+	@Override
+	public TestRequestFormDto getTestRequestFormsByAnalysisId(Integer analysisId) {
+		return testRequestFormDao.getTestRequestFormsByAnalysisId(analysisId);
+	}
+
+	private List<TestRequestFormRequest> prepareTestRequest(TestRequestFormRequest testRequestFormRequest) {
+		List<TestRequestFormRequest> testRequestFormRequestList = testRequestFormRequest.getTrfTestResults().stream().map(tr -> {
+			TestRequestFormRequest testRequest = new TestRequestFormRequest();
+						
+			testRequest.setExpId(testRequestFormRequest.getExpId());
+			testRequest.setTestRequestFormStatus(testRequestFormRequest.getTestRequestFormStatus());
+			testRequest.setCondition(testRequestFormRequest.getCondition());
+			testRequest.setStage(testRequestFormRequest.getStage());
+			testRequest.setPackaging(testRequestFormRequest.getPackaging());
+			testRequest.setLabelClaim(testRequestFormRequest.getLabelClaim());
+			testRequest.setQuantity(testRequestFormRequest.getQuantity());
+			testRequest.setManufacturingDate(testRequestFormRequest.getManufacturingDate());
+			testRequest.setExpireDate(testRequestFormRequest.getExpireDate());
+			testRequest.setAnalysisId(testRequestFormRequest.getAnalysisId());
+			
+			testRequest.setTestId(tr.getTestId());
+			testRequest.setTestName(tr.getTestName());
+			testRequest.setTestNumber(tr.getTestNumber());
+			testRequest.setTestResult(tr.getTestResult());
+			testRequest.setTestStatus(tr.getTestStatus());
+			
+			return testRequest;
+		}).collect(Collectors.toList());
+		
+		return testRequestFormRequestList;
+	}
+	
 }

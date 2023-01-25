@@ -19,4 +19,6 @@ public interface TestRequestFormService {
 	
 	List<TestRequestFormDto> getTestRequestFormData();
 	
+	TestRequestFormDto getTestRequestFormsByAnalysisId(Integer analysisId);
+	
 }
