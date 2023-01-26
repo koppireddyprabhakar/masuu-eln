@@ -179,7 +179,7 @@ public class AnalysisController extends BaseController {
 		return getResponseEntity(testRequestFormService.updateTestRequestForm(testRequestFormRequest), "Test Request Form Update");
 	}
 	
-	@GetMapping("/get-test-requests-by-analysisId")
+	@GetMapping("/get-trf-by-analysisId")
 	public ResponseEntity<TestRequestFormDto> getTestRequestFormsByAnalysisId(@RequestParam Integer analysisId){
 		return new ResponseEntity<TestRequestFormDto>(testRequestFormService.getTestRequestFormsByAnalysisId(analysisId), HttpStatus.OK);
 	}

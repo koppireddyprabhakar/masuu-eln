@@ -11,7 +11,6 @@ public class TestRequestFormRequest extends Base implements Serializable {
 	private Integer testRequestFormId;
 	private Integer expId;  
 //    private Integer projectId;
-//    private Integer analysisId;
     private String testRequestFormStatus;  
     private String condition;  
     private String stage;  
