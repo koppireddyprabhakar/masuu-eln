@@ -93,10 +93,25 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	@Value("${get.excipients.by.analysisId}")
 	private String GET_EXCIPIENTS_BY_ANALYSISID_QUERY;
 	
+	@Value("${get.analysis.by.id.with.out.trf}")
+	private String GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY;
+	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_QUERY + analysisId,
 				new AnalysisExtractor());
+
+		if(analysisList.isEmpty()) {
+			return getAnalysisByIdWithoutTRF(analysisId);
+		}
+
+		return analysisList.get(0);
+	}
+	
+	@Override
+	public AnalysisDto getAnalysisByIdWithoutTRF(Integer analysisId) {
+		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
+				new AnalysisDetailsExtractor());
 
 		if(analysisList.isEmpty()) {
 			return null;
@@ -104,6 +119,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return analysisList.get(0);
 	}
+	
 
 	@Override
 	public List<AnalysisDto> getAnalysisList(Integer teamId) {
@@ -381,27 +397,50 @@ public class AnalysisDaoImpl implements AnalysisDao {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
 
 				AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
-//				AnalysisExcipientDto analysisExcipientDto = getAnalysisExcipientDto(resultSet);
 				TestRequestFormDto testRequestFormDto = getTestRequestFormDto(resultSet);
 				
 				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
 					int index = analysisDtoList.indexOf(analysisDto);
 					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);
-//					analysisDtoList.get(index).getAnalysisExcipients().add(analysisExcipientDto);
 					analysisDtoList.get(index).getTestRequestForms().add(testRequestFormDto);
 				} else {
 
 					Set<AnalysisDetailsDto> analysisDetailsList = new LinkedHashSet<>();
-//					Set<AnalysisExcipientDto> excipients = new HashSet<>();
 					Set<TestRequestFormDto> trfs = new HashSet<>();
 
 					analysisDetailsList.add(analysisDetails);
-//					excipients.add(analysisExcipientDto);
 					trfs.add(testRequestFormDto);
 					
 					analysisDto.setAnalysisDetails(analysisDetailsList);
-//					analysisDto.setAnalysisExcipients(excipients);
 					analysisDto.setTestRequestForms(trfs);
+					
+					analysisDtoList.add(analysisDto);
+				}
+
+			}
+			return analysisDtoList;
+		};
+	}
+	
+	class AnalysisDetailsExtractor implements ResultSetExtractor<List<AnalysisDto>> {
+
+		@Override
+		public List<AnalysisDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+			List<AnalysisDto> analysisDtoList = new ArrayList<AnalysisDto>();
+
+			while(resultSet.next()) {
+				AnalysisDto analysisDto = getAnalysisDto(resultSet);
+
+				AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
+				
+				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
+					int index = analysisDtoList.indexOf(analysisDto);
+					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);
+				} else {
+
+					Set<AnalysisDetailsDto> analysisDetailsList = new LinkedHashSet<>();
+					analysisDetailsList.add(analysisDetails);
+					analysisDto.setAnalysisDetails(analysisDetailsList);
 					
 					analysisDtoList.add(analysisDto);
 				}

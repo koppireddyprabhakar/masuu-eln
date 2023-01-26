@@ -44,4 +44,6 @@ public interface AnalysisDao {
 	
 	List<AnalysisExcipientDto> getExcipientByAnalysisId(Integer analysisId);
 	
+	AnalysisDto getAnalysisByIdWithoutTRF(Integer analysisId);
+	
 }
