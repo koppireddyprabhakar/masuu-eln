@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.TestRequestFormDao;
 import com.ectd.global.eln.dto.TestRequestFormDto;
@@ -56,15 +57,30 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
-		testRequestFormDao.batchTestRequestUpdate(prepareTestRequest(testRequestFormRequest));
+		List<TestRequestFormRequest> testRequests = prepareTestRequest(testRequestFormRequest);
+		
+		List<TestRequestFormRequest> addTestRequests = testRequests.stream().filter(tr -> tr.getTestRequestFormId() == null)
+				.toList();
+		
+		List<TestRequestFormRequest> updateTestRequests = testRequests.stream().filter(tr -> tr.getTestRequestFormId() != null)
+				.toList();
+		int[] rowsEffected = null;
+		
+		if(!CollectionUtils.isEmpty(updateTestRequests)) {
+		 rowsEffected = testRequestFormDao.batchTestRequestUpdate(updateTestRequests);
+		}
+		
+		if(!CollectionUtils.isEmpty(addTestRequests)) {
+			 rowsEffected = testRequestFormDao.batchTestRequestInsert(addTestRequests);
+		}
 		
 //		if(!CollectionUtils.isEmpty(testRequestFormRequest.getTrfTestResults())) {
 //			testRequestFormDao.batchUpdate(testRequestFormRequest.getTrfTestResults());
 //		}
 		
-		return 1;
+		return rowsEffected != null ? rowsEffected.length : 0;
 	}
-
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer deleteTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
