@@ -85,6 +85,10 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 		List<TestRequestFormRequest> testRequestFormRequestList = testRequestFormRequest.getTrfTestResults().stream().map(tr -> {
 			TestRequestFormRequest testRequest = new TestRequestFormRequest();
 						
+			if(tr.getTrfId() != null) {
+				testRequest.setTestRequestFormId(tr.getTrfId());
+			}
+			
 			testRequest.setExpId(testRequestFormRequest.getExpId());
 			testRequest.setTestRequestFormStatus(testRequestFormRequest.getTestRequestFormStatus());
 			testRequest.setCondition(testRequestFormRequest.getCondition());
