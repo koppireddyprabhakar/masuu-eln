@@ -278,7 +278,10 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		
 	class ExperimentRowMapper implements RowMapper<ExperimentDto> {
 		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			return getExperimentDto(resultSet);
+			ExperimentDto experimentDto =  getExperimentDto(resultSet);
+			ProjectDto project = getProject(resultSet);
+			experimentDto.setProject(project);
+			return experimentDto;  
 		};
 	}
 
