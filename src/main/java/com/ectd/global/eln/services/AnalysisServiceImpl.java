@@ -151,4 +151,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return analysisDao.getExcipientByAnalysisId(analysisId);
 	}
 
+	@Override
+	public Integer updateAnalysisStatus(Integer analysisId, String status) {
+		return analysisDao.updateAnalysisStatus(analysisId, status);
+	}
+
 }

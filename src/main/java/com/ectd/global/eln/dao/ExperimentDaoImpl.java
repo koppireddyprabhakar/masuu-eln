@@ -369,7 +369,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		experimentDto.setProjectId(resultSet.getInt("PROJECTID"));
 		experimentDto.setTeamId(resultSet.getInt("TEAMID"));
 		experimentDto.setUserId(resultSet.getInt("USER_ID"));
-		experimentDto.setExperimentStatus(ExperimentRequest.EXPERIMENT_STATUS.valueOf(resultSet.getString("EXPERIMENT_STATUS")).getValue());
+		experimentDto.setExperimentStatus(resultSet.getString("EXPERIMENT_STATUS"));
 		experimentDto.setSummary(resultSet.getString("SUMMARY"));
 		experimentDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
 		experimentDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));

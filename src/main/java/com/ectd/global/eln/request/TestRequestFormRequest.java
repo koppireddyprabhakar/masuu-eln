@@ -125,10 +125,6 @@ public class TestRequestFormRequest extends Base implements Serializable {
 		this.labelClaim = labelClaim;
 	}
 	
-	public static enum TRF_STATUS {
-		NEW, INPROGRESS, COMPLETED, CLOSED
-	}
-
 	public Integer getTestId() {
 		return testId;
 	}
@@ -177,4 +173,18 @@ public class TestRequestFormRequest extends Base implements Serializable {
 		this.analysisId = analysisId;
 	}
 
+	public static enum TRF_STATUS {
+		NEW("New"), INPROGRESS("Inprogress"), ANLYSIS_SUBMIT("Analysis Submit"), CLOSED("Closed");
+		
+		String value;
+
+		TRF_STATUS(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return this.value;
+		}
+	}
+	
 }

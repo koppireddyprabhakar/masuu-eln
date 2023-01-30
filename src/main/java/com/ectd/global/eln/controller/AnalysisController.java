@@ -184,4 +184,9 @@ public class AnalysisController extends BaseController {
 		return new ResponseEntity<TestRequestFormDto>(testRequestFormService.getTestRequestFormsByAnalysisId(analysisId), HttpStatus.OK);
 	}
 	
+	@PutMapping("/update-analysis-status")
+	public ResponseEntity<String> updateAnalysisStatus(@RequestParam Integer analysisId, @RequestParam String status) {
+		return getResponseEntity(analysisService.updateAnalysisStatus(analysisId, status), "Experiment Update");
+	}
+	
 }

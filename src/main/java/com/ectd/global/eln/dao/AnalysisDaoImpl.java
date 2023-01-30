@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -96,9 +95,12 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	@Value("${get.analysis.by.id.with.out.trf}")
 	private String GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY;
 	
+	@Value("${update.analysis.status}")
+	private String UPDATE_ANALYSIS_STATUS_QUERY;
+	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
-		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_QUERY + analysisId,
+		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
 				new AnalysisExtractor());
 
 		if(analysisList.isEmpty()) {
@@ -306,9 +308,10 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			public void setValues(PreparedStatement ps, int i) 
 					throws SQLException {
 				ps.setInt(1, analysisExperimentId);
-				ps.setString(2, ElnUtils.DEFAULT_USER_ID);
-				ps.setTimestamp(3, ElnUtils.getTimeStamp());
-				ps.setInt(4, testRequestFormList.get(i).getTestRequestFormId());
+				ps.setString(2, TestRequestFormRequest.TRF_STATUS.INPROGRESS.getValue());
+				ps.setString(3, ElnUtils.DEFAULT_USER_ID);
+				ps.setTimestamp(4, ElnUtils.getTimeStamp());
+				ps.setInt(5, testRequestFormList.get(i).getTestRequestFormId());
 			}
 
 			public int getBatchSize() {
@@ -378,6 +381,16 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		return namedParameterJdbcTemplate.query(GET_EXCIPIENTS_BY_ANALYSISID_QUERY, parameters, new AnalysisExcipientRowMapper());
 	}
 	
+	@Override
+	public Integer updateAnalysisStatus(Integer analysisId, String status) {
+
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("analysisId", analysisId);
+		parameters.addValue("status", status);
+
+		return namedParameterJdbcTemplate.update(UPDATE_ANALYSIS_STATUS_QUERY, parameters);
+	}
+	
 	class AnalysisExcipientRowMapper implements RowMapper<AnalysisExcipientDto> {
 		public AnalysisExcipientDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			AnalysisExcipientDto excipientDto = getAnalysisExcipientDto(resultSet);
@@ -397,23 +410,16 @@ public class AnalysisDaoImpl implements AnalysisDao {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
 
 				AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
-				TestRequestFormDto testRequestFormDto = getTestRequestFormDto(resultSet);
 				
 				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
 					int index = analysisDtoList.indexOf(analysisDto);
-					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);
-					analysisDtoList.get(index).getTestRequestForms().add(testRequestFormDto);
+					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);	
 				} else {
 
 					Set<AnalysisDetailsDto> analysisDetailsList = new LinkedHashSet<>();
-					Set<TestRequestFormDto> trfs = new HashSet<>();
 
 					analysisDetailsList.add(analysisDetails);
-					trfs.add(testRequestFormDto);
-					
 					analysisDto.setAnalysisDetails(analysisDetailsList);
-					analysisDto.setTestRequestForms(trfs);
-					
 					analysisDtoList.add(analysisDto);
 				}
 

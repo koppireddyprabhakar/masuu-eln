@@ -102,7 +102,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		parameters.addValue("expId", testRequestFormRequest.getExpId());
 		//		parameters.addValue("projectId", testRequestFormRequest.getProjectId());
 		//		parameters.addValue("analysisId", testRequestFormRequest.getAnalysisId());
-		parameters.addValue("testRequestFormStatus", testRequestFormRequest.getTestRequestFormStatus());
+		parameters.addValue("testRequestFormStatus", TestRequestFormRequest.TRF_STATUS.NEW.getValue());
 		parameters.addValue("condition", testRequestFormRequest.getCondition());
 		parameters.addValue("stage", testRequestFormRequest.getStage());
 		parameters.addValue("packaging", testRequestFormRequest.getPackaging());
@@ -161,11 +161,12 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 
 	@Override
 	public int[] batchTestRequestInsert(List<TestRequestFormRequest> testRequestFormRequestList) {
-		testRequestFormRequestList.forEach(ed -> {
-			ed.setInsertDate(ElnUtils.getTimeStamp());
-			ed.setUpdateDate(ElnUtils.getTimeStamp());
-			ed.setInsertUser(ElnUtils.DEFAULT_USER_ID);
-			ed.setUpdateUser(ElnUtils.DEFAULT_USER_ID);
+		testRequestFormRequestList.forEach(trf -> {
+			trf.setTestRequestFormStatus(TestRequestFormRequest.TRF_STATUS.NEW.getValue());
+			trf.setInsertDate(ElnUtils.getTimeStamp());
+			trf.setUpdateDate(ElnUtils.getTimeStamp());
+			trf.setInsertUser(ElnUtils.DEFAULT_USER_ID);
+			trf.setUpdateUser(ElnUtils.DEFAULT_USER_ID);
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(testRequestFormRequestList.toArray());

@@ -46,4 +46,6 @@ public interface AnalysisDao {
 	
 	AnalysisDto getAnalysisByIdWithoutTRF(Integer analysisId);
 	
+	Integer updateAnalysisStatus(Integer analysisId, String status);
+	
 }
