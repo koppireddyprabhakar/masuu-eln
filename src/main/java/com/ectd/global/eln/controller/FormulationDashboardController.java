@@ -44,12 +44,12 @@ public class FormulationDashboardController extends BaseController {
 	
 	@GetMapping("/get-experiments")
 	public ResponseEntity<List<ExperimentDto>> getExperiments() throws Exception {
-		return  new ResponseEntity<>(experimentService.getExperiments(null), HttpStatus.OK);
+		return  new ResponseEntity<>(experimentService.getExperiments(null, null), HttpStatus.OK);
 	}
 	
 	@GetMapping("/get-experiments-by-user-id")
 	public ResponseEntity<List<ExperimentDto>> getExperimentsByUserId(@RequestParam(required = false) Integer userId) {
-		return new ResponseEntity<List<ExperimentDto>>(experimentService.getExperiments(userId), HttpStatus.OK);
+		return new ResponseEntity<List<ExperimentDto>>(experimentService.getExperiments(userId, null), HttpStatus.OK);
 	}
 	
 	@GetMapping("/get-experiments-with-project")

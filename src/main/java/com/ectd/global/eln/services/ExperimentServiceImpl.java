@@ -30,8 +30,8 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<ExperimentDto> getExperiments(Integer userId) {
-		return experimentDao.getExperiments(userId);
+	public List<ExperimentDto> getExperiments(Integer userId, String status) {
+		return experimentDao.getExperiments(userId, status);
 	}
 
 	@Override

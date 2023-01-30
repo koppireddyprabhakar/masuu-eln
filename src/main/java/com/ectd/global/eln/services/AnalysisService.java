@@ -13,7 +13,7 @@ public interface AnalysisService {
 	
 	AnalysisDto getAnalysisById(Integer analysisId);
 	
-	List<AnalysisDto> getAnalysisList(Integer teamId);
+	List<AnalysisDto> getAnalysisList(Integer teamId, String status);
 	
 	Integer createAnalysis(AnalysisRequest analysisRequest);
 	

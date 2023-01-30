@@ -32,8 +32,8 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<AnalysisDto> getAnalysisList(Integer teamId) {
-		return analysisDao.getAnalysisList(teamId);
+	public List<AnalysisDto> getAnalysisList(Integer teamId, String status) {
+		return analysisDao.getAnalysisList(teamId, status);
 	}
 
 	@Override

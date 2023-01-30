@@ -102,12 +102,16 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	}
 
 	@Override
-	public List<ExperimentDto> getExperiments(Integer userId) {
+	public List<ExperimentDto> getExperiments(Integer userId, String status) {
 
 		StringBuilder sb = new StringBuilder(GET_EXPERIMENT_LIST_QUERY);
 
 		if(userId != null) {
 			sb.append(" AND USER_ID = ").append(userId);
+		}
+		
+		if(status != null) {
+			sb.append(" AND EXPERIMENT_STATUS = ").append("'"+status+"'");
 		}
 
 		sb.append(" ORDER BY INSERT_DATE DESC");

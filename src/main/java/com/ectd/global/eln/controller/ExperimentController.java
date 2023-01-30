@@ -57,7 +57,7 @@ public class ExperimentController extends BaseController {
 
 	@GetMapping("/get-experiments")
 	public ResponseEntity<List<ExperimentDto>> getExperiments() throws Exception {
-		return  new ResponseEntity<>(experimentService.getExperiments(null), HttpStatus.OK);
+		return  new ResponseEntity<>(experimentService.getExperiments(null, null), HttpStatus.OK);
 	}
 
 	@PostMapping("/create-experiment")
@@ -165,6 +165,11 @@ public class ExperimentController extends BaseController {
 	@GetMapping("/get-excipient-by-experimentId")
 	public ResponseEntity<List<ExperimentExcipientDto>> getExcipientByExperimentId(@RequestParam Integer experimentId){
 		return new ResponseEntity<List<ExperimentExcipientDto>>(experimentService.getExcipientByExperimentId(experimentId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-experiments-by-status")
+	public ResponseEntity<List<ExperimentDto>> getExperimentsByUserId(@RequestParam(required = false) String status) {
+		return new ResponseEntity<List<ExperimentDto>>(experimentService.getExperiments(null, status), HttpStatus.OK);
 	}
 
 }

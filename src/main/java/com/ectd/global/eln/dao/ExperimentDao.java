@@ -12,7 +12,7 @@ public interface ExperimentDao {
 
 	ExperimentDto getExperimentById(Integer experimentId);
 
-	List<ExperimentDto> getExperiments(Integer userId);
+	List<ExperimentDto> getExperiments(Integer userId, String status);
 
 	Integer createExperiment(ExperimentRequest experimentRequest);
 

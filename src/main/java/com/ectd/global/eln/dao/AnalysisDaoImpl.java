@@ -124,7 +124,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 
 	@Override
-	public List<AnalysisDto> getAnalysisList(Integer teamId) {
+	public List<AnalysisDto> getAnalysisList(Integer teamId, String status) {
 
 		StringBuilder sb = new StringBuilder(GET_ANALYSIS_LIST_QUERY);
 
@@ -132,6 +132,11 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			sb.append(" AND AE.TEAM_ID = " + teamId);
 		}
 
+		if(status != null) {
+			
+			sb.append(" AND AE.STATUS = ").append("'"+status+"'");
+		}
+		
 		sb.append(" ORDER BY AE.INSERT_DATE DESC");
 
 		return jdbcTemplate.query(sb.toString(), new AnalysisRowMapper());
