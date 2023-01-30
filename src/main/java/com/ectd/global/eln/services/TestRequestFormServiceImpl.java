@@ -60,10 +60,10 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 		List<TestRequestFormRequest> testRequests = prepareTestRequest(testRequestFormRequest);
 		
 		List<TestRequestFormRequest> addTestRequests = testRequests.stream().filter(tr -> tr.getTestRequestFormId() == null)
-				.toList();
+				.collect(Collectors.toList());
 		
 		List<TestRequestFormRequest> updateTestRequests = testRequests.stream().filter(tr -> tr.getTestRequestFormId() != null)
-				.toList();
+				.collect(Collectors.toList());
 		int[] rowsEffected = null;
 		
 		if(!CollectionUtils.isEmpty(updateTestRequests)) {
