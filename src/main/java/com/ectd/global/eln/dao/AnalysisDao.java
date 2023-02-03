@@ -46,6 +46,10 @@ public interface AnalysisDao {
 	
 	AnalysisDto getAnalysisByIdWithoutTRF(Integer analysisId);
 	
-	Integer updateAnalysisStatus(Integer analysisId, String status);
+	Integer updateAnalysisStatus(AnalysisRequest analysisRequest);
+	
+	Integer updateTRFStatus(Integer analysisExperimentId, String status);
+	
+	List<AnalysisDto> getAnalysisExperiments(Integer analysisId);
 	
 }

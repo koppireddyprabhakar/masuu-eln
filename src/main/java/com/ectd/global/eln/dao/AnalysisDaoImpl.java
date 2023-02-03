@@ -98,6 +98,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	@Value("${update.analysis.status}")
 	private String UPDATE_ANALYSIS_STATUS_QUERY;
 	
+	@Value("${update.trf.status}")
+	private String UPDATE_TRF_STATUS_QUERY;
+	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
@@ -108,6 +111,13 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		}
 
 		return analysisList.get(0);
+	}
+
+	public List<AnalysisDto> getAnalysisExperiments(Integer analysisId) {
+		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
+				new AnalysisExtractor());
+
+		return analysisList;
 	}
 	
 	@Override
@@ -325,6 +335,18 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		}
 				);
 	}
+	
+	@Override
+	public Integer updateTRFStatus(Integer analysisExperimentId, String status) {
+
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("analysisId", analysisExperimentId);
+		parameters.addValue("testRequestFormStatus", status);
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+
+		return namedParameterJdbcTemplate.update(UPDATE_TRF_STATUS_QUERY, parameters);
+	}
 
 	@Override
 	public Integer createAnalysisExcipient(AnalysisExcipient analysisExcipient) {
@@ -387,11 +409,12 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	}
 	
 	@Override
-	public Integer updateAnalysisStatus(Integer analysisId, String status) {
+	public Integer updateAnalysisStatus(AnalysisRequest analysisRequest) {
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("analysisId", analysisId);
-		parameters.addValue("status", status);
+		parameters.addValue("analysisId", analysisRequest.getAnalysisId());
+		parameters.addValue("status", analysisRequest.getStatus());
+		parameters.addValue("summary", analysisRequest.getSummary());
 
 		return namedParameterJdbcTemplate.update(UPDATE_ANALYSIS_STATUS_QUERY, parameters);
 	}

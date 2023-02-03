@@ -35,6 +35,6 @@ public interface AnalysisService {
 	
 	List<AnalysisExcipientDto> getExcipientByAnalysisId(Integer analysisId);
 	
-	Integer updateAnalysisStatus(Integer analysisId, String status);
+	Integer updateAnalysisStatus(AnalysisRequest analysisRequest);
 	
 }

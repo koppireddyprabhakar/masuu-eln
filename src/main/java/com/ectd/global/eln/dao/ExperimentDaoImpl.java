@@ -30,6 +30,7 @@ import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ProjectDto;
+import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
@@ -49,7 +50,10 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 	@Value(value="${get.experiment.by.id}")
 	private String GET_EXPERIMENT_BY_ID_QUERY;
-
+	
+	@Value("${get.experiment.by.id_1}")
+	private String GET_EXPERIMENT_BY_ID_QUERY_1;
+	
 	@Value(value="${get.experiment.list}")
 	private String GET_EXPERIMENT_LIST_QUERY;
 
@@ -88,11 +92,17 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	
 	@Value("${get.excipients.by.experimentId}")
 	private String GET_EXCIPIENTS_BY_EXPERIMENT_ID;
+	
+	@Value("${get.trf.by.exp.id}")
+	private String GET_TRF_BY_EXPR_ID_QUERY;
 
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
-		List<ExperimentDto> experiments = jdbcTemplate.query(GET_EXPERIMENT_BY_ID_QUERY + experimentId,
-				new ExperimentExtractor());
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("experimentId", experimentId);
+		
+		List<ExperimentDto> experiments = namedParameterJdbcTemplate.query(GET_EXPERIMENT_BY_ID_QUERY, params, new ExperimentExtractor());
 
 		if(experiments.isEmpty()) {
 			return null;
@@ -100,7 +110,25 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 		return experiments.get(0);
 	}
+	
+	@Override
+	public List<ExperimentDto> getExperimentByIds(String experimentId) {
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("experimentId", experimentId);
+		String qry = GET_EXPERIMENT_BY_ID_QUERY_1 + " (" + experimentId + ")";
+		return namedParameterJdbcTemplate.query(qry, new ExperimentExtractor());
+	}
 
+	@Override
+	public List<TestRequestFormDto> getTRFByExpIds(Integer experimentId) {
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("experimentId", experimentId);
+		
+		return namedParameterJdbcTemplate.query(GET_TRF_BY_EXPR_ID_QUERY, params, new TestRequestFormRowMapper());
+	}
+	
 	@Override
 	public List<ExperimentDto> getExperiments(Integer userId, String status) {
 
@@ -447,4 +475,14 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		return experimentDetails;
 	}
 
+	class TestRequestFormRowMapper implements RowMapper<TestRequestFormDto> {
+		public TestRequestFormDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			TestRequestFormDto testRequestFormDto = new TestRequestFormDto();
+			testRequestFormDto.setTestRequestFormId(resultSet.getInt("TRF_ID"));
+			testRequestFormDto.setTestRequestFormStatus(resultSet.getString("TRF_STATUS"));
+			
+			return testRequestFormDto;
+		};
+	}
+	
 }

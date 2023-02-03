@@ -2,6 +2,8 @@ package com.ectd.global.eln.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,12 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.AnalysisDao;
+import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
+import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 
 @Service
@@ -24,6 +29,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Autowired
 	AnalysisDao analysisDao; 
 
+	@Autowired
+	ExperimentDao experimentDao;
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -142,18 +150,45 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateTestRequestFormResult(List<TestRequestFormRequest> results) {
 		return analysisDao.updateTestRequestFormResult(results);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<AnalysisExcipientDto> getExcipientByAnalysisId(Integer analysisId) {
 		return analysisDao.getExcipientByAnalysisId(analysisId);
 	}
 
 	@Override
-	public Integer updateAnalysisStatus(Integer analysisId, String status) {
-		return analysisDao.updateAnalysisStatus(analysisId, status);
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer updateAnalysisStatus(AnalysisRequest analysisRequest) {
+
+		analysisDao.updateAnalysisStatus(analysisRequest);
+
+		if(TestRequestFormRequest.TRF_STATUS.ANLYSIS_SUBMIT.getValue().equals(analysisRequest.getStatus())) {
+			analysisDao.updateTRFStatus(analysisRequest.getAnalysisId(), TestRequestFormRequest.TRF_STATUS.ANLYSIS_SUBMIT.getValue());
+
+			List<TestRequestFormDto> testRequestForms = analysisDao.getTestRequestByAnalysisId(analysisRequest.getAnalysisId());
+
+			Set<Integer> experimentIds = testRequestForms.stream().filter(trf -> trf.getExpId() != 0).map(trf -> trf.getExpId()).collect(Collectors.toSet());
+
+			if(!CollectionUtils.isEmpty(experimentIds)) {
+				String ids = experimentIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+				List<ExperimentDto> experiments = experimentDao.getExperimentByIds(ids);
+
+				experiments.stream().forEach(e -> {
+					List<TestRequestFormDto> trfs = experimentDao.getTRFByExpIds(e.getExpId());
+					Boolean isAllSubmitted = trfs.stream().allMatch(t -> t.getTestRequestFormStatus().equalsIgnoreCase(TestRequestFormRequest.TRF_STATUS.ANLYSIS_SUBMIT.getValue()));
+					if(isAllSubmitted) {
+						experimentDao.updateExperimentStatus(e.getExpId(), ExperimentRequest.EXPERIMENT_STATUS.ANLYSIS_SUBMIT.getValue());
+					}
+				});
+			}
+		}
+
+		return 1;
 	}
 
 }

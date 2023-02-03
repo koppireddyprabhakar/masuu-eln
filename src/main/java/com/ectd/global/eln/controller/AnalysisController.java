@@ -185,8 +185,8 @@ public class AnalysisController extends BaseController {
 	}
 	
 	@PutMapping("/update-analysis-status")
-	public ResponseEntity<String> updateAnalysisStatus(@RequestParam Integer analysisId, @RequestParam String status) {
-		return getResponseEntity(analysisService.updateAnalysisStatus(analysisId, status), "Experiment Update");
+	public ResponseEntity<String> updateAnalysisStatus(@RequestBody AnalysisRequest analysisRequest) {
+		return getResponseEntity(analysisService.updateAnalysisStatus(analysisRequest), "Experiment Update");
 	}
 	
 	@GetMapping("/get-analysis-by-status")

@@ -174,7 +174,7 @@ public class TestRequestFormRequest extends Base implements Serializable {
 	}
 
 	public static enum TRF_STATUS {
-		NEW("New"), INPROGRESS("Inprogress"), ANLYSIS_SUBMIT("Analysis Submit"), CLOSED("Closed");
+		NEW("New"), INPROGRESS("Inprogress"), ANLYSIS_SUBMIT("Analysis Submitted"), CLOSED("Closed");
 		
 		String value;
 
