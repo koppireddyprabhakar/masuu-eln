@@ -15,11 +15,13 @@ import com.ectd.global.eln.dao.AnalysisDao;
 import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
+import com.ectd.global.eln.dto.AnalysisReviewDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.AnalysisReview;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 
@@ -189,6 +191,36 @@ public class AnalysisServiceImpl implements AnalysisService {
 		}
 
 		return 1;
+	}
+
+	@Override
+	public Integer createAnalysisReview(AnalysisReview analysisReview) {
+		
+		analysisDao.createAnalysisReview(analysisReview);
+		
+		AnalysisRequest analysisRequest = new AnalysisRequest();
+		analysisRequest.setAnalysisId(analysisReview.getAnalysisId());
+		analysisRequest.setStatus(AnalysisRequest.ANALYSIS_STATUS.INREVIEW.getValue());
+		analysisRequest.setSummary(AnalysisRequest.ANALYSIS_STATUS.INREVIEW.getValue());
+		
+		return this.updateAnalysisStatus(analysisRequest);
+	}
+
+	@Override
+	public Integer updateAnalysisReview(AnalysisReview analysisReview) {
+		analysisDao.updateAnalysisReview(analysisReview);
+		
+		AnalysisRequest analysisRequest = new AnalysisRequest();
+		analysisRequest.setAnalysisId(analysisReview.getAnalysisId());
+		analysisRequest.setStatus(AnalysisRequest.ANALYSIS_STATUS.REVIEW_COMPLETED.getValue());
+		analysisRequest.setSummary(AnalysisRequest.ANALYSIS_STATUS.REVIEW_COMPLETED.getValue());
+		
+		return this.updateAnalysisStatus(analysisRequest);
+	}
+
+	@Override
+	public AnalysisReviewDto getAnalysisReview(Integer analysisId) {
+		return analysisDao.getAnalysisReview(analysisId);
 	}
 
 }

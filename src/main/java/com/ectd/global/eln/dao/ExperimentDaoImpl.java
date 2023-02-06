@@ -29,11 +29,13 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
+import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
+import com.ectd.global.eln.request.ExperimentReview;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
@@ -95,6 +97,15 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	
 	@Value("${get.trf.by.exp.id}")
 	private String GET_TRF_BY_EXPR_ID_QUERY;
+	
+	@Value("${create.experiment.review}")
+	private String CREATE_EXPERIMENT_REVIEW_QUERY;
+
+	@Value("${update.experiment.review}")
+	private String UPDATE_EXPERIMENT_REVIEW_QUERY;
+	
+	@Value("${get.experiment.review}")
+	private String GET_EXPERIMENT_REVIEW_QUERY;
 
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
@@ -156,7 +167,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("teamId", experimentRequest.getTeamId());
 		parameters.addValue("userId", experimentRequest.getUserId());
 		parameters.addValue("experimentName", experimentRequest.getExperimentName());
-		parameters.addValue("experimentStatus", ExperimentRequest.EXPERIMENT_STATUS.INPROGRESS.name());
+		parameters.addValue("experimentStatus", ExperimentRequest.EXPERIMENT_STATUS.INPROGRESS.getValue());
 		parameters.addValue("summary", experimentRequest.getSummary());
 		parameters.addValue("batchSize", experimentRequest.getBatchSize());
 		parameters.addValue("batchNumber", experimentRequest.getBatchNumber());
@@ -298,6 +309,64 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("experimentId", experimentId);
 		return namedParameterJdbcTemplate.query(GET_EXCIPIENTS_BY_EXPERIMENT_ID, parameters, new ExperimentExcipientRowMapper());
+	}
+	
+	@Override
+	public Integer createExperimentReview(ExperimentReview experimentReview) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+
+		parameters.addValue("experimentId", experimentReview.getExperimentId());
+		parameters.addValue("reviewUserId", experimentReview.getReviewUserId());
+		parameters.addValue("comments", experimentReview.getComments());
+		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+
+		return namedParameterJdbcTemplate.update(CREATE_EXPERIMENT_REVIEW_QUERY, parameters);
+	}
+
+	@Override
+	public Integer updateExperimentReview(ExperimentReview experimentReview) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+
+		parameters.addValue("experimentReviewId", experimentReview.getExperimentReviewId());
+		parameters.addValue("experimentId", experimentReview.getExperimentId());
+		parameters.addValue("reviewUserId", experimentReview.getReviewUserId());
+		parameters.addValue("comments", experimentReview.getComments());
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+
+		return namedParameterJdbcTemplate.update(UPDATE_EXPERIMENT_REVIEW_QUERY, parameters);
+	}
+	
+	@Override
+	public ExperimentReviewDto getExperimentReview(Integer experimentId) {
+		
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("experimentId", experimentId);
+		
+		List<ExperimentReviewDto> experimentReviewDtos = namedParameterJdbcTemplate.query(GET_EXPERIMENT_REVIEW_QUERY, parameters, 
+				new ExperimentReviewRowMapper());
+
+		if(experimentReviewDtos.isEmpty()) {
+			return null;
+		}
+
+		return experimentReviewDtos.get(0);
+	}
+	
+	class ExperimentReviewRowMapper implements RowMapper<ExperimentReviewDto> {
+		public ExperimentReviewDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			ExperimentReviewDto experimentReviewDto = new ExperimentReviewDto();
+
+			experimentReviewDto.setExperimentReviewId(resultSet.getInt("EXP_REVIEW_ID"));
+			experimentReviewDto.setExperimentId(resultSet.getInt("EXP_ID"));
+			experimentReviewDto.setComments(resultSet.getString("COMMENTS"));
+			experimentReviewDto.setReviewUserId(resultSet.getInt("REVIEW_USER_ID"));
+			
+			return experimentReviewDto;
+		};
 	}
 	
 	class ExperimentExcipientRowMapper implements RowMapper<ExperimentExcipientDto> {

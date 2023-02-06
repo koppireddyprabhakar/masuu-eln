@@ -30,11 +30,13 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
+import com.ectd.global.eln.dto.AnalysisReviewDto;
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.AnalysisReview;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 
@@ -82,25 +84,34 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 	@Value("${delete.analysis.excipient}")
 	private String DELETE_ANALSIS_EXCIPIENT_QUERY;
-	
+
 	@Value("${trfs.by.analysi.id}")
 	private String GET_TRFS_BY_ANALYSIS_ID_QUERY;
-	
+
 	@Value("${update.test.request.form.results}")
 	private String UPDATE_TEST_REQUEST_FORM_RESULT_QUERY;
-	
+
 	@Value("${get.excipients.by.analysisId}")
 	private String GET_EXCIPIENTS_BY_ANALYSISID_QUERY;
-	
+
 	@Value("${get.analysis.by.id.with.out.trf}")
 	private String GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY;
-	
+
 	@Value("${update.analysis.status}")
 	private String UPDATE_ANALYSIS_STATUS_QUERY;
-	
+
 	@Value("${update.trf.status}")
 	private String UPDATE_TRF_STATUS_QUERY;
+
+	@Value("${create.anlaysis.review}")
+	private String CREATE_ANALYSIS_REVIEW_QUERY;
+
+	@Value("${update.anlaysis.review}")
+	private String UPDATE_ANALYSIS_REVIEW_QUERY;
 	
+	@Value("${get.anlaysis.review}")
+	private String GET_ANALYSIS_REVIEW_QUERY;
+
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
@@ -119,7 +130,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return analysisList;
 	}
-	
+
 	@Override
 	public AnalysisDto getAnalysisByIdWithoutTRF(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
@@ -131,7 +142,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return analysisList.get(0);
 	}
-	
+
 
 	@Override
 	public List<AnalysisDto> getAnalysisList(Integer teamId, String status) {
@@ -143,10 +154,10 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		}
 
 		if(status != null) {
-			
+
 			sb.append(" AND AE.STATUS = ").append("'"+status+"'");
 		}
-		
+
 		sb.append(" ORDER BY AE.INSERT_DATE DESC");
 
 		return jdbcTemplate.query(sb.toString(), new AnalysisRowMapper());
@@ -160,7 +171,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("projectId", analysisRequest.getProjectId());
 		parameters.addValue("teamId", analysisRequest.getTeamId());
 		parameters.addValue("summary", analysisRequest.getProjectId());
-		parameters.addValue("status", AnalysisRequest.ANALYSIS_STATUS.INPROGRESS.name());
+		parameters.addValue("status", AnalysisRequest.ANALYSIS_STATUS.INPROGRESS.getValue());
 		parameters.addValue("userId", analysisRequest.getUserId());
 		parameters.addValue("batchSize", analysisRequest.getBatchSize());
 		parameters.addValue("batchNumber", analysisRequest.getBatchNumber());
@@ -198,13 +209,13 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	public Integer deleteAnalysis(Integer analysisId) {
 		return jdbcTemplate.update(DELETE_ANALYSIS_QUERY, new Object[] {analysisId});
 	}
-	
+
 	@Override
 	public Integer deleteAnalysisExcipient(Integer analysisId) {
 		return jdbcTemplate.update(DELETE_ANALSIS_EXCIPIENT_QUERY + analysisId);
 	}
-	
-	
+
+
 	class AnalysisRowMapper implements RowMapper<AnalysisDto> {
 		public AnalysisDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			AnalysisDto analysisDto = new AnalysisDto();
@@ -220,7 +231,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			analysisDto.setUpdateDate(resultSet.getDate("INSERT_DATE"));
 			analysisDto.setUpdateUser(resultSet.getString("INSERT_USER"));
-			
+
 			ProjectDto projectDto = new ProjectDto();
 			projectDto.setProjectId(resultSet.getInt("PROJECT_ID"));
 			projectDto.setProjectName(resultSet.getString("PROJECT_NAME"));
@@ -236,7 +247,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			projectDto.setMarkertName(resultSet.getString("MARKET_NAME"));
 
 			analysisDto.setProject(projectDto);
-			
+
 			return  analysisDto;
 		};
 	}
@@ -253,22 +264,22 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		});
 		List<Map<String, Object>> batchValues = new ArrayList<>(analysisDetailsList.size());
 		for (AnalysisDetails analysisDetails : analysisDetailsList) {
-		    batchValues.add(
-		            new MapSqlParameterSource("analysisId", analysisDetails.getAnalysisId())
-		                    .addValue("fileContent", analysisDetails.getFileContent().getBytes())
-		                    .addValue("name", analysisDetails.getName())
-		                    .addValue("status", analysisDetails.getStatus())
-		                    .addValue("insertUser", "ELN")
-		            		.addValue("insertDate", ElnUtils.getTimeStamp())
-		            		.addValue("updateUser", "ELN")
-		            		.addValue("updateDate", ElnUtils.getTimeStamp())
-		                    .getValues());
+			batchValues.add(
+					new MapSqlParameterSource("analysisId", analysisDetails.getAnalysisId())
+					.addValue("fileContent", analysisDetails.getFileContent().getBytes())
+					.addValue("name", analysisDetails.getName())
+					.addValue("status", analysisDetails.getStatus())
+					.addValue("insertUser", "ELN")
+					.addValue("insertDate", ElnUtils.getTimeStamp())
+					.addValue("updateUser", "ELN")
+					.addValue("updateDate", ElnUtils.getTimeStamp())
+					.getValues());
 		}
-		
+
 		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_ANALYSIS_DETAILS_QUERY, batchValues.toArray(new Map[analysisDetailsList.size()]) );
 
-//		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(analysisDetailsList.toArray());
-//		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_ANALYSIS_DETAILS_QUERY, batch );
+		//		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(analysisDetailsList.toArray());
+		//		return this.namedParameterJdbcTemplate.batchUpdate(CREATE_ANALYSIS_DETAILS_QUERY, batch );
 	}
 
 	@Override
@@ -335,7 +346,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		}
 				);
 	}
-	
+
 	@Override
 	public Integer updateTRFStatus(Integer analysisExperimentId, String status) {
 
@@ -388,7 +399,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return namedParameterJdbcTemplate.update(UPDATE_ANALYSIS_EXCIPIENT_QUERY, parameters);
 	}
-	
+
 	@Override
 	public Integer updateTestRequestFormResult(List<TestRequestFormRequest> results) {
 		results.forEach(ed -> {
@@ -400,14 +411,14 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		int[] effectedRows =  this.namedParameterJdbcTemplate.batchUpdate(UPDATE_TEST_REQUEST_FORM_RESULT_QUERY, batch);
 		return effectedRows.length;
 	}
-	
+
 	@Override
 	public List<AnalysisExcipientDto> getExcipientByAnalysisId(Integer analysisId) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("analysisId", analysisId);
 		return namedParameterJdbcTemplate.query(GET_EXCIPIENTS_BY_ANALYSISID_QUERY, parameters, new AnalysisExcipientRowMapper());
 	}
-	
+
 	@Override
 	public Integer updateAnalysisStatus(AnalysisRequest analysisRequest) {
 
@@ -418,15 +429,78 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return namedParameterJdbcTemplate.update(UPDATE_ANALYSIS_STATUS_QUERY, parameters);
 	}
+
+	@Override
+	public List<TestRequestFormDto> getTestRequestByAnalysisId(Integer analysisId) {
+		return jdbcTemplate.query(GET_TRFS_BY_ANALYSIS_ID_QUERY + analysisId, new TestRequestFormRowMapper());
+	}
+
+	@Override
+	public Integer createAnalysisReview(AnalysisReview analysisReview) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+
+		parameters.addValue("analysisId", analysisReview.getAnalysisId());
+		parameters.addValue("reviewUserId", analysisReview.getReviewUserId());
+		parameters.addValue("comments", analysisReview.getComments());
+		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
+		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+
+		return namedParameterJdbcTemplate.update(CREATE_ANALYSIS_REVIEW_QUERY, parameters);
+	}
+
+	@Override
+	public Integer updateAnalysisReview(AnalysisReview analysisReview) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+
+		parameters.addValue("analysisReviewId", analysisReview.getAnalysisReviewId());
+		parameters.addValue("analysisId", analysisReview.getAnalysisId());
+		parameters.addValue("reviewUserId", analysisReview.getReviewUserId());
+		parameters.addValue("comments", analysisReview.getComments());
+		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
+		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+
+		return namedParameterJdbcTemplate.update(UPDATE_ANALYSIS_REVIEW_QUERY, parameters);
+	}
 	
+	@Override
+	public AnalysisReviewDto getAnalysisReview(Integer analysisId) {
+		
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("analysisId", analysisId);
+		
+		List<AnalysisReviewDto> analysisReviewDtos = namedParameterJdbcTemplate.query(GET_ANALYSIS_REVIEW_QUERY, parameters, 
+				new AnalysisReviewRowMapper());
+
+		if(analysisReviewDtos.isEmpty()) {
+			return null;
+		}
+
+		return analysisReviewDtos.get(0);
+	}
+	
+	class AnalysisReviewRowMapper implements RowMapper<AnalysisReviewDto> {
+		public AnalysisReviewDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			AnalysisReviewDto analysisReviewDto = new AnalysisReviewDto();
+
+			analysisReviewDto.setAnalysisReviewId(resultSet.getInt("ANALYSIS_REVIEW_ID"));
+			analysisReviewDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+			analysisReviewDto.setComments(resultSet.getString("COMMENTS"));
+			analysisReviewDto.setReviewUserId(resultSet.getInt("REVIEW_USER_ID"));
+			
+			return analysisReviewDto;
+		};
+	}
+
 	class AnalysisExcipientRowMapper implements RowMapper<AnalysisExcipientDto> {
 		public AnalysisExcipientDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			AnalysisExcipientDto excipientDto = getAnalysisExcipientDto(resultSet);
-			
+
 			return excipientDto;
 		};
 	}
-	
+
 
 	class AnalysisExtractor implements ResultSetExtractor<List<AnalysisDto>> {
 
@@ -438,7 +512,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
 
 				AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
-				
+
 				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
 					int index = analysisDtoList.indexOf(analysisDto);
 					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);	
@@ -455,7 +529,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			return analysisDtoList;
 		};
 	}
-	
+
 	class AnalysisDetailsExtractor implements ResultSetExtractor<List<AnalysisDto>> {
 
 		@Override
@@ -466,7 +540,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
 
 				AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
-				
+
 				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
 					int index = analysisDtoList.indexOf(analysisDto);
 					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);
@@ -475,7 +549,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 					Set<AnalysisDetailsDto> analysisDetailsList = new LinkedHashSet<>();
 					analysisDetailsList.add(analysisDetails);
 					analysisDto.setAnalysisDetails(analysisDetailsList);
-					
+
 					analysisDtoList.add(analysisDto);
 				}
 
@@ -495,7 +569,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		analysisDto.setStatus(resultSet.getString("STATUS"));
 		analysisDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
 		analysisDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
-		
+
 		//	analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 		//	analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));
 		//	analysisDto.setUpdateDate(resultSet.getDate("INSERT_DATE"));
@@ -546,11 +620,6 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		return testRequestFormDto;
 	}
 
-	@Override
-	public List<TestRequestFormDto> getTestRequestByAnalysisId(Integer analysisId) {
-		return jdbcTemplate.query(GET_TRFS_BY_ANALYSIS_ID_QUERY + analysisId, new TestRequestFormRowMapper());
-	}
-	
 	class TestRequestFormRowMapper implements RowMapper<TestRequestFormDto> {
 		public TestRequestFormDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			TestRequestFormDto testRequestFormDto = new TestRequestFormDto();
@@ -571,7 +640,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
 			testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
 			testRequestFormDto.setStatus(resultSet.getString("STATUS"));		
-			
+
 			return testRequestFormDto;
 		};
 	}

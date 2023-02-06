@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
+import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
+import com.ectd.global.eln.request.ExperimentReview;
 
 public interface ExperimentDao {
 
@@ -42,5 +44,11 @@ public interface ExperimentDao {
 	List<ExperimentDto> getExperimentByIds(String experimentId);
 	
 	List<TestRequestFormDto> getTRFByExpIds(Integer experimentId);
+	
+	Integer createExperimentReview(ExperimentReview experimentReview);
+
+	Integer updateExperimentReview(ExperimentReview experimentReview);
+	
+	ExperimentReviewDto getExperimentReview(Integer experimentId);
 	
 }

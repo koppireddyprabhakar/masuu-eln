@@ -10,7 +10,7 @@ public interface UsersDetailsDao {
 
 	UsersDetailsDto getUsersDetailsById(Integer experimentId);
 
-	List<UsersDetailsDto> getUsersDetails();
+	List<UsersDetailsDto> getUsersDetails(Integer roleId, String departmentName);
 
 	Boolean createUsersDetails(UsersDetailsRequest experimentRequest);
 

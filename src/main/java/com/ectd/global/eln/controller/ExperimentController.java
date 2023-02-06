@@ -24,10 +24,12 @@ import com.ectd.global.eln.dto.ExperimentAttachmentDto;
 import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
+import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentAttachment;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
+import com.ectd.global.eln.request.ExperimentReview;
 import com.ectd.global.eln.request.FileInfo;
 import com.ectd.global.eln.services.ExcipientService;
 import com.ectd.global.eln.services.ExperimentAttachmentService;
@@ -170,6 +172,21 @@ public class ExperimentController extends BaseController {
 	@GetMapping("/get-experiments-by-status")
 	public ResponseEntity<List<ExperimentDto>> getExperimentsByUserId(@RequestParam(required = false) String status) {
 		return new ResponseEntity<List<ExperimentDto>>(experimentService.getExperiments(null, status), HttpStatus.OK);
+	}
+	
+	@PostMapping("/create-experiment-review")
+	public ResponseEntity<String> createExperimentReview(@RequestBody ExperimentReview experimentReview) {
+		return getResponseEntity(experimentService.createExperimentReview(experimentReview), "Experiment Review Create");
+	}
+	
+	@PutMapping("/udpate-experiment-review")
+	public ResponseEntity<String> updateExperimentReview(@RequestBody ExperimentReview experimentReview) {
+		return getResponseEntity(experimentService.updateExperimentReview(experimentReview), "Experiment Review Update");
+	}
+	
+	@GetMapping("/get-experiment-review-by-experiment-id")
+	public ResponseEntity<ExperimentReviewDto> getExperimentReview(@RequestParam Integer experimentId) throws Exception {
+		return  new ResponseEntity<>(experimentService.getExperimentReview(experimentId), HttpStatus.OK);
 	}
 
 }

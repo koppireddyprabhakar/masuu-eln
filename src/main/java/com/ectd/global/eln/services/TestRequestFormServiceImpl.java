@@ -42,7 +42,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 		int[] rowsEffected = testRequestFormDao.batchTestRequestInsert(prepareTestRequest(testRequestFormRequest));
 		
 		if(testRequestFormRequest.getExpId() != null) {
-			experimentService.updateExperimentStatus(testRequestFormRequest.getExpId(), ExperimentRequest.EXPERIMENT_STATUS.CREATED_TRF.name());
+			experimentService.updateExperimentStatus(testRequestFormRequest.getExpId(), ExperimentRequest.EXPERIMENT_STATUS.CREATED_TRF.getValue());
 		}
 //		Integer testRequestFormId = testRequestFormDao.createTestRequestForm(testRequestFormRequest);
 		

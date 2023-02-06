@@ -29,8 +29,8 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<UsersDetailsDto> getUsersDetails() {
-		return usersDetailsDao.getUsersDetails();
+	public List<UsersDetailsDto> getUsersDetails(Integer roleId, String departmentName) {
+		return usersDetailsDao.getUsersDetails(roleId, departmentName);
 	}
 
 	@Override

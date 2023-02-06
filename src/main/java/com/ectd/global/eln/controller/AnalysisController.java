@@ -25,17 +25,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
+import com.ectd.global.eln.dto.AnalysisReviewDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
+import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.AnalysisAttachment;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.AnalysisReview;
 import com.ectd.global.eln.request.FileInfo;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.services.AnalysisAttachmentService;
 import com.ectd.global.eln.services.AnalysisExpeimentDetailsService;
 import com.ectd.global.eln.services.AnalysisService;
 import com.ectd.global.eln.services.TestRequestFormService;
+import com.ectd.global.eln.services.UsersDetailsService;
 
 @RestController
 @RequestMapping("/analysis")
@@ -52,6 +56,9 @@ public class AnalysisController extends BaseController {
 
 	@Autowired
 	AnalysisExpeimentDetailsService analysisExpeimentDetailsService;
+	
+	@Autowired
+	UsersDetailsService usersDetailsService;
 
 	@GetMapping("/get-analysis-by-id")
 	public ResponseEntity<AnalysisDto> getAnalysisById(@RequestParam Integer analysisId) throws Exception {
@@ -192,6 +199,26 @@ public class AnalysisController extends BaseController {
 	@GetMapping("/get-analysis-by-status")
 	public ResponseEntity<List<AnalysisDto>> getAnalysisByStatus(@RequestParam String status) throws Exception {
 		return new ResponseEntity<>(analysisService.getAnalysisList(null, status), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-user-details-by-role-id")
+	public ResponseEntity<List<UsersDetailsDto>> getUsersDetailsByRoleId(@RequestParam Integer roleId, @RequestParam String departmentName) throws Exception {
+		return  new ResponseEntity<>(usersDetailsService.getUsersDetails(roleId, departmentName), HttpStatus.OK);
+	}
+	
+	@PostMapping("/create-analysis-review")
+	public ResponseEntity<String> createAnalysisReview(@RequestBody AnalysisReview analysisReview) {
+		return getResponseEntity(analysisService.createAnalysisReview(analysisReview), "Analysis Review Create");
+	}
+	
+	@PutMapping("/udpate-analysis-review")
+	public ResponseEntity<String> updateAnalysisReview(@RequestBody AnalysisReview analysisReview) {
+		return getResponseEntity(analysisService.updateAnalysisReview(analysisReview), "Analysis Review Update");
+	}
+	
+	@GetMapping("/get-analysis-review-by-analysis-id")
+	public ResponseEntity<AnalysisReviewDto> getAnalysisReview(@RequestParam Integer analysisId) throws Exception {
+		return  new ResponseEntity<>(analysisService.getAnalysisReview(analysisId), HttpStatus.OK);
 	}
 	
 }

@@ -12,9 +12,11 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
+import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
+import com.ectd.global.eln.request.ExperimentReview;
 
 @Service
 public class ExperimentServiceImpl implements ExperimentService {
@@ -124,6 +126,25 @@ public class ExperimentServiceImpl implements ExperimentService {
 	@Override
 	public List<ExperimentExcipientDto> getExcipientByExperimentId(Integer experimentId) {
 		return experimentDao.getExcipientByExperimentId(experimentId);
+	}
+
+	@Override
+	public Integer createExperimentReview(ExperimentReview experimentReview) {
+		experimentDao.createExperimentReview(experimentReview);
+
+		return this.updateExperimentStatus(experimentReview.getExperimentId(), ExperimentRequest.EXPERIMENT_STATUS.INREVIEW.getValue());
+	}
+
+	@Override
+	public Integer updateExperimentReview(ExperimentReview experimentReview) {
+		experimentDao.updateExperimentReview(experimentReview);
+
+		return this.updateExperimentStatus(experimentReview.getExperimentId(), ExperimentRequest.EXPERIMENT_STATUS.REVIEW_COMPLETED.getValue());
+	}
+
+	@Override
+	public ExperimentReviewDto getExperimentReview(Integer experimentId) {
+		return experimentDao.getExperimentReview(experimentId);
 	}
 
 }

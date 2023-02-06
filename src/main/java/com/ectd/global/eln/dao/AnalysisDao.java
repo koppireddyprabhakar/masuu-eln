@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
+import com.ectd.global.eln.dto.AnalysisReviewDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
+import com.ectd.global.eln.request.AnalysisReview;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 
 public interface AnalysisDao {
@@ -51,5 +53,11 @@ public interface AnalysisDao {
 	Integer updateTRFStatus(Integer analysisExperimentId, String status);
 	
 	List<AnalysisDto> getAnalysisExperiments(Integer analysisId);
+	
+	Integer createAnalysisReview(AnalysisReview analysisReview);
+ 
+	Integer updateAnalysisReview(AnalysisReview analysisReview);
+	
+	AnalysisReviewDto getAnalysisReview(Integer analysisId);
 	
 }

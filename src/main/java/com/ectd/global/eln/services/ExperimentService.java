@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
+import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentRequest;
+import com.ectd.global.eln.request.ExperimentReview;
 
 public interface ExperimentService {
 
@@ -28,5 +30,11 @@ public interface ExperimentService {
 	Integer saveExcipient(List<ExcipientRequest> excipientRequests);
 	
 	List<ExperimentExcipientDto> getExcipientByExperimentId(Integer experimentId);
+	
+	Integer createExperimentReview(ExperimentReview experimentReview);
+
+	Integer updateExperimentReview(ExperimentReview experimentReview);
+	
+	ExperimentReviewDto getExperimentReview(Integer experimentId);
 	
 }
