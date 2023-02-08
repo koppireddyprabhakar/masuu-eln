@@ -166,7 +166,7 @@ public class AnalysisController extends BaseController {
 		return new ResponseEntity<>(analysisService.getTestRequestByAnalysisId(analysisId), HttpStatus.OK);
 	}
 	
-	@PutMapping("/updae-test-request-form-results")
+	@PutMapping("/update-test-request-form-results")
 	public ResponseEntity<String> updateTestRequestFormResult(@RequestBody List<TestRequestFormRequest> results) {
 		return getResponseEntity(analysisService.updateTestRequestFormResult(results), "Analysis Results Update");
 	}

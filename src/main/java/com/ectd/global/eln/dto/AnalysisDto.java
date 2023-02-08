@@ -132,7 +132,7 @@ public class AnalysisDto extends Base implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
 		sb.append(analysisId); 
-		sb.append(projectId); 
+		sb.append(analysisName); 
 		return sb.toString();
 	}
 	
@@ -143,7 +143,10 @@ public class AnalysisDto extends Base implements Serializable {
 	    if (!(o instanceof AnalysisDto))
 	        return false;
 	    AnalysisDto other = (AnalysisDto)o;
-	    return this.analysisId == other.analysisId && this.projectId == other.projectId;
+	    boolean analysisNameEquals = (this.analysisName == null && other.analysisName == null)
+	  	      || (this.analysisName != null && this.analysisName.equals(other.analysisName));
+	  	    
+	    return this.analysisId.intValue() == other.analysisId.intValue() && analysisNameEquals;
 	}
 	
 	@Override
