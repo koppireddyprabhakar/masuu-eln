@@ -23,4 +23,6 @@ public interface LabTestDao {
 	
 	Boolean deleteTests(TestRequest testRequest);
 	
+	List<TestDto> getTestByDosageId(Integer dosageId);
+	
 }

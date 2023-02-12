@@ -97,6 +97,7 @@ public class ProductDaoImpl implements ProductDao {
 			ProductDto productDto = new ProductDto();
 			productDto.setProductId(resultSet.getInt("PRODUCT_ID"));
 			productDto.setProductName(resultSet.getString("PRODUCT_NAME"));
+			productDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
 			productDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			productDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			

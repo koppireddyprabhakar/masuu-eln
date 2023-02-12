@@ -24,7 +24,7 @@ public class BaseController {
 		return new ResponseEntity(getJson(statement + " Failed"), HttpStatus.NOT_FOUND);
 	}
 
-	private String getJson(String value) {
+	public String getJson(String value) {
 		return "{\"data\":\"" + value +"\"}";
 	}
 

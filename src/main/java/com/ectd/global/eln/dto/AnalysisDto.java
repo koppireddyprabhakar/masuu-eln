@@ -1,6 +1,7 @@
 package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import com.ectd.global.eln.request.Base;
 
@@ -9,11 +10,20 @@ public class AnalysisDto extends Base implements Serializable {
 	private static final long serialVersionUID = 3912715790802220944L;
 
 	private Integer analysisId;  
-    private Integer projectId;  
-    private Integer teamId;  
-    private Integer expId;  
-    private String analysisName;  
-    private String summary;  
+	private Integer projectId;  
+	private Integer teamId;  
+	private Integer userId;
+	private String analysisName;  
+	private String status;
+	private String summary;
+	private String batchSize;
+	private String batchNumber;
+    
+    ProjectDto project;
+    
+    private Set<AnalysisDetailsDto> analysisDetails;
+    private Set<AnalysisExcipientDto> analysisExcipients;
+    private Set<TestRequestFormDto> testRequestForms;
     
 	// Constructor
 	public AnalysisDto() {
@@ -41,13 +51,6 @@ public class AnalysisDto extends Base implements Serializable {
 		this.teamId = teamId;
 	}
 	
-	public Integer getExpId() {
-		return this.expId;
-	}
-	public void setExpId(Integer expId) {
-		this.expId = expId;
-	}
-	
 	public String getAnalysisName() {
 		return this.analysisName;
 	}
@@ -61,5 +64,101 @@ public class AnalysisDto extends Base implements Serializable {
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
+
+	public Set<AnalysisDetailsDto> getAnalysisDetails() {
+		return analysisDetails;
+	}
+
+	public void setAnalysisDetails(Set<AnalysisDetailsDto> analysisDetails) {
+		this.analysisDetails = analysisDetails;
+	}
+
+	public Set<AnalysisExcipientDto> getAnalysisExcipients() {
+		return analysisExcipients;
+	}
+
+	public void setAnalysisExcipients(Set<AnalysisExcipientDto> analysisExcipients) {
+		this.analysisExcipients = analysisExcipients;
+	}
+
+	public Set<TestRequestFormDto> getTestRequestForms() {
+		return testRequestForms;
+	}
+
+	public void setTestRequestForms(Set<TestRequestFormDto> testRequestForms) {
+		this.testRequestForms = testRequestForms;
+	}
 	
+	public ProjectDto getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectDto project) {
+		this.project = project;
+	}
+	
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getBatchSize() {
+		return batchSize;
+	}
+
+	public void setBatchSize(String batchSize) {
+		this.batchSize = batchSize;
+	}
+
+	public String getBatchNumber() {
+		return batchNumber;
+	}
+
+	public void setBatchNumber(String batchNumber) {
+		this.batchNumber = batchNumber;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(analysisId); 
+		sb.append(analysisName); 
+		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof AnalysisDto))
+	        return false;
+	    AnalysisDto other = (AnalysisDto)o;
+	    boolean analysisNameEquals = (this.analysisName == null && other.analysisName == null)
+	  	      || (this.analysisName != null && this.analysisName.equals(other.analysisName));
+	  	    
+	    return this.analysisId.intValue() == other.analysisId.intValue() && analysisNameEquals;
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (analysisId != null) {
+	        result = 31 * result + analysisId.hashCode();
+	    }
+	    if (projectId != null) {
+	        result = 31 * result + projectId.hashCode();
+	    }
+	    return result;
+	}
+
 }

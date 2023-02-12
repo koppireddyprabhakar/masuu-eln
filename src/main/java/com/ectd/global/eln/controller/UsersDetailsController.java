@@ -32,7 +32,7 @@ public class UsersDetailsController extends BaseController {
 
 	@GetMapping("/get-users-details")
 	public ResponseEntity<List<UsersDetailsDto>> getUsersDetailsList() throws Exception {
-		return  new ResponseEntity<>(usersDetailsService.getUsersDetails(), HttpStatus.OK);
+		return  new ResponseEntity<>(usersDetailsService.getUsersDetails(null, null), HttpStatus.OK);
 	}
 
 	@PostMapping("/create-users-details")

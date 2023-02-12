@@ -38,8 +38,8 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	@Value(value="${getUsersDetailsById}")
 	private String getUsersDetailsByIdQuery;
 
-	@Value(value="${getUsersDetailsList}")
-	private String getUsersDetailsListQuery;
+	@Value(value="${get.user.details.list}")
+	private String GET_USER_DETAILS_LIST_QUERY;
 
 	@Value(value="${createUsersDetails}")
 	private String createUsersDetailsQuery;
@@ -69,8 +69,21 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	}
 
 	@Override
-	public List<UsersDetailsDto> getUsersDetails() {
-		return jdbcTemplate.query(getUsersDetailsListQuery, new UsersDetailsRowMapper());
+	public List<UsersDetailsDto> getUsersDetails(Integer roleId, String departmentName) {
+		
+		StringBuilder sb = new StringBuilder(GET_USER_DETAILS_LIST_QUERY);
+		
+		if(roleId != null) {
+			sb.append(" AND U.ROLE_ID = ").append(roleId);
+		}
+		
+		if(departmentName != null) {
+			sb.append(" AND D.DEPARTMENT_NAME = '").append(departmentName+"'");
+		}
+		
+		sb.append(" ORDER BY U.INSERT_DATE DESC");
+		
+		return jdbcTemplate.query(sb.toString(), new UsersDetailsRowMapper());
 	}
 
 	@Override

@@ -22,6 +22,8 @@ public class ProjectRequest extends Base implements Serializable {
     private Integer marketId;
     private String markertName;
     
+    private ProjectTeamRequest projectTeam;
+    
     public Integer getProjectId() {
 		return projectId;
 	}
@@ -129,6 +131,13 @@ public class ProjectRequest extends Base implements Serializable {
 	}
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
+	}
+	
+	public ProjectTeamRequest getProjectTeam() {
+		return projectTeam;
+	}
+	public void setProjectTeam(ProjectTeamRequest projectTeam) {
+		this.projectTeam = projectTeam;
 	}
 	
 }

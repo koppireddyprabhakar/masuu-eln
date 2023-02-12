@@ -46,8 +46,8 @@ public class TestRequestFormController extends BaseController {
 	}
 	
 	@DeleteMapping("/delete-test-request-form")
-	public ResponseEntity<String> deleteTestRequestForm(@RequestParam Integer testRequestFormServiceId) throws Exception {
-		return getResponseEntity(testRequestFormService.deleteTestRequestForm(testRequestFormServiceId), "Test Request Form Delete");
+	public ResponseEntity<String> deleteTestRequestForm(@RequestBody TestRequestFormRequest testRequestFormRequest) throws Exception {
+		return getResponseEntity(testRequestFormService.deleteTestRequestForm(testRequestFormRequest), "Test Request Form Delete");
 	}
 	
 }

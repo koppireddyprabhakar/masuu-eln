@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -61,6 +62,9 @@ public class LabTestDaoImpl implements LabTestDao {
 	@Value(value="${update.dosage.test}")
 	private String UPDATE_DOSAGE_TEST_QUERY;
 	
+	@Value("${get.test.by.dosage.id}")
+	private String GET_TEST_BY_DOSAGE_ID;
+	
 	@Override
 	public TestDto getTestById(Integer testId) {
 		List<TestDto> tests = jdbcTemplate.query(GET_TEST_BY_ID_QUERY + testId,
@@ -78,6 +82,12 @@ public class LabTestDaoImpl implements LabTestDao {
 		return jdbcTemplate.query(GET_TEST_LIST_QUERY, new TestRowMapper());
 	}
 
+	@Override
+	public List<TestDto> getTestByDosageId(Integer dosageId) {
+		String sql = GET_TEST_BY_DOSAGE_ID + dosageId;
+		return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(TestDto.class));
+	}
+	
 	@Override
 	public Integer createTest(TestRequest testRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();

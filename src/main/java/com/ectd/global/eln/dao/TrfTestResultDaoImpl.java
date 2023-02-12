@@ -30,24 +30,24 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 	@Qualifier("namedParameterJdbcTemplate")
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Value(value="${getTrfTestResultById}")
-	private String getTrfTestResultByIdQuery;
+	@Value(value="${get.trf.test.result.by.id}")
+	private String GET_TRF_TEST_RESULT_BY_ID_QUERY;
 
-	@Value(value="${getTrfTestResultList}")
-	private String getTrfTestResultListQuery;
+	@Value(value="${get.trf.test.result.list}")
+	private String GET_TRF_TEST_RESULT_LIST_QUERY;
 
-	@Value(value="${createTrfTestResult}")
-	private String createTrfTestResultQuery;
+	@Value(value="${create.trf.test.result}")
+	private String CREATE_TRF_TEST_RESULT_QUERY;
+	
+	@Value("${update.trf.test.result}")
+	private String UPDATE_TRF_TEST_RESULT_QUERY;
 
-	@Value(value="${updateTrfTestResult}")
-	private String updateTrfTestResultQuery;
-
-	@Value(value="${deleteTrfTestResult}")
-	private String deleteTrfTestResultQuery;
+	@Value(value="${delete.trf.test.result}")
+	private String DELETE_TRF_TEST_RESULT_QUERY;
 
 	@Override
 	public TrfTestResultDto getTrfTestResultById(Integer trfTestResultId) {
-		List<TrfTestResultDto> trfTestResults = jdbcTemplate.query(getTrfTestResultByIdQuery + trfTestResultId,
+		List<TrfTestResultDto> trfTestResults = jdbcTemplate.query(GET_TRF_TEST_RESULT_BY_ID_QUERY + trfTestResultId,
 				new TrfTestResultMapper());
 
 		if(trfTestResults.isEmpty()) {
@@ -59,7 +59,7 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 
 	@Override
 	public List<TrfTestResultDto> getTrfTestResults() {
-		return jdbcTemplate.query(getTrfTestResultListQuery, new TrfTestResultMapper());
+		return jdbcTemplate.query(GET_TRF_TEST_RESULT_LIST_QUERY, new TrfTestResultMapper());
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
-		return namedParameterJdbcTemplate.update(createTrfTestResultQuery, parameters);
+		return namedParameterJdbcTemplate.update(CREATE_TRF_TEST_RESULT_QUERY, parameters);
 	}
 
 	@Override
@@ -90,12 +90,12 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 		parameters.addValue("updateUser", trfTestResultRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
-		return namedParameterJdbcTemplate.update(updateTrfTestResultQuery, parameters);
+		return namedParameterJdbcTemplate.update(UPDATE_TRF_TEST_RESULT_QUERY, parameters);
 	}
 
 	@Override
 	public Integer deleteTrfTestResult(Integer trfTestResultId) {
-		return jdbcTemplate.update(deleteTrfTestResultQuery, new Object[] {trfTestResultId});
+		return jdbcTemplate.update(DELETE_TRF_TEST_RESULT_QUERY, new Object[] {trfTestResultId});
 	}
 	
 	class TrfTestResultMapper implements RowMapper<TrfTestResultDto> {

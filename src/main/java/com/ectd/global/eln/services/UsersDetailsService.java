@@ -9,7 +9,7 @@ public interface UsersDetailsService {
 
 	UsersDetailsDto getUsersDetailsById(Integer usersDetailsId);
 
-	List<UsersDetailsDto> getUsersDetails();
+	List<UsersDetailsDto> getUsersDetails(Integer roleId, String departmentName);
 
 	Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest);
 

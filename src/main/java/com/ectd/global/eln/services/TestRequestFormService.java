@@ -15,6 +15,10 @@ public interface TestRequestFormService {
 	
 	Integer updateTestRequestForm(TestRequestFormRequest testRequestFormRequest);
 
-	Integer deleteTestRequestForm(Integer testRequestFormId);
+	Integer deleteTestRequestForm(TestRequestFormRequest testRequestFormRequest);
+	
+	List<TestRequestFormDto> getTestRequestFormData();
+	
+	TestRequestFormDto getTestRequestFormsByAnalysisId(Integer analysisId);
 	
 }

@@ -2,6 +2,7 @@ package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.ectd.global.eln.request.Base;
 
@@ -10,20 +11,29 @@ public class TestRequestFormDto extends Base implements Serializable {
 	private static final long serialVersionUID = 4941879037777082219L;
 
 	private Integer testRequestFormId;
-    private Integer expId;  
-    private Integer projectId;  
+    private Integer expId;
+//    private Integer projectId;  
     private Integer analysisId;  
-    private String testRequestFormStatus;  
-    private String condition;  
-    private String stage;  
+    private String testRequestFormStatus;
+    private String condition;
+    private String stage;
     private String packaging;  
-    private Integer quantity;  
+    private String labelClaim;
+    private Integer quantity;
     private Date manufacturingDate;  
-    private Date expireDate;  
+    private Date expireDate;
+    private Integer testId;
+    private String testName;
+    private String testNumber;
+    private String testResult;
+    private String testStatus;
 
-	public TestRequestFormDto() {
-		// Needed empty constructor for serialization
-	}
+    ProjectDto project = new ProjectDto();
+    ExperimentDto experiment = new ExperimentDto();
+    
+    private List<TrfTestResultDto> trfTestResults;    
+    
+	public TestRequestFormDto() {}
 
 	public Integer getTestRequestFormId() {
 		return testRequestFormId;
@@ -39,12 +49,12 @@ public class TestRequestFormDto extends Base implements Serializable {
 		this.expId = expId;
 	}
 	
-	public Integer getProjectId() {
-		return this.projectId;
-	}
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
-	}
+//	public Integer getProjectId() {
+//		return this.projectId;
+//	}
+//	public void setProjectId(Integer projectId) {
+//		this.projectId = projectId;
+//	}
 	
 	public Integer getAnalysisId() {
 		return this.analysisId;
@@ -100,6 +110,107 @@ public class TestRequestFormDto extends Base implements Serializable {
 	}
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
+	}
+	
+	public List<TrfTestResultDto> getTrfTestResults() {
+		return trfTestResults;
+	}
+
+	public void setTrfTestResults(List<TrfTestResultDto> trfTestResults) {
+		this.trfTestResults = trfTestResults;
+	}
+
+	public String getLabelClaim() {
+		return labelClaim;
+	}
+
+	public void setLabelClaim(String labelClaim) {
+		this.labelClaim = labelClaim;
+	}
+	
+	public Integer getTestId() {
+		return testId;
+	}
+
+	public void setTestId(Integer testId) {
+		this.testId = testId;
+	}
+
+	public String getTestName() {
+		return testName;
+	}
+
+	public void setTestName(String testName) {
+		this.testName = testName;
+	}
+
+	public String getTestNumber() {
+		return testNumber;
+	}
+
+	public void setTestNumber(String testNumber) {
+		this.testNumber = testNumber;
+	}
+
+	public String getTestResult() {
+		return testResult;
+	}
+
+	public void setTestResult(String testResult) {
+		this.testResult = testResult;
+	}
+
+	public String getTestStatus() {
+		return testStatus;
+	}
+
+	public void setTestStatus(String testStatus) {
+		this.testStatus = testStatus;
+	}
+
+	public ProjectDto getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectDto project) {
+		this.project = project;
+	}
+
+	public ExperimentDto getExperiment() {
+		return experiment;
+	}
+
+	public void setExperiment(ExperimentDto experiment) {
+		this.experiment = experiment;
+	}
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(testRequestFormId); 
+		sb.append(expId); 
+		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof TestRequestFormDto))
+	        return false;
+	    TestRequestFormDto other = (TestRequestFormDto)o;
+	    return this.testRequestFormId == other.testRequestFormId && this.expId == other.expId;
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (testRequestFormId != null) {
+	        result = 31 * result + testRequestFormId.hashCode();
+	    }
+	    if (expId != null) {
+	        result = 31 * result + expId.hashCode();
+	    }
+	    return result;
 	}
 	
 }
