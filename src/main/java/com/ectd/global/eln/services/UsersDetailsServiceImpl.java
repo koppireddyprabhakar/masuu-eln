@@ -44,17 +44,18 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		usersDetailsDao.updateUsersDetails(usersDetailsRequest);
 		
-		List<UserTeamRequest> updateUserTeams = usersDetailsRequest.getUserTeams().stream().filter(ut -> !ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
-		List<UserTeamRequest> insertUserTeams = usersDetailsRequest.getUserTeams().stream().filter(ut -> ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
+		if(!CollectionUtils.isEmpty(usersDetailsRequest.getUserTeams())) {
+			List<UserTeamRequest> updateUserTeams = usersDetailsRequest.getUserTeams().stream().filter(ut -> !ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
+			List<UserTeamRequest> insertUserTeams = usersDetailsRequest.getUserTeams().stream().filter(ut -> ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
 
-		if(!CollectionUtils.isEmpty(updateUserTeams)) {
-			usersDetailsDao.batchUpdate(updateUserTeams);
+			if(!CollectionUtils.isEmpty(updateUserTeams)) {
+				usersDetailsDao.batchUpdate(updateUserTeams);
+			}
+
+			if(!CollectionUtils.isEmpty(insertUserTeams)) {
+				usersDetailsDao.batchInsert(insertUserTeams, usersDetailsRequest.getUserId());
+			}
 		}
-
-		if(!CollectionUtils.isEmpty(insertUserTeams)) {
-			usersDetailsDao.batchInsert(insertUserTeams, usersDetailsRequest.getUserId());
-		}
-
 		return 1;
 	}
 

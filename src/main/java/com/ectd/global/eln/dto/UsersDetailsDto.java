@@ -2,6 +2,7 @@ package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import com.ectd.global.eln.request.Base;
 
@@ -28,6 +29,8 @@ public class UsersDetailsDto extends Base implements Serializable {
     private String roleName;
     private String departmentName;
     private Integer teamId;
+    
+    private Set<UserTeamDto> userTeams;
 
 	public UsersDetailsDto() {
 		// Needed empty constructor for serialization
@@ -159,4 +162,42 @@ public class UsersDetailsDto extends Base implements Serializable {
 		this.teamId = teamId;
 	}
 	
+	public Set<UserTeamDto> getUserTeams() {
+		return userTeams;
+	}
+
+	public void setUserTeams(Set<UserTeamDto> userTeams) {
+		this.userTeams = userTeams;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(userId); 
+		sb.append(teamId); 
+		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    if (o == this)
+	        return true;
+	    if (!(o instanceof UsersDetailsDto))
+	        return false;
+	    UsersDetailsDto other = (UsersDetailsDto)o;
+	  	    
+	    return this.userId.intValue() == other.userId.intValue() && this.teamId.intValue() == other.teamId.intValue();
+	}
+	
+	@Override
+	public final int hashCode() {
+	    int result = 17;
+	    if (userId != null) {
+	        result = 31 * result + userId.hashCode();
+	    }
+	    if (teamId != null) {
+	        result = 31 * result + teamId.hashCode();
+	    }
+	    return result;
+	}
+
 }

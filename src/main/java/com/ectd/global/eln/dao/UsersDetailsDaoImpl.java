@@ -2,13 +2,18 @@ package com.ectd.global.eln.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,7 +22,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
+import com.ectd.global.eln.dto.UserTeamDto;
 import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.UserTeamRequest;
 import com.ectd.global.eln.request.UsersDetailsRequest;
@@ -59,7 +66,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	@Override
 	public UsersDetailsDto getUsersDetailsById(Integer usersDetailsId) {
 		List<UsersDetailsDto> usersDetailsList = jdbcTemplate.query(getUsersDetailsByIdQuery + usersDetailsId,
-				new UsersDetailsRowMapper());
+				new UsersDetailsExtractor());
 
 		if(usersDetailsList.isEmpty()) {
 			return null;
@@ -83,7 +90,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		
 		sb.append(" ORDER BY U.INSERT_DATE DESC");
 		
-		return jdbcTemplate.query(sb.toString(), new UsersDetailsRowMapper());
+		return jdbcTemplate.query(sb.toString(), new UsersDetailsExtractor());
 	}
 
 	@Override
@@ -183,30 +190,71 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 	class UsersDetailsRowMapper implements RowMapper<UsersDetailsDto> {
 		public UsersDetailsDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
-			usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
-			usersDetailsDto.setFirstName(resultSet.getString("FIRST_NAME"));
-			usersDetailsDto.setLastName(resultSet.getString("LAST_NAME"));
-			usersDetailsDto.setDateOfBirth(resultSet.getDate("DATE_OF_BIRTH"));
-			usersDetailsDto.setGender(resultSet.getString("GENDER"));
-			usersDetailsDto.setDeptId(resultSet.getInt("DEPT_ID"));
-			usersDetailsDto.setRoleId(resultSet.getInt("ROLE_ID"));
-			usersDetailsDto.setContactNo(resultSet.getInt("CONTACT_NO"));
-			usersDetailsDto.setMailId(resultSet.getString("MAIL_ID"));
-			usersDetailsDto.setStatus(resultSet.getString("STATUS"));
-			usersDetailsDto.setAddressLine1(resultSet.getString("ADDRESS_LINE1"));
-			usersDetailsDto.setAddressLine2(resultSet.getString("ADDRESS_LINE2"));
-			usersDetailsDto.setCity(resultSet.getString("CITY"));
-			usersDetailsDto.setZipCode(resultSet.getString("ZIP_CODE"));
-			usersDetailsDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			usersDetailsDto.setInsertUser(resultSet.getString("INSERT_USER"));
-			usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
-			usersDetailsDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
-			usersDetailsDto.setRoleName(resultSet.getString("ROLE_NAME"));
-			usersDetailsDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
-			usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
-
-			return usersDetailsDto;
+			return getUserDetails(resultSet);
 		};
 	}
+	
+	class UsersDetailsExtractor implements ResultSetExtractor<List<UsersDetailsDto>> {
+
+		@Override
+		public List<UsersDetailsDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+			List<UsersDetailsDto> analysisDtoList = new ArrayList<UsersDetailsDto>();
+
+			while(resultSet.next()) {
+				UsersDetailsDto usersDetailsDto = getUserDetails(resultSet);
+
+				UserTeamDto userTeam = getUserTeam(resultSet);
+
+				if(CollectionUtils.contains(analysisDtoList.iterator(), usersDetailsDto)) {
+					int index = analysisDtoList.indexOf(usersDetailsDto);
+					analysisDtoList.get(index).getUserTeams().add(userTeam);	
+				} else {
+
+					Set<UserTeamDto> userTeams = new LinkedHashSet<>();
+
+					userTeams.add(userTeam);
+					usersDetailsDto.setUserTeams(userTeams);
+					analysisDtoList.add(usersDetailsDto);
+				}
+
+			}
+			return analysisDtoList;
+		};
+	}
+	
+	public UsersDetailsDto getUserDetails(ResultSet resultSet) throws SQLException {
+		UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
+		usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
+		usersDetailsDto.setFirstName(resultSet.getString("FIRST_NAME"));
+		usersDetailsDto.setLastName(resultSet.getString("LAST_NAME"));
+		usersDetailsDto.setDateOfBirth(resultSet.getDate("DATE_OF_BIRTH"));
+		usersDetailsDto.setGender(resultSet.getString("GENDER"));
+		usersDetailsDto.setDeptId(resultSet.getInt("DEPT_ID"));
+		usersDetailsDto.setRoleId(resultSet.getInt("ROLE_ID"));
+		usersDetailsDto.setContactNo(resultSet.getInt("CONTACT_NO"));
+		usersDetailsDto.setMailId(resultSet.getString("MAIL_ID"));
+		usersDetailsDto.setStatus(resultSet.getString("STATUS"));
+		usersDetailsDto.setAddressLine1(resultSet.getString("ADDRESS_LINE1"));
+		usersDetailsDto.setAddressLine2(resultSet.getString("ADDRESS_LINE2"));
+		usersDetailsDto.setCity(resultSet.getString("CITY"));
+		usersDetailsDto.setZipCode(resultSet.getString("ZIP_CODE"));
+		usersDetailsDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+		usersDetailsDto.setInsertUser(resultSet.getString("INSERT_USER"));
+		usersDetailsDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
+		usersDetailsDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+		usersDetailsDto.setRoleName(resultSet.getString("ROLE_NAME"));
+		usersDetailsDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
+		usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
+
+		return usersDetailsDto;
+	}
+	
+	public UserTeamDto getUserTeam(ResultSet resultSet) throws SQLException {
+		UserTeamDto usersDetailsDto = new UserTeamDto();
+		usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
+		usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
+
+		return usersDetailsDto;
+	}
+	
 }
