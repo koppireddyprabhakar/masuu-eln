@@ -3,9 +3,11 @@ package com.ectd.global.eln.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -90,7 +92,12 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		
 		sb.append(" ORDER BY U.INSERT_DATE DESC");
 		
-		return jdbcTemplate.query(sb.toString(), new UsersDetailsExtractor());
+		List<UsersDetailsDto> sortedList = jdbcTemplate.query(sb.toString(), new UsersDetailsExtractor());
+		 sortedList = sortedList.stream()
+				.sorted(Comparator.comparingInt(UsersDetailsDto::getUserId)
+				.reversed())
+				.collect(Collectors.toList());
+		return sortedList;
 	}
 
 	@Override

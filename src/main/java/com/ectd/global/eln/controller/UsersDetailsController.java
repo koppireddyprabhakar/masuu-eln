@@ -36,8 +36,8 @@ public class UsersDetailsController extends BaseController {
 	}
 
 	@PostMapping("/create-users-details")
-	public ResponseEntity<String> createUsersDetails(@RequestBody UsersDetailsRequest UsersDetailsRequest) {
-		return getResponseEntity(usersDetailsService.createUsersDetails(UsersDetailsRequest), "Users Details Create");
+	public ResponseEntity<String> createUsersDetails(@RequestBody UsersDetailsRequest usersDetailsRequest) {
+		return getResponseEntity(usersDetailsService.createUsersDetails(usersDetailsRequest), "Users Details Create");
 	}
 
 	@PutMapping("/update-users-details")
