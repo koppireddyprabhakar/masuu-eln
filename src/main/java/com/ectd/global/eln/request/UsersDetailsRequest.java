@@ -22,8 +22,27 @@ public class UsersDetailsRequest extends Base implements Serializable {
     private String addressLine2;  
     private String city;  
     private String zipCode;  
+    private String password;
+    private Boolean firstLogin = Boolean.TRUE;
     
     private List<UserTeamRequest> userTeams;
+    
+    public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Boolean getFirstLogin() {
+		return firstLogin;
+	}
+
+	public void setFirstLogin(Boolean firstLogin) {
+		this.firstLogin = firstLogin;
+	}
+
     
 	public UsersDetailsRequest() {
 		// Needed empty constructor for serialization

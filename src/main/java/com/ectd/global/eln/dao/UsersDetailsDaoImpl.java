@@ -128,6 +128,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 	@Override
 	public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		usersDetailsRequest.setPassword("eln@123456");
 		Integer userId = this.create(usersDetailsRequest);
 		int[] insertedRows = this.batchInsert(usersDetailsRequest.getUserTeams(), userId);
 
@@ -160,6 +161,9 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", usersDetailsRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("password", usersDetailsRequest.getPassword());
+		parameters.addValue("firstLogin", usersDetailsRequest.getFirstLogin());
+		
 
 		namedParameterJdbcTemplate.update(createUsersDetailsQuery, parameters, keyHolder);
 
@@ -205,6 +209,8 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 			usersDetailsDto.setRoleName(resultSet.getString("ROLE_NAME"));
 			usersDetailsDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
 			usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
+			
+
 
 			return usersDetailsDto;
 		};

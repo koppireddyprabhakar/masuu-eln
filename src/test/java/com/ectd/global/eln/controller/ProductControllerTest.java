@@ -192,7 +192,7 @@ class ProductControllerTest {
      */
     @Test
     void testDeleteProduct() throws Exception {
-        when(this.productService.deleteProduct((Integer) any())).thenReturn(1);
+        when(this.productService.deleteProduct((ProductRequest) any())).thenReturn(1);
         MockHttpServletRequestBuilder deleteResult = MockMvcRequestBuilders.delete("/product/delete-product");
         MockHttpServletRequestBuilder requestBuilder = deleteResult.param("productId", String.valueOf(1));
         MockMvcBuilders.standaloneSetup(this.productController)
@@ -208,7 +208,7 @@ class ProductControllerTest {
      */
     @Test
     void testDeleteProduct2() throws Exception {
-        when(this.productService.deleteProduct((Integer) any())).thenReturn(1);
+        when(this.productService.deleteProduct((ProductRequest) any())).thenReturn(1);
         MockHttpServletRequestBuilder deleteResult = MockMvcRequestBuilders.delete("/product/delete-product");
         deleteResult.contentType("application/json");
         MockHttpServletRequestBuilder requestBuilder = deleteResult.param("productId", String.valueOf(1));

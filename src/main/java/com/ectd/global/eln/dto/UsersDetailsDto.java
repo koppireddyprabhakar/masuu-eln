@@ -28,6 +28,15 @@ public class UsersDetailsDto extends Base implements Serializable {
     private String roleName;
     private String departmentName;
     private Integer teamId;
+    private String password;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public UsersDetailsDto() {
 		// Needed empty constructor for serialization
