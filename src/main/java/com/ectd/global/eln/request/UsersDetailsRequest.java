@@ -15,15 +15,34 @@ public class UsersDetailsRequest extends Base implements Serializable {
     private String gender;  
     private Integer deptId;  
     private Integer roleId;  
-    private String contactNo;  
+    private Integer contactNo;  
     private String mailId;  
     private String status;  
     private String addressLine1;  
     private String addressLine2;  
     private String city;  
     private String zipCode;  
+    private String password;
+    private Boolean firstLogin = Boolean.TRUE;
     
     private List<UserTeamRequest> userTeams;
+    
+    public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Boolean getFirstLogin() {
+		return firstLogin;
+	}
+
+	public void setFirstLogin(Boolean firstLogin) {
+		this.firstLogin = firstLogin;
+	}
+
     
 	public UsersDetailsRequest() {
 		// Needed empty constructor for serialization
@@ -78,14 +97,13 @@ public class UsersDetailsRequest extends Base implements Serializable {
 		this.roleId = roleId;
 	}
 	
-	public String getContactNo() {
-		return contactNo;
+	public Integer getContactNo() {
+		return this.contactNo;
 	}
-
-	public void setContactNo(String contactNo) {
+	public void setContactNo(Integer contactNo) {
 		this.contactNo = contactNo;
 	}
-
+	
 	public String getMailId() {
 		return this.mailId;
 	}

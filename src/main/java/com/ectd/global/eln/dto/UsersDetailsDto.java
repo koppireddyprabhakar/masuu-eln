@@ -29,8 +29,10 @@ public class UsersDetailsDto extends Base implements Serializable {
     private String roleName;
     private String departmentName;
     private Integer teamId;
-    
-    private Set<UserTeamDto> userTeams;
+    private String password;
+ 
+
+	private Set<UserTeamDto> userTeams;
 
 	public UsersDetailsDto() {
 		// Needed empty constructor for serialization
@@ -119,6 +121,12 @@ public class UsersDetailsDto extends Base implements Serializable {
 	public void setAddressLine2(String addressLine2) {
 		this.addressLine2 = addressLine2;
 	}
+	public String getPassword() {
+		return password;
+		}
+	public void setPassword(String password) {
+		this.password = password;
+		}
 	
 	public String getCity() {
 		return this.city;
