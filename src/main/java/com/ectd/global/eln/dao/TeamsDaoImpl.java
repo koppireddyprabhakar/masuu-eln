@@ -96,7 +96,7 @@ public class TeamsDaoImpl implements TeamsDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("teamName", teamsRequest.getTeamName());
 		parameters.addValue("deptId", teamsRequest.getDeptId());
-		parameters.addValue("status", teamsRequest.getStatus());
+		parameters.addValue("status", "Active");
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");

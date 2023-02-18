@@ -88,7 +88,7 @@ public class DosageDaoImpl implements DosageDao {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("dosageName", dosageRequest.getDosageName());
-		parameters.addValue("status", dosageRequest.getStatus());
+		parameters.addValue("status", "Active");
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
@@ -203,8 +203,7 @@ public class DosageDaoImpl implements DosageDao {
 
 				DosageDto dosageDto = new DosageDto();
 				dosageDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
-				dosageDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
-				
+				dosageDto.setDosageName(resultSet.getString("DOSAGE_NAME"));	
 				FormulationDto formulationDto = new FormulationDto();
 				formulationDto.setFormulationId(resultSet.getInt("FORMULATION_ID"));
 				formulationDto.setFormulationName(resultSet.getString("FORMULATION_NAME"));
