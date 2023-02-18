@@ -12,7 +12,7 @@ public interface UsersDetailsDao {
 
 	List<UsersDetailsDto> getUsersDetails(Integer roleId, String departmentName);
 
-	Boolean createUsersDetails(UsersDetailsRequest experimentRequest);
+	Integer createUsersDetails(UsersDetailsRequest experimentRequest);
 
 	Integer updateUsersDetails(UsersDetailsRequest experimentRequest);
 
@@ -21,5 +21,7 @@ public interface UsersDetailsDao {
 	int[] batchUpdate(List<UserTeamRequest> userTeamRequests);
 	
 	int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId);
+	
+	Boolean createUserTeam(UsersDetailsRequest usersDetailsRequest, Integer userId);
 	
 }

@@ -36,7 +36,12 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
-		return usersDetailsDao.createUsersDetails(usersDetailsRequest);
+		Integer userId = usersDetailsDao.createUsersDetails(usersDetailsRequest);
+		if(userId != null) {
+			usersDetailsDao.createUserTeam(usersDetailsRequest, userId);
+			return true;
+		}
+		return false;
 	}
 
 	@Override

@@ -33,7 +33,7 @@ import com.ectd.global.eln.request.UsersDetailsRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Repository
-@PropertySource(value = {"classpath:sql/users-details-dao.properties"})
+@PropertySource(value = { "classpath:sql/users-details-dao.properties" })
 public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 	@Autowired
@@ -44,25 +44,25 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 	@Qualifier("namedParameterJdbcTemplate")
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Value(value="${getUsersDetailsById}")
+	@Value(value = "${getUsersDetailsById}")
 	private String getUsersDetailsByIdQuery;
 
-	@Value(value="${get.user.details.list}")
+	@Value(value = "${get.user.details.list}")
 	private String GET_USER_DETAILS_LIST_QUERY;
 
-	@Value(value="${createUsersDetails}")
+	@Value(value = "${createUsersDetails}")
 	private String createUsersDetailsQuery;
 
-	@Value(value="${updateUsersDetails}")
+	@Value(value = "${updateUsersDetails}")
 	private String updateUsersDetailsQuery;
 
-	@Value(value="${deleteUsersDetails}")
+	@Value(value = "${deleteUsersDetails}")
 	private String deleteUsersDetailsQuery;
 
-	@Value(value="${createUserTeam}")
+	@Value(value = "${createUserTeam}")
 	private String createUserTeamQuery;
 
-	@Value(value="${updateUserTeam}")
+	@Value(value = "${updateUserTeam}")
 	private String updateUserTeamQuery;
 
 	@Override
@@ -70,7 +70,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		List<UsersDetailsDto> usersDetailsList = jdbcTemplate.query(getUsersDetailsByIdQuery + usersDetailsId,
 				new UsersDetailsExtractor());
 
-		if(usersDetailsList.isEmpty()) {
+		if (usersDetailsList.isEmpty()) {
 			return null;
 		}
 
@@ -79,30 +79,28 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 	@Override
 	public List<UsersDetailsDto> getUsersDetails(Integer roleId, String departmentName) {
-		
+
 		StringBuilder sb = new StringBuilder(GET_USER_DETAILS_LIST_QUERY);
-		
-		if(roleId != null) {
+
+		if (roleId != null) {
 			sb.append(" AND U.ROLE_ID = ").append(roleId);
 		}
-		
-		if(departmentName != null) {
-			sb.append(" AND D.DEPARTMENT_NAME = '").append(departmentName+"'");
+
+		if (departmentName != null) {
+			sb.append(" AND D.DEPARTMENT_NAME = '").append(departmentName + "'");
 		}
-		
+
 		sb.append(" ORDER BY U.INSERT_DATE DESC");
-		
+
 		List<UsersDetailsDto> sortedList = jdbcTemplate.query(sb.toString(), new UsersDetailsExtractor());
-		 sortedList = sortedList.stream()
-				.sorted(Comparator.comparingInt(UsersDetailsDto::getUserId)
-				.reversed())
+		sortedList = sortedList.stream().sorted(Comparator.comparingInt(UsersDetailsDto::getUserId).reversed())
 				.collect(Collectors.toList());
 		return sortedList;
 	}
 
 	@Override
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
-		
+
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("userId", usersDetailsRequest.getUserId());
 		parameters.addValue("firstName", usersDetailsRequest.getFirstName());
@@ -132,25 +130,20 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(userTeamRequests.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate( updateUserTeamQuery, batch);
+		return this.namedParameterJdbcTemplate.batchUpdate(updateUserTeamQuery, batch);
 	}
 
 	@Override
 	public Integer deleteUsersDetails(Integer usersDetailsId) {
-		return jdbcTemplate.update(deleteUsersDetailsQuery, new Object[] {usersDetailsId});
+		return jdbcTemplate.update(deleteUsersDetailsQuery, new Object[] { usersDetailsId });
 	}
 
 	@Override
-	public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+	public Integer createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		usersDetailsRequest.setPassword("eln@123456");
 		Integer userId = this.create(usersDetailsRequest);
-		int[] insertedRows = this.batchInsert(usersDetailsRequest.getUserTeams(), userId);
-
-		if(insertedRows.length > 0) {
-			return true;
-		}
-
-		return false;
+	
+		return userId;
 	}
 
 	private Integer create(UsersDetailsRequest usersDetailsRequest) {
@@ -185,17 +178,16 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 	public int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId) {
 
-		userTeamRequests.forEach(f -> 
-		{
+		userTeamRequests.forEach(f -> {
 			f.setUserId(userId);
-			f.setInsertDate(ElnUtils.getTimeStamp());
+			// f.setInsertDate(ElnUtils.getTimeStamp());
 			f.setInsertUser("ELN");
-			f.setUpdateDate(ElnUtils.getTimeStamp());
+			// f.setUpdateDate(ElnUtils.getTimeStamp());
 			f.setUpdateUser("ELN");
 		});
 
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(userTeamRequests.toArray());
-		return this.namedParameterJdbcTemplate.batchUpdate( createUserTeamQuery, batch);
+		return this.namedParameterJdbcTemplate.batchUpdate(createUserTeamQuery, batch);
 	}
 
 	class UsersDetailsRowMapper implements RowMapper<UsersDetailsDto> {
@@ -203,21 +195,21 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 			return getUserDetails(resultSet);
 		};
 	}
-	
+
 	class UsersDetailsExtractor implements ResultSetExtractor<List<UsersDetailsDto>> {
 
 		@Override
 		public List<UsersDetailsDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
 			List<UsersDetailsDto> analysisDtoList = new ArrayList<UsersDetailsDto>();
 
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				UsersDetailsDto usersDetailsDto = getUserDetails(resultSet);
 
 				UserTeamDto userTeam = getUserTeam(resultSet);
 
-				if(CollectionUtils.contains(analysisDtoList.iterator(), usersDetailsDto)) {
+				if (CollectionUtils.contains(analysisDtoList.iterator(), usersDetailsDto)) {
 					int index = analysisDtoList.indexOf(usersDetailsDto);
-					analysisDtoList.get(index).getUserTeams().add(userTeam);	
+					analysisDtoList.get(index).getUserTeams().add(userTeam);
 				} else {
 
 					Set<UserTeamDto> userTeams = new LinkedHashSet<>();
@@ -231,7 +223,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 			return analysisDtoList;
 		};
 	}
-	
+
 	public UsersDetailsDto getUserDetails(ResultSet resultSet) throws SQLException {
 		UsersDetailsDto usersDetailsDto = new UsersDetailsDto();
 		usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
@@ -258,7 +250,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 		return usersDetailsDto;
 	}
-	
+
 	public UserTeamDto getUserTeam(ResultSet resultSet) throws SQLException {
 		UserTeamDto usersDetailsDto = new UserTeamDto();
 		usersDetailsDto.setUserId(resultSet.getInt("USER_ID"));
@@ -266,5 +258,24 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 		return usersDetailsDto;
 	}
-	
+
+	@Override
+	public Boolean createUserTeam(UsersDetailsRequest usersDetailsRequest, Integer userId) {
+		usersDetailsRequest.getUserTeams().forEach(f -> {
+			f.setUserId(userId);
+			f.setInsertDate(ElnUtils.getTimeStamp());
+			f.setInsertUser("ELN");
+			f.setUpdateDate(ElnUtils.getTimeStamp());
+			f.setUpdateUser("ELN");
+		});
+
+		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(usersDetailsRequest.getUserTeams().toArray());
+		int[] insertedRows = this.namedParameterJdbcTemplate.batchUpdate(createUserTeamQuery, batch);
+		if (insertedRows.length > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
 }
