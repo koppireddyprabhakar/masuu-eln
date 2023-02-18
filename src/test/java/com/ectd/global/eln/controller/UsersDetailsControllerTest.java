@@ -48,7 +48,7 @@ class UsersDetailsControllerTest {
 		usersDetailsDto.setAddressLine1("D.no 62-4/41");
 		usersDetailsDto.setAddressLine2("Jawaharnagar Road , Sriharipuram");
 		usersDetailsDto.setCity("HYD");
-		usersDetailsDto.setContactNo(934671352);
+		usersDetailsDto.setContactNo("934671352");
 		usersDetailsDto.setDateOfBirth(null);
 		usersDetailsDto.setDepartmentName(null);
 		usersDetailsDto.setDeptId(null);
@@ -89,7 +89,7 @@ class UsersDetailsControllerTest {
 		usersDetailsDto.setAddressLine1("D.no 62-4/41");
 		usersDetailsDto.setAddressLine2("Jawaharnagar Road , Sriharipuram");
 		usersDetailsDto.setCity("HYD");
-		usersDetailsDto.setContactNo(934671352);
+		usersDetailsDto.setContactNo("934671352");
 		usersDetailsDto.setDateOfBirth(null);
 		usersDetailsDto.setDepartmentName(null);
 		usersDetailsDto.setDeptId(null);
