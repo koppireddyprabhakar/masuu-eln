@@ -241,7 +241,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		usersDetailsDto.setGender(resultSet.getString("GENDER"));
 		usersDetailsDto.setDeptId(resultSet.getInt("DEPT_ID"));
 		usersDetailsDto.setRoleId(resultSet.getInt("ROLE_ID"));
-		usersDetailsDto.setContactNo(resultSet.getInt("CONTACT_NO"));
+		usersDetailsDto.setContactNo(resultSet.getString("CONTACT_NO"));
 		usersDetailsDto.setMailId(resultSet.getString("MAIL_ID"));
 		usersDetailsDto.setStatus(resultSet.getString("STATUS"));
 		usersDetailsDto.setAddressLine1(resultSet.getString("ADDRESS_LINE1"));

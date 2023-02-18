@@ -15,7 +15,7 @@ public class UsersDetailsRequest extends Base implements Serializable {
     private String gender;  
     private Integer deptId;  
     private Integer roleId;  
-    private Integer contactNo;  
+    private String contactNo;  
     private String mailId;  
     private String status;  
     private String addressLine1;  
@@ -96,14 +96,15 @@ public class UsersDetailsRequest extends Base implements Serializable {
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
 	}
-	
-	public Integer getContactNo() {
-		return this.contactNo;
+
+	public String getContactNo() {
+		return contactNo;
 	}
-	public void setContactNo(Integer contactNo) {
+
+	public void setContactNo(String contactNo) {
 		this.contactNo = contactNo;
 	}
-	
+
 	public String getMailId() {
 		return this.mailId;
 	}
