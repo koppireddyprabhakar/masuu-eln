@@ -10,6 +10,7 @@ public class DosageTestDto  extends Base implements Serializable {
 	
 	private Integer testId;  
     private Integer dosageId;  
+    private String dosageName; 
     
 	public DosageTestDto() {
 		// Needed empty constructor for serialization
@@ -28,5 +29,13 @@ public class DosageTestDto  extends Base implements Serializable {
 	public void setDosageId(Integer dosageId) {
 		this.dosageId = dosageId;
 	}
+
+	public String getDosageName() {
+		return dosageName;
+	}
+
+	public void setDosageName(String dosageName) {
+		this.dosageName = dosageName;
+	}	
 	
 }

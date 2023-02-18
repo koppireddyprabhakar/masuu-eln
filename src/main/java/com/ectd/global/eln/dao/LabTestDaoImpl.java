@@ -211,12 +211,13 @@ public class LabTestDaoImpl implements LabTestDao {
 			DosageTestDto dosageTestDto = new DosageTestDto();
 			
 			dosageTestDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
-			dosageTestDto.setTestId(resultSet.getInt("DT_TEST_ID"));
-			dosageTestDto.setStatus(resultSet.getString("DT_STATUS"));
-			dosageTestDto.setInsertUser(resultSet.getString("DT_INSERT_USER"));
-			dosageTestDto.setInsertDate(resultSet.getDate("DT_INSERT_DATE"));
-			dosageTestDto.setUpdateUser(resultSet.getString("DT_UPDATE_USER"));
-			dosageTestDto.setUpdateDate(resultSet.getDate("DT_UPDATE_DATE"));
+			//dosageTestDto.setTestId(resultSet.getInt("DT_TEST_ID"));
+			dosageTestDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
+			//dosageTestDto.setStatus(resultSet.getString("DT_STATUS"));
+			//dosageTestDto.setInsertUser(resultSet.getString("DT_INSERT_USER"));
+			//dosageTestDto.setInsertDate(resultSet.getDate("DT_INSERT_DATE"));
+			//dosageTestDto.setUpdateUser(resultSet.getString("DT_UPDATE_USER"));
+			//dosageTestDto.setUpdateDate(resultSet.getDate("DT_UPDATE_DATE"));
 			
 			testDto.setDosageTest(dosageTestDto);
 			return testDto;

@@ -204,6 +204,7 @@ public class DosageDaoImpl implements DosageDao {
 				DosageDto dosageDto = new DosageDto();
 				dosageDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
 				dosageDto.setDosageName(resultSet.getString("DOSAGE_NAME"));	
+				dosageDto.setStatus(resultSet.getString("STATUS"));
 				FormulationDto formulationDto = new FormulationDto();
 				formulationDto.setFormulationId(resultSet.getInt("FORMULATION_ID"));
 				formulationDto.setFormulationName(resultSet.getString("FORMULATION_NAME"));
