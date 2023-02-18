@@ -93,7 +93,7 @@ public class LabTestDaoImpl implements LabTestDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("testName", testRequest.getTestName());
 		parameters.addValue("description", testRequest.getDescription());
-		parameters.addValue("status", testRequest.getStatus());
+		parameters.addValue("status", "Active");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp(), Types.TIMESTAMP);
 		parameters.addValue("insertUser", testRequest.getInsertUser());
 		parameters.addValue("updateUser", testRequest.getUpdateUser());

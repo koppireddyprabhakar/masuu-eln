@@ -68,7 +68,7 @@ public class ProductDaoImpl implements ProductDao {
 		//		parameters.addValue("productId", productRequest.getProductId());
 		parameters.addValue("productName", productRequest.getProductName());
 		parameters.addValue("productCode", productRequest.getProductCode());
-		parameters.addValue("status", productRequest.getStatus());
+		parameters.addValue("status","Active");
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 
@@ -97,6 +97,7 @@ public class ProductDaoImpl implements ProductDao {
 			ProductDto productDto = new ProductDto();
 			productDto.setProductId(resultSet.getInt("PRODUCT_ID"));
 			productDto.setProductName(resultSet.getString("PRODUCT_NAME"));
+			productDto.setStatus(resultSet.getString("STATUS"));
 			productDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
 			productDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			productDto.setInsertUser(resultSet.getString("INSERT_USER"));

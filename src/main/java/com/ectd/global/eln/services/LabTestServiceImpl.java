@@ -2,6 +2,7 @@ package com.ectd.global.eln.services;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -44,7 +45,11 @@ public class LabTestServiceImpl implements LabTestService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer deleteTest(Integer testId) {
-		return labTestDao.deleteTest(testId);
+		TestDto TestDto = labTestDao.getTestById(testId);
+		TestRequest testRequest = new TestRequest();
+		BeanUtils.copyProperties(TestDto, testRequest);
+		testRequest.setStatus("Inactive");
+		return labTestDao.updateTest(testRequest);
 	}
 
 	@Override

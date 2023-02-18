@@ -2,6 +2,7 @@ package com.ectd.global.eln.services;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -44,7 +45,11 @@ public class ExcipientServiceImpl implements ExcipientService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer deleteExcipient(Integer excipientId) {
-		return excipientDao.deleteExcipient(excipientId);
+		ExcipientDto excipientDto = excipientDao.getExcipientById(excipientId);
+		ExcipientRequest excipientRequest = new ExcipientRequest();
+		BeanUtils.copyProperties(excipientDto, excipientRequest);
+		excipientRequest.setStatus("Inactive");
+		return excipientDao.updateExcipient(excipientRequest);
 	}
 
 	@Override
