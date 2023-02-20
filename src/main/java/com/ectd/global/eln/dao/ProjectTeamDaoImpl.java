@@ -67,6 +67,7 @@ public class ProjectTeamDaoImpl implements ProjectTeamDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectTeamRequest.getProjectId());
 		parameters.addValue("teamId", projectTeamRequest.getTeamId());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertUser", projectTeamRequest.getInsertUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());

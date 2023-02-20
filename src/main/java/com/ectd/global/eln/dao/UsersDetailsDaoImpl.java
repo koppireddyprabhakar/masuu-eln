@@ -159,7 +159,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("roleId", usersDetailsRequest.getRoleId());
 		parameters.addValue("contactNo", usersDetailsRequest.getContactNo());
 		parameters.addValue("mailId", usersDetailsRequest.getMailId());
-		parameters.addValue("status", usersDetailsRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("addressLine1", usersDetailsRequest.getAddressLine1());
 		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
 		parameters.addValue("city", usersDetailsRequest.getCity());

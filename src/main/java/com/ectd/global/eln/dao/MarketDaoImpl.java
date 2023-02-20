@@ -66,7 +66,7 @@ public class MarketDaoImpl implements MarketDao{
 	public Integer createMarket(MarketRequest marketRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("marketName", marketRequest.getMarketName());
-		parameters.addValue("status", marketRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", marketRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 

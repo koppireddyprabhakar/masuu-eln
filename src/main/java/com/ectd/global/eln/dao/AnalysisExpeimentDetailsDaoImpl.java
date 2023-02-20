@@ -63,7 +63,7 @@ public class AnalysisExpeimentDetailsDaoImpl implements AnalysisExpeimentDetails
 		parameters.addValue("analysisId", analysisDetails.getAnalysisId());
 		parameters.addValue("fileContent", analysisDetails.getFileContent().getBytes());
 		parameters.addValue("name", analysisDetails.getName());
-		parameters.addValue("status", analysisDetails.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");

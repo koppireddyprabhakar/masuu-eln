@@ -74,7 +74,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	public Integer createDepartment(DepartmentRequest departmentRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("departmentName", departmentRequest.getDepartmentName());
-		parameters.addValue("status", departmentRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 

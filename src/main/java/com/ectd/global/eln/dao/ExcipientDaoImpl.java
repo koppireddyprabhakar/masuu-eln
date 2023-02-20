@@ -82,7 +82,7 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("sourceName", excipientRequest.getSourceName());
 		parameters.addValue("potency", excipientRequest.getPotency());
 		parameters.addValue("grade", excipientRequest.getGrade());
-		parameters.addValue("status", "Active");
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");

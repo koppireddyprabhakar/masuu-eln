@@ -67,7 +67,7 @@ public class UserRoleDaoImpl implements UserRoleDao {
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("roleName", userRoleRequest.getRoleName());
-		parameters.addValue("status", userRoleRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertUser", "ELN");
 

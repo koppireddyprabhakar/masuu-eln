@@ -69,7 +69,7 @@ public class TrfTestResultDaoImpl implements TrfTestResultDao {
 		parameters.addValue("trfId", trfTestResultRequest.getTrfId());
 		parameters.addValue("testId", trfTestResultRequest.getTestId());
 		parameters.addValue("testStatus", trfTestResultRequest.getTestStatus());
-		parameters.addValue("status", trfTestResultRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", trfTestResultRequest.getInsertUser());
 		parameters.addValue("updateUser", trfTestResultRequest.getUpdateUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());

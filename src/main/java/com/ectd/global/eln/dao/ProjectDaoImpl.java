@@ -155,7 +155,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId",  projectTeamRequest.getProjectId());
 		parameters.addValue("teamId", projectTeamRequest.getTeamId());
-		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.name());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 
@@ -167,7 +167,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectRequest.getProjectId());
-		parameters.addValue("status", ElnUtils.STATUS.INACTIVE.name());
+		parameters.addValue("status", ElnUtils.STATUS.INACTIVE.getValue());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		
@@ -180,7 +180,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectTeamRequest.getProjectId());
-		parameters.addValue("status", ElnUtils.STATUS.INACTIVE.name());
+		parameters.addValue("status", ElnUtils.STATUS.INACTIVE.getValue());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		
@@ -197,7 +197,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectTeamRequest.getProjectId());
 		parameters.addValue("teamId", projectTeamRequest.getTeamId());
-		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.name());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());

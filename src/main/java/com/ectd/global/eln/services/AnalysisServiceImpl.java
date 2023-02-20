@@ -24,6 +24,7 @@ import com.ectd.global.eln.request.AnalysisRequest;
 import com.ectd.global.eln.request.AnalysisReview;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
@@ -59,14 +60,14 @@ public class AnalysisServiceImpl implements AnalysisService {
 			analysisDetails.setAnalysisId(analysisId);
 			analysisDetails.setName("Purpose and Conclusion");
 			analysisDetails.setFileContent("");
-			analysisDetails.setStatus("Active");
+			analysisDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			analysisDetailsList.add(analysisDetails);
 
 			analysisDetails = new AnalysisDetails();
 			analysisDetails.setAnalysisId(analysisId);
 			analysisDetails.setName("Formulation");
 			analysisDetails.setFileContent("");
-			analysisDetails.setStatus("Active");
+			analysisDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			analysisDetailsList.add(analysisDetails);
 
 			analysisRequest.setAnalysisDetailsList(analysisDetailsList);

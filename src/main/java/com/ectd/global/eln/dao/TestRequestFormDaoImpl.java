@@ -114,7 +114,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		parameters.addValue("testNumber", testRequestFormRequest.getTestNumber());
 		parameters.addValue("testResult", testRequestFormRequest.getTestResult());
 		parameters.addValue("testStatus", testRequestFormRequest.getTestStatus());
-		parameters.addValue("status", testRequestFormRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("expireDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("insertUser", testRequestFormRequest.getInsertUser());

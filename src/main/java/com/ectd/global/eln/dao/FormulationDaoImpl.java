@@ -71,7 +71,7 @@ public class FormulationDaoImpl implements FormulationDao {
 		parameters.addValue("updateUser", formulationRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("dosageId", formulationRequest.getDosageId());
-		parameters.addValue("status", formulationRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 
 		return namedParameterJdbcTemplate.update(createFormulationQuery, parameters);
 	}

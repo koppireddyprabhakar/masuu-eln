@@ -68,7 +68,7 @@ public class ProductDaoImpl implements ProductDao {
 		//		parameters.addValue("productId", productRequest.getProductId());
 		parameters.addValue("productName", productRequest.getProductName());
 		parameters.addValue("productCode", productRequest.getProductCode());
-		parameters.addValue("status","Active");
+		parameters.addValue("status",ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 

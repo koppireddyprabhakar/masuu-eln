@@ -72,7 +72,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 		parameters.addValue("experimentId", experimentDetails.getExperimentId());
 		parameters.addValue("fileContent", experimentDetails.getFileContent().getBytes());
 		parameters.addValue("name", experimentDetails.getName());
-		parameters.addValue("status", experimentDetails.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");

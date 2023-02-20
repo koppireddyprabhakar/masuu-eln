@@ -11,6 +11,16 @@ public class ElnUtils {
 	}
 	
 	public static enum STATUS {
-		ACTIVE, INACTIVE
+		ACTIVE("Active"), INACTIVE("Inactive");
+		
+		private String value;
+		
+		STATUS(String value) {
+			this.value = value;
+		}
+		
+		public String getValue() {
+			return this.value;
+		}
 	}
 }

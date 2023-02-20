@@ -17,6 +17,7 @@ import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.ExperimentReview;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
 public class ExperimentServiceImpl implements ExperimentService {
@@ -50,14 +51,14 @@ public class ExperimentServiceImpl implements ExperimentService {
 			experimentDetails.setExperimentId(expermentId);
 			experimentDetails.setName("Purpose and Conclusion");
 			experimentDetails.setFileContent("");
-			experimentDetails.setStatus("Active");
+			experimentDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			experimentDetailsList.add(experimentDetails);
 			
 			experimentDetails = new ExperimentDetails();
 			experimentDetails.setExperimentId(expermentId);
 			experimentDetails.setName("Formulation");
 			experimentDetails.setFileContent("");
-			experimentDetails.setStatus("Active");
+			experimentDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			experimentDetailsList.add(experimentDetails);
 			
 			experimentRequest.setExperimentDetailsList(experimentDetailsList);

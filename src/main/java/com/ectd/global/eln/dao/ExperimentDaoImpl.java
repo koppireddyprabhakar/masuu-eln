@@ -53,8 +53,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	@Value(value="${get.experiment.by.id}")
 	private String GET_EXPERIMENT_BY_ID_QUERY;
 	
-	@Value("${get.experiment.by.id_1}")
-	private String GET_EXPERIMENT_BY_ID_QUERY_1;
+	@Value("${get.experiment.by.ids}")
+	private String GET_EXPERIMENT_BY_IDs_QUERY;
 	
 	@Value(value="${get.experiment.list}")
 	private String GET_EXPERIMENT_LIST_QUERY;
@@ -127,7 +127,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("experimentId", experimentId);
-		String qry = GET_EXPERIMENT_BY_ID_QUERY_1 + " (" + experimentId + ")";
+		String qry = GET_EXPERIMENT_BY_IDs_QUERY + " (" + experimentId + ")";
 		return namedParameterJdbcTemplate.query(qry, new ExperimentExtractor());
 	}
 
@@ -171,7 +171,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("summary", experimentRequest.getSummary());
 		parameters.addValue("batchSize", experimentRequest.getBatchSize());
 		parameters.addValue("batchNumber", experimentRequest.getBatchNumber());
-		parameters.addValue("status", experimentRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
@@ -198,7 +198,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		            new MapSqlParameterSource("experimentId", experimentDetails.getExperimentId())
 		                    .addValue("fileContent", experimentDetails.getFileContent().getBytes())
 		                    .addValue("name", experimentDetails.getName())
-		                    .addValue("status", experimentDetails.getStatus())
+		                    .addValue("status", ElnUtils.STATUS.ACTIVE.getValue())
 		                    .addValue("insertUser", "ELN")
 		            		.addValue("insertDate", ElnUtils.getTimeStamp())
 		            		.addValue("updateUser", "ELN")

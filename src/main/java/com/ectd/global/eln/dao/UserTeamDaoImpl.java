@@ -74,7 +74,7 @@ public class UserTeamDaoImpl implements UserTeamDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("teamId", userTeamRequest.getTeamId());
 		parameters.addValue("userId", userTeamRequest.getUserId());
-		parameters.addValue("status", userTeamRequest.getStatus());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", userTeamRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", userTeamRequest.getUpdateUser());
