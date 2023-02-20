@@ -24,7 +24,7 @@ public class UsersDetailsRequest extends Base implements Serializable {
     private String zipCode;  
     private String password;
     private Boolean firstLogin = Boolean.TRUE;
-    
+    private Boolean certifiedReviewer = Boolean.FALSE;
     private List<UserTeamRequest> userTeams;
     
     public String getPassword() {
@@ -154,4 +154,14 @@ public class UsersDetailsRequest extends Base implements Serializable {
 	public void setUserTeams(List<UserTeamRequest> userTeams) {
 		this.userTeams = userTeams;
 	}
+
+	public Boolean getCertifiedReviewer() {
+		return certifiedReviewer;
+	}
+
+	public void setCertifiedReviewer(Boolean certifiedReviewer) {
+		this.certifiedReviewer = certifiedReviewer;
+	}
+	
+	
 }

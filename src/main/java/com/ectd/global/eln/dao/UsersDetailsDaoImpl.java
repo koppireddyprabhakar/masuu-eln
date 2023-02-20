@@ -170,7 +170,8 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("password", usersDetailsRequest.getPassword());
 		parameters.addValue("firstLogin", usersDetailsRequest.getFirstLogin());
-
+		parameters.addValue("certifiedReviewer", usersDetailsRequest.getCertifiedReviewer());
+		
 		namedParameterJdbcTemplate.update(createUsersDetailsQuery, parameters, keyHolder);
 
 		return keyHolder.getKey().intValue();
@@ -180,9 +181,9 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 		userTeamRequests.forEach(f -> {
 			f.setUserId(userId);
-			// f.setInsertDate(ElnUtils.getTimeStamp());
+			f.setInsertDate(ElnUtils.getTimeStamp());
 			f.setInsertUser("ELN");
-			// f.setUpdateDate(ElnUtils.getTimeStamp());
+			f.setUpdateDate(ElnUtils.getTimeStamp());
 			f.setUpdateUser("ELN");
 		});
 
