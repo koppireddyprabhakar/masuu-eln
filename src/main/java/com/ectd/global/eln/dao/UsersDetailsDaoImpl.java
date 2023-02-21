@@ -118,6 +118,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
 		parameters.addValue("updateUser", usersDetailsRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("certifiedReviewer", usersDetailsRequest.getCertifiedReviewer());
 
 		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
 	}
@@ -248,6 +249,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		usersDetailsDto.setRoleName(resultSet.getString("ROLE_NAME"));
 		usersDetailsDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
 		usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
+		usersDetailsDto.setCertifiedReviewer(resultSet.getBoolean("CERTIFIED_REVIEWER"));
 
 		return usersDetailsDto;
 	}
@@ -269,7 +271,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 			f.setUpdateDate(ElnUtils.getTimeStamp());
 			f.setUpdateUser("ELN");
 		});
-
+		
 		SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(usersDetailsRequest.getUserTeams().toArray());
 		int[] insertedRows = this.namedParameterJdbcTemplate.batchUpdate(createUserTeamQuery, batch);
 		if (insertedRows.length > 0) {

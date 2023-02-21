@@ -31,7 +31,7 @@ public class UsersDetailsDto extends Base implements Serializable {
     private Integer teamId;
     private String password;
  
-
+    private Boolean certifiedReviewer = Boolean.FALSE;
 	private Set<UserTeamDto> userTeams;
 
 	public UsersDetailsDto() {
@@ -179,6 +179,14 @@ public class UsersDetailsDto extends Base implements Serializable {
 		this.userTeams = userTeams;
 	}
 	
+	public Boolean getCertifiedReviewer() {
+		return certifiedReviewer;
+	}
+
+	public void setCertifiedReviewer(Boolean certifiedReviewer) {
+		this.certifiedReviewer = certifiedReviewer;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
 		sb.append(userId); 
