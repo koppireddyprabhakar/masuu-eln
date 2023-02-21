@@ -436,6 +436,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		public ExperimentDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 
 			ExperimentDto experimentDto = getExperimentDto(resultSet);
+			experimentDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
 			experimentDto.setProject(getProject(resultSet));
 
 			Set<ExperimentDetailsDto> experimentDetailsList = new HashSet<>();

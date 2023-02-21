@@ -19,8 +19,9 @@ public class ExperimentDto extends Base implements Serializable {
     private String summary;
     private String batchSize;
     private String batchNumber;
+    private String departmentName;
     
-    private Set<ExperimentDetailsDto> experimentDetails = new HashSet<ExperimentDetailsDto>();
+	private Set<ExperimentDetailsDto> experimentDetails = new HashSet<ExperimentDetailsDto>();
     private Set<ExperimentExcipientDto> experimentExcipients = new HashSet<ExperimentExcipientDto>();
     private ProjectDto project;
 
@@ -106,6 +107,13 @@ public class ExperimentDto extends Base implements Serializable {
 	}
 	public void setExperimentExcipients(Set<ExperimentExcipientDto> experimentExcipients) {
 		this.experimentExcipients = experimentExcipients;
+	}
+	
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 	
 	public String toString() {
