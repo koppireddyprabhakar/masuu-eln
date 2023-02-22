@@ -91,6 +91,7 @@ public class LoginDaoImpl implements LoginDao {
 			login.setFirstLogin(rs.getString("FIRSTLOGIN"));
 			login.setOtp(rs.getInt("OTP"));
 			login.setTimeStamp(rs.getDate("TIMESTAMP"));
+			login.setTeamId(rs.getInt("TEAM_ID"));
 			return login;
 		}
 	}

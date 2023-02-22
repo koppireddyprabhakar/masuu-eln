@@ -25,6 +25,7 @@ public class LoginDto implements Serializable {
 	private String firstLogin;
 	private int otp;
 	private Date TimeStamp;
+	private Integer teamId;
 
 	public int getOtp() {
 		return otp;
@@ -168,6 +169,14 @@ public class LoginDto implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Integer getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(Integer teamId) {
+		this.teamId = teamId;
 	}
 
 }
