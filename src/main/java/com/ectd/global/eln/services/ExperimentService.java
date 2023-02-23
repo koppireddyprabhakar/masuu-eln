@@ -5,6 +5,7 @@ import java.util.List;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ExperimentReviewDto;
+import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.ExperimentReview;
@@ -36,5 +37,7 @@ public interface ExperimentService {
 	Integer updateExperimentReview(ExperimentReview experimentReview);
 	
 	ExperimentReviewDto getExperimentReview(Integer experimentId);
+	
+	List<TestRequestFormDto> getTRFByExpIds(Integer experimentId);
 	
 }

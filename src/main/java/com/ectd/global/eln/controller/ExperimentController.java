@@ -25,6 +25,7 @@ import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ExperimentReviewDto;
+import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentAttachment;
 import com.ectd.global.eln.request.ExperimentDetails;
@@ -187,6 +188,11 @@ public class ExperimentController extends BaseController {
 	@GetMapping("/get-experiment-review-by-experiment-id")
 	public ResponseEntity<ExperimentReviewDto> getExperimentReview(@RequestParam Integer experimentId) throws Exception {
 		return  new ResponseEntity<>(experimentService.getExperimentReview(experimentId), HttpStatus.OK);
+	}
+	
+	@GetMapping("get-test-requests-by-experiment-id")
+	public ResponseEntity<List<TestRequestFormDto>> getTestRequestByExperimentId(@RequestParam Integer experimentId) {
+		return new ResponseEntity<>(experimentService.getTRFByExpIds(experimentId), HttpStatus.OK);
 	}
 
 }

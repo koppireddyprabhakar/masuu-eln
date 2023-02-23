@@ -13,6 +13,7 @@ import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ExperimentReviewDto;
+import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
@@ -125,6 +126,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<ExperimentExcipientDto> getExcipientByExperimentId(Integer experimentId) {
 		return experimentDao.getExcipientByExperimentId(experimentId);
 	}
@@ -137,6 +139,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public Integer updateExperimentReview(ExperimentReview experimentReview) {
 		experimentDao.updateExperimentReview(experimentReview);
 
@@ -144,8 +147,15 @@ public class ExperimentServiceImpl implements ExperimentService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public ExperimentReviewDto getExperimentReview(Integer experimentId) {
 		return experimentDao.getExperimentReview(experimentId);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public List<TestRequestFormDto> getTRFByExpIds(Integer experimentId) {
+		return experimentDao.getTRFByExpIds(experimentId);
 	}
 
 }

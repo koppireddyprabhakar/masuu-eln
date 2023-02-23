@@ -276,12 +276,10 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		return jdbcTemplate.update(DELETE_EXPERIMENT_QUERY, new Object[] {experimentId});
 	}
 	
-	
 	@Override
 	public Integer deleteExperimentExcipient(Integer experimentId) {
 		return jdbcTemplate.update(DELETE_EXCIPIENT_QUERY, new Object[] {experimentId});
 	}
-	
 	
 	@Override
 	public List<ExperimentDto> getExperimentsWithProject() {
@@ -290,7 +288,6 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 	@Override
 	public List<ExperimentDto> getExperimentsInfo(Integer experimentId) {
-
 		return jdbcTemplate.query(GET_EXPERIMENT_INFO_QUERY + experimentId, new ExperimentIdRowMapper());
 	}
 
@@ -547,9 +544,26 @@ public class ExperimentDaoImpl implements ExperimentDao {
 
 	class TestRequestFormRowMapper implements RowMapper<TestRequestFormDto> {
 		public TestRequestFormDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+
 			TestRequestFormDto testRequestFormDto = new TestRequestFormDto();
+			
 			testRequestFormDto.setTestRequestFormId(resultSet.getInt("TRF_ID"));
 			testRequestFormDto.setTestRequestFormStatus(resultSet.getString("TRF_STATUS"));
+			testRequestFormDto.setExpId(resultSet.getInt("EXP_ID"));
+			testRequestFormDto.setCondition(resultSet.getString("CONDITION"));
+			testRequestFormDto.setStage(resultSet.getString("STAGE"));
+			testRequestFormDto.setPackaging(resultSet.getString("PACKAGING"));
+			testRequestFormDto.setLabelClaim(resultSet.getString("LABEL_CLAIM"));
+			testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
+			testRequestFormDto.setManufacturingDate(resultSet.getDate("MANUFACTURING_DATE"));
+			testRequestFormDto.setExpireDate(resultSet.getDate("EXPIRE_DATE"));
+			testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));
+			testRequestFormDto.setTestName(resultSet.getString("TEST_NAME"));
+			testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
+			testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
+			testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
+			testRequestFormDto.setStatus(resultSet.getString("STATUS"));
+			testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
 			
 			return testRequestFormDto;
 		};
