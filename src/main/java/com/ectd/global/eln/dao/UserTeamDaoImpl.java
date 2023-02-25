@@ -75,10 +75,10 @@ public class UserTeamDaoImpl implements UserTeamDao {
 		parameters.addValue("teamId", userTeamRequest.getTeamId());
 		parameters.addValue("userId", userTeamRequest.getUserId());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
-		parameters.addValue("insertUser", userTeamRequest.getInsertUser());
+		parameters.addValue("insertUser", userTeamRequest.getUserId());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", userTeamRequest.getUpdateUser());
-		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("updateDate", userTeamRequest.getUserId());
 		
 		return namedParameterJdbcTemplate.update(createUserTeamQuery, parameters);
 	}
@@ -89,7 +89,7 @@ public class UserTeamDaoImpl implements UserTeamDao {
 		parameters.addValue("teamId", userTeamRequest.getTeamId());
 		parameters.addValue("userId", userTeamRequest.getUserId());
 		parameters.addValue("status", userTeamRequest.getStatus());
-		parameters.addValue("updateUser", userTeamRequest.getUpdateUser());
+		parameters.addValue("updateUser", userTeamRequest.getUserId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(updateUserTeamQuery, parameters);

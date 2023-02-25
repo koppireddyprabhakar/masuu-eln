@@ -175,9 +175,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("userId", analysisRequest.getUserId());
 		parameters.addValue("batchSize", analysisRequest.getBatchSize());
 		parameters.addValue("batchNumber", analysisRequest.getBatchNumber());
-		parameters.addValue("insertUser", "ELN");
+		parameters.addValue("insertUser", analysisRequest.getUserId());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateUser", "ELN");
+		parameters.addValue("updateUser", analysisRequest.getUserId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(CREATE_ANALYSIS_QUERY, parameters, keyHolder);
@@ -198,7 +198,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		parameters.addValue("userId", analysisRequest.getUserId());
 		parameters.addValue("batchSize", analysisRequest.getBatchSize());
 		parameters.addValue("batchNumber", analysisRequest.getBatchNumber());
-		parameters.addValue("updateUser", analysisRequest.getUpdateUser());
+		parameters.addValue("updateUser", analysisRequest.getUserId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(UPDATE_ANALYSIS_QUERY, parameters);

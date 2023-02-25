@@ -116,7 +116,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
 		parameters.addValue("city", usersDetailsRequest.getCity());
 		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
-		parameters.addValue("updateUser", usersDetailsRequest.getUpdateUser());
+		parameters.addValue("updateUser", usersDetailsRequest.getUserId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("certifiedReviewer", usersDetailsRequest.getCertifiedReviewer());
 

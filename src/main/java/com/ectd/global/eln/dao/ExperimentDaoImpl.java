@@ -172,9 +172,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("batchSize", experimentRequest.getBatchSize());
 		parameters.addValue("batchNumber", experimentRequest.getBatchNumber());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
-		parameters.addValue("insertUser", "ELN");
+		parameters.addValue("insertUser", experimentRequest.getUserId());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("updateUser", "ELN");
+		parameters.addValue("updateUser", experimentRequest.getUserId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		namedParameterJdbcTemplate.update(CREATE_EXPERIMENT_QUERY, parameters, keyHolder);
@@ -265,7 +265,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("batchSize", experimentRequest.getBatchSize());
 		parameters.addValue("batchNumber", experimentRequest.getBatchNumber());
 		parameters.addValue("status", experimentRequest.getStatus());
-		parameters.addValue("updateUser", experimentRequest.getUpdateUser());
+		parameters.addValue("updateUser", experimentRequest.getUserId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 
 		return namedParameterJdbcTemplate.update(UPDATE_EXPERIMENT_QUERY, parameters);

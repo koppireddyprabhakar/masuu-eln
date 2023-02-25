@@ -13,6 +13,7 @@ import com.ectd.global.eln.dao.TestRequestFormDao;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
 public class TestRequestFormServiceImpl implements TestRequestFormService {
@@ -115,6 +116,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 			testRequest.setManufacturingDate(testRequestFormRequest.getManufacturingDate());
 			testRequest.setExpireDate(testRequestFormRequest.getExpireDate());
 			testRequest.setAnalysisId(testRequestFormRequest.getAnalysisId());
+			testRequest.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			
 			testRequest.setTestId(tr.getTestId());
 			testRequest.setTestName(tr.getTestName());
