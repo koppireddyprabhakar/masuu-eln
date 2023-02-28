@@ -43,8 +43,8 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<AnalysisDto> getAnalysisList(Integer teamId, String status) {
-		return analysisDao.getAnalysisList(teamId, status);
+	public List<AnalysisDto> getAnalysisList(Integer teamId, String status, Integer userId) {
+		return analysisDao.getAnalysisList(teamId, status, userId);
 	}
 
 	@Override
@@ -58,14 +58,14 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 			AnalysisDetails analysisDetails = new AnalysisDetails();
 			analysisDetails.setAnalysisId(analysisId);
-			analysisDetails.setName("Purpose and Conclusion");
+			analysisDetails.setName("Purpose and Details");
 			analysisDetails.setFileContent("");
 			analysisDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			analysisDetailsList.add(analysisDetails);
 
 			analysisDetails = new AnalysisDetails();
 			analysisDetails.setAnalysisId(analysisId);
-			analysisDetails.setName("Formulation");
+			analysisDetails.setName("Analysis Details");
 			analysisDetails.setFileContent("");
 			analysisDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			analysisDetailsList.add(analysisDetails);

@@ -67,12 +67,12 @@ public class AnalysisController extends BaseController {
 
 	@GetMapping("/get-analysis-list")
 	public ResponseEntity<List<AnalysisDto>> getAnalysisList() throws Exception {
-		return new ResponseEntity<>(analysisService.getAnalysisList(null, null), HttpStatus.OK);
+		return new ResponseEntity<>(analysisService.getAnalysisList(null, null,null), HttpStatus.OK);
 	}
 
 	@GetMapping("/get-analysis-by-team-id")
-	public ResponseEntity<List<AnalysisDto>> getAnalysisByTeamId(@RequestParam Integer teamId) throws Exception {
-		return new ResponseEntity<>(analysisService.getAnalysisList(teamId, null), HttpStatus.OK);
+	public ResponseEntity<List<AnalysisDto>> getAnalysisByTeamId(@RequestParam Integer teamId,@RequestParam Integer userId) throws Exception {
+		return new ResponseEntity<>(analysisService.getAnalysisList(teamId, null,userId), HttpStatus.OK);
 	}
 
 	@PostMapping("/create-analysis")
@@ -198,7 +198,7 @@ public class AnalysisController extends BaseController {
 	
 	@GetMapping("/get-analysis-by-status")
 	public ResponseEntity<List<AnalysisDto>> getAnalysisByStatus(@RequestParam String status) throws Exception {
-		return new ResponseEntity<>(analysisService.getAnalysisList(null, status), HttpStatus.OK);
+		return new ResponseEntity<>(analysisService.getAnalysisList(null, status, null), HttpStatus.OK);
 	}
 	
 	@GetMapping("/get-user-details-by-role-id")

@@ -145,10 +145,14 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 
 	@Override
-	public List<AnalysisDto> getAnalysisList(Integer teamId, String status) {
+	public List<AnalysisDto> getAnalysisList(Integer teamId, String status, Integer userID) {
 
 		StringBuilder sb = new StringBuilder(GET_ANALYSIS_LIST_QUERY);
 
+		if(userID != null) {
+			sb.append(" AND USER_ID = ").append(userID);
+		}
+		
 		if(teamId != null) {
 			sb.append(" AND AE.TEAM_ID = " + teamId);
 		}
