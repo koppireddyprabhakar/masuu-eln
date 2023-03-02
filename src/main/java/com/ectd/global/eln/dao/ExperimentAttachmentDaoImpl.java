@@ -65,6 +65,8 @@ public class ExperimentAttachmentDaoImpl implements ExperimentAttachmentDao {
 			sb.append(" AND ATTACHMENT_LOCATION LIKE '%" + fileName +"%'");
 		}
 		
+		sb.append(" AND STATUS = '" + ElnUtils.STATUS.ACTIVE.getValue()+"'");
+		
 		return jdbcTemplate.query(sb.toString(), new ExperimentAttachmentRowMapper());
 	}
 
@@ -74,7 +76,7 @@ public class ExperimentAttachmentDaoImpl implements ExperimentAttachmentDao {
 		
 		parameters.addValue("experimentId", experimentAttachment.getExperimentId());
 		parameters.addValue("attachmentLocation", experimentAttachment.getAttachmentLocation());
-		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.name());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
@@ -101,6 +103,9 @@ public class ExperimentAttachmentDaoImpl implements ExperimentAttachmentDao {
 
 	@Override
 	public Integer deleteExperimentAttachment(ExperimentAttachment experimentAttachment) {
+		if(experimentAttachment.getStatus() == null) {
+			experimentAttachment.setStatus(ElnUtils.STATUS.INACTIVE.getValue());
+		}
 		return this.updateExperimentAttachment(experimentAttachment);
 	}
 	

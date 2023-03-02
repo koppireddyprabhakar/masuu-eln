@@ -71,7 +71,7 @@ public class AnalysisController extends BaseController {
 	}
 
 	@GetMapping("/get-analysis-by-team-id")
-	public ResponseEntity<List<AnalysisDto>> getAnalysisByTeamId(@RequestParam Integer teamId,@RequestParam Integer userId) throws Exception {
+	public ResponseEntity<List<AnalysisDto>> getAnalysisByTeamId(@RequestParam(required = false) Integer teamId,@RequestParam(required = false) Integer userId) throws Exception {
 		return new ResponseEntity<>(analysisService.getAnalysisList(teamId, null,userId), HttpStatus.OK);
 	}
 
@@ -144,6 +144,11 @@ public class AnalysisController extends BaseController {
 		Resource file = analysisAttachmentService.getAnalysisAttachmentContent(fileName, experimentId, projectId);
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+	}
+	
+	@DeleteMapping("/delete-analysis-attachment")
+	public ResponseEntity<String> deleteExperimentAttachment(@RequestBody AnalysisAttachment analysisAttachment) throws Exception {
+		return getResponseEntity(analysisAttachmentService.deleteAnalysisAttachment(analysisAttachment), "Analysis Attachment Delete");
 	}
 
 	@PostMapping("/create-analysis-excipient")

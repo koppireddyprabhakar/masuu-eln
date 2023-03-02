@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dto.AnalysisAttachmentDto;
 import com.ectd.global.eln.request.AnalysisAttachment;
@@ -44,7 +45,13 @@ public class AnalysisAttachmentDaoImpl implements AnalysisAttachmentDao {
 
 	@Override
 	public AnalysisAttachmentDto getAnalysisAttachmentById(Integer analysisExperimentId) {
-		return jdbcTemplate.queryForObject(GET_ANALYSIS_ATTACHMENT_BY_ID, new AnalysisAttachmentRowMapper(), analysisExperimentId);
+List<AnalysisAttachmentDto> attachments = jdbcTemplate.query(GET_ANALYSIS_ATTACHMENT_BY_ID + analysisExperimentId, new AnalysisAttachmentRowMapper());
+		
+		if(CollectionUtils.isEmpty(attachments)) {
+			return null;
+		}
+		
+		return attachments.get(0);
 	}
 
 	@Override
@@ -57,6 +64,8 @@ public class AnalysisAttachmentDaoImpl implements AnalysisAttachmentDao {
 		if(fileName != null) {
 			sb.append(" AND ATTACHMENT_LOCATION LIKE '%" + fileName +"%'");
 		}
+		
+		sb.append(" AND STATUS = '" + ElnUtils.STATUS.ACTIVE.getValue()+"'");
 
 		return jdbcTemplate.query(sb.toString(), new AnalysisAttachmentRowMapper());
 	}
@@ -67,7 +76,7 @@ public class AnalysisAttachmentDaoImpl implements AnalysisAttachmentDao {
 
 		parameters.addValue("experimentId", analysisAttachment.getExperimentId());
 		parameters.addValue("attachmentLocation", analysisAttachment.getAttachmentLocation());
-		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.name());
+		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
@@ -81,7 +90,7 @@ public class AnalysisAttachmentDaoImpl implements AnalysisAttachmentDao {
 	public Integer updateAnalysisAttachment(AnalysisAttachment analysisAttachment) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 
-		parameters.addValue("experimentAttachmentId", analysisAttachment.getAnalysisAttachmentId());
+		parameters.addValue("analysisAttachmentId", analysisAttachment.getAnalysisAttachmentId());
 		parameters.addValue("experimentId", analysisAttachment.getExperimentId());
 		parameters.addValue("attachmentLocation", analysisAttachment.getAttachmentLocation());
 		parameters.addValue("status", analysisAttachment.getStatus());
@@ -95,6 +104,9 @@ public class AnalysisAttachmentDaoImpl implements AnalysisAttachmentDao {
 
 	@Override
 	public Integer deleteAnalysisAttachment(AnalysisAttachment analysisAttachment) {
+		if(analysisAttachment.getStatus() == null) {
+			analysisAttachment.setStatus(ElnUtils.STATUS.INACTIVE.getValue());
+		}
 		return this.updateAnalysisAttachment(analysisAttachment);
 	}
 	
