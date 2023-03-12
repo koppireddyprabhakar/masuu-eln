@@ -606,6 +606,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		analysisExcipientDto.setPotency(resultSet.getString("POTENCY"));
 		analysisExcipientDto.setGrade(resultSet.getString("GRADE"));
 		analysisExcipientDto.setStatus(resultSet.getString("STATUS"));
+		analysisExcipientDto.setExcipientsName(resultSet.getString("EXCIPIENTS_NAME"));
 
 		return analysisExcipientDto;
 	}
