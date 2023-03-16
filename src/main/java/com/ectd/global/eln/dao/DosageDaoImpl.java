@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -139,6 +140,7 @@ public class DosageDaoImpl implements DosageDao {
 		formulationDtos.forEach(f -> 
 		{	
 			f.setDosageId(dosageId);
+			f.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			f.setInsertUser("ELN");
 			f.setUpdateUser("ELN");
 			f.setInsertDate(ElnUtils.getTimeStamp());
@@ -158,7 +160,7 @@ public class DosageDaoImpl implements DosageDao {
 		
 		int[] updatedRows = null;
 		if(!CollectionUtils.isEmpty(updateFormulations)) {
-			updatedRows = this.batchUpdate(updateFormulations);
+			updatedRows = this.batchUpdate(updateFormulations, dosageRequest.getDosageId());
 		}
 		
 		if(!CollectionUtils.isEmpty(insertFormulations)) {
@@ -172,9 +174,13 @@ public class DosageDaoImpl implements DosageDao {
 		return false;
 	}
 
-	private int[] batchUpdate(List<FormulationDto> formulationDtos) {
+	private int[] batchUpdate(List<FormulationDto> formulationDtos, Integer dosageId) {
 		
 		formulationDtos.forEach(f -> {
+			if( StringUtils.isBlank(f.getStatus())) {
+				f.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
+			}
+			f.setDosageId(dosageId);
 			f.setUpdateUser("ELN");
 			f.setUpdateDate(ElnUtils.getTimeStamp());
 		});
