@@ -117,6 +117,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 			testRequest.setExpireDate(testRequestFormRequest.getExpireDate());
 			testRequest.setAnalysisId(testRequestFormRequest.getAnalysisId());
 			testRequest.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
+			testRequest.setPurpose(testRequestFormRequest.getPurpose());
 			
 			testRequest.setTestId(tr.getTestId());
 			testRequest.setTestName(tr.getTestName());

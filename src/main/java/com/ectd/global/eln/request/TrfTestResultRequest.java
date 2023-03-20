@@ -13,6 +13,7 @@ public class TrfTestResultRequest extends Base implements Serializable {
     private String testName;
     private String testNumber;
     private String testResult;
+    private String purpose;
 
     public Integer getTrfTestId() {
 		return trfTestId;
@@ -61,6 +62,12 @@ public class TrfTestResultRequest extends Base implements Serializable {
 	}
 	public void setTestResult(String testResult) {
 		this.testResult = testResult;
+	}
+	public String getPurpose() {
+		return purpose;
+	}
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
 	}
 
 }

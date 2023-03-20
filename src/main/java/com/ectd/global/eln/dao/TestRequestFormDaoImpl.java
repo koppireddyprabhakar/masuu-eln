@@ -120,7 +120,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		parameters.addValue("insertUser", testRequestFormRequest.getInsertUser());
 		parameters.addValue("updateUser", testRequestFormRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
-
+		parameters.addValue("purpose",testRequestFormRequest.getPurpose());
 		namedParameterJdbcTemplate.update(CREATE_TEST_REQUEST_FORM_QUERY, parameters, keyHolder);
 
 		return keyHolder.getKey().intValue();
@@ -234,6 +234,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			testRequestFormDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			testRequestFormDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+			testRequestFormDto.setPurpose(resultSet.getString("PURPOSE"));
 
 			ProjectDto project = new ProjectDto();
 			project.setProjectId(resultSet.getInt("PROJECT_ID"));
@@ -244,6 +245,9 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			project.setFormulationName(resultSet.getString("FORMULATION_NAME"));
 			project.setStrength(resultSet.getString("STRENGTH"));
 			project.setMarkertName(resultSet.getString("MARKET_NAME"));
+			project.setInsertDate(resultSet.getDate("INSERT_DATE"));
+			project.setStatus(resultSet.getString("STATUS"));
+
 
 			ExperimentDto experiment = new ExperimentDto();
 			experiment.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
@@ -252,6 +256,9 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			experiment.setTeamId(resultSet.getInt("TEAM_ID"));
 			experiment.setUserId(resultSet.getInt("USER_ID"));
 			experiment.setExpId(resultSet.getInt("EXP_ID"));
+			experiment.setInsertDate(resultSet.getDate("INSERT_DATE"));
+			experiment.setStatus(resultSet.getString("STATUS"));
+
 
 			testRequestFormDto.setProject(project);
 			testRequestFormDto.setExperiment(experiment);
@@ -286,6 +293,8 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
 			testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
 			testRequestFormDto.setStatus(resultSet.getString("STATUS"));
+			testRequestFormDto.setPurpose(resultSet.getString("PURPOSE"));
+			
 
 			ProjectDto projectDto = new ProjectDto();
 			projectDto.setProjectId(resultSet.getInt("PROJECT_ID"));

@@ -25,6 +25,7 @@ public class TestRequestFormRequest extends Base implements Serializable {
     private String testResult;
     private String testStatus;
     private Integer analysisId;
+    private String purpose;
     
     private List<TrfTestResultRequest> trfTestResults;
     
@@ -171,6 +172,14 @@ public class TestRequestFormRequest extends Base implements Serializable {
 
 	public void setAnalysisId(Integer analysisId) {
 		this.analysisId = analysisId;
+	}
+
+	public String getPurpose() {
+		return purpose;
+	}
+
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
 	}
 
 	public static enum TRF_STATUS {
