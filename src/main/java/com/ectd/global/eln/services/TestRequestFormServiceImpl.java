@@ -108,6 +108,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 			
 			testRequest.setExpId(testRequestFormRequest.getExpId());
 			testRequest.setTestRequestFormStatus(testRequestFormRequest.getTestRequestFormStatus());
+			testRequest.setTrfNumber(testRequestFormRequest.getTrfNumber());
 			testRequest.setCondition(testRequestFormRequest.getCondition());
 			testRequest.setStage(testRequestFormRequest.getStage());
 			testRequest.setPackaging(testRequestFormRequest.getPackaging());

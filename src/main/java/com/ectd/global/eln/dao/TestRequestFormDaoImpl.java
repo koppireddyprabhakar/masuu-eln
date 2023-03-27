@@ -213,6 +213,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		public TestRequestFormDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			TestRequestFormDto testRequestFormDto = new TestRequestFormDto();
 			testRequestFormDto.setTestRequestFormId(resultSet.getInt("TRF_ID"));
+			testRequestFormDto.setTrfNumber(resultSet.getString("TRF_NUMBER"));
 			testRequestFormDto.setExpId(resultSet.getInt("EXP_ID"));
 			//testRequestFormDto.setProjectId(resultSet.getInt("PROJECT_ID"));
 			//testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));

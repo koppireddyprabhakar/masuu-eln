@@ -9,6 +9,7 @@ public class TestRequestFormRequest extends Base implements Serializable {
     private static final long serialVersionUID = -7398000181669452392L;
     
 	private Integer testRequestFormId;
+	private String trfNumber;
 	private Integer expId;  
 //    private Integer projectId;
     private String testRequestFormStatus;  
@@ -181,6 +182,16 @@ public class TestRequestFormRequest extends Base implements Serializable {
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
+	
+	public String getTrfNumber() {
+		return trfNumber;
+	}
+
+	public void setTrfNumber(String trfNumber) {
+		this.trfNumber = trfNumber;
+	}
+
+
 
 	public static enum TRF_STATUS {
 		NEW("New"), INPROGRESS("Inprogress"), ANLYSIS_SUBMIT("Analysis Submitted"), CLOSED("Closed");

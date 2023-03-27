@@ -12,6 +12,7 @@ public class TestRequestFormDto extends Base implements Serializable {
 
 	private Integer testRequestFormId;
     private Integer expId;
+    private String trfNumber;
 //    private Integer projectId;  
     private Integer analysisId;  
     private String testRequestFormStatus;
@@ -200,6 +201,14 @@ public class TestRequestFormDto extends Base implements Serializable {
 		return sb.toString();
 	}
 	
+	public String getTrfNumber() {
+		return trfNumber;
+	}
+
+	public void setTrfNumber(String trfNumber) {
+		this.trfNumber = trfNumber;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 	    if (o == this)
