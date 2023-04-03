@@ -110,17 +110,17 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	private Integer update(AnalysisRequest analysisRequest) {
 
-		analysisDao.updateAnalysis(analysisRequest);
+		return analysisDao.updateAnalysis(analysisRequest);
 
-		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
-			analysisDao.batchAnalysisDetailsUpdate(analysisRequest.getAnalysisDetailsList());
-		}
+//		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
+//			analysisDao.batchAnalysisDetailsUpdate(analysisRequest.getAnalysisDetailsList());
+//		}
+//
+//		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
+//			analysisDao.batchExcipientUpdate(analysisRequest.getExcipients());
+//		}
 
-		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
-			analysisDao.batchExcipientUpdate(analysisRequest.getExcipients());
-		}
-
-		return 1;
+//		return 1;
 	}
 
 	@Override

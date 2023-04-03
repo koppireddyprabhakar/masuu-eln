@@ -1,6 +1,7 @@
 package com.ectd.global.eln.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,8 +120,13 @@ public class ExperimentServiceImpl implements ExperimentService {
 	private Integer update(ExperimentRequest experimentRequest) {
 
 		experimentDao.updateExperiment(experimentRequest);
+		
+		if(!CollectionUtils.isEmpty(experimentRequest.getExperimentDetailsList())) {
 		experimentDao.batchUpdate(experimentRequest.getExperimentDetailsList());
+		}
+		if(!CollectionUtils.isEmpty(experimentRequest.getExcipients())) {
 		experimentDao.batchExcipientUpdate(experimentRequest.getExcipients());
+		}
 
 		return 1;
 	}

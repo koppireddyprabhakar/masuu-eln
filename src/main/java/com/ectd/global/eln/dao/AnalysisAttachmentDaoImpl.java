@@ -77,6 +77,7 @@ List<AnalysisAttachmentDto> attachments = jdbcTemplate.query(GET_ANALYSIS_ATTACH
 		parameters.addValue("experimentId", analysisAttachment.getExperimentId());
 		parameters.addValue("attachmentLocation", analysisAttachment.getAttachmentLocation());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
+		parameters.addValue("fromSummary", analysisAttachment.getFromSummary());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
@@ -94,6 +95,7 @@ List<AnalysisAttachmentDto> attachments = jdbcTemplate.query(GET_ANALYSIS_ATTACH
 		parameters.addValue("experimentId", analysisAttachment.getExperimentId());
 		parameters.addValue("attachmentLocation", analysisAttachment.getAttachmentLocation());
 		parameters.addValue("status", analysisAttachment.getStatus());
+		parameters.addValue("fromSummary", analysisAttachment.getFromSummary());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
@@ -118,6 +120,7 @@ List<AnalysisAttachmentDto> attachments = jdbcTemplate.query(GET_ANALYSIS_ATTACH
 			analysisAttachmentDto.setAnalysisExperimentId(resultSet.getInt("ANALYSIS_EXP_ID"));
 			analysisAttachmentDto.setAttachmentLocation(resultSet.getString("ATTACHMENT_LOCATION"));
 			analysisAttachmentDto.setStatus(resultSet.getString("STATUS"));
+			analysisAttachmentDto.setFromSummary(resultSet.getString("FROM_SUMMARY"));
 			analysisAttachmentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			analysisAttachmentDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			analysisAttachmentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));

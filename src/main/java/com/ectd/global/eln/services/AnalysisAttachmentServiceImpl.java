@@ -82,7 +82,7 @@ public class AnalysisAttachmentServiceImpl implements AnalysisAttachmentService 
 				String filename = path.getAttachmentLocation().substring(path.getAttachmentLocation().lastIndexOf("/") + 1);
 				String url = path.getAttachmentLocation();
 
-				return new FileInfo(filename, url, path.getAnalysisExperimentId(), path.getAnalysisAttachmentId());
+				return new FileInfo(filename, url, path.getAnalysisExperimentId(), path.getAnalysisAttachmentId(), path.getFromSummary());
 			}).collect(Collectors.toList());
 
 		} catch (Exception e) {

@@ -11,6 +11,7 @@ public class AnalysisAttachmentDto extends Base implements Serializable {
 	private Integer analysisAttachmentId;
 	private Integer analysisExperimentId;
 	private String attachmentLocation;
+	private String fromSummary;
 	
 	public Integer getAnalysisAttachmentId() {
 		return analysisAttachmentId;
@@ -31,6 +32,13 @@ public class AnalysisAttachmentDto extends Base implements Serializable {
 	}
 	public void setAnalysisExperimentId(Integer analysisExperimentId) {
 		this.analysisExperimentId = analysisExperimentId;
+	}
+	
+	public String getFromSummary() {
+		return fromSummary;
+	}
+	public void setFromSummary(String fromSummary) {
+		this.fromSummary = fromSummary;
 	}
 	
 }

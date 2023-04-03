@@ -231,6 +231,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			analysisDto.setStatus(resultSet.getString("STATUS"));
 			analysisDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
 			analysisDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
+			analysisDto.setUserId(resultSet.getInt("USER_ID"));
 			analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			analysisDto.setUpdateDate(resultSet.getDate("INSERT_DATE"));
@@ -573,6 +574,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		analysisDto.setStatus(resultSet.getString("STATUS"));
 		analysisDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
 		analysisDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
+		analysisDto.setUserId(resultSet.getInt("USER_ID"));
 
 		//	analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 		//	analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));

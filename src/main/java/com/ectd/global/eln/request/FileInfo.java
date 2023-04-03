@@ -10,14 +10,16 @@ public class FileInfo implements Serializable {
 	private String url;
 	private Integer experimentId;
 	private Integer attachmentId;
+	private String fromSummary;
 	
 	public FileInfo() {}
 
-	public FileInfo(String name, String url, Integer experimentId, Integer attachmentId) {
+	public FileInfo(String name, String url, Integer experimentId, Integer attachmentId, String fromSummary) {
 		this.name = name;
 		this.url = url;
 		this.experimentId = experimentId;
 		this.attachmentId = attachmentId;
+		this.fromSummary = fromSummary;
 	}
 
 	public String getName() {
@@ -50,6 +52,14 @@ public class FileInfo implements Serializable {
 
 	public void setAttachmentId(Integer attachmentId) {
 		this.attachmentId = attachmentId;
+	}
+
+	public String getFromSummary() {
+		return fromSummary;
+	}
+
+	public void setFromSummary(String fromSummary) {
+		this.fromSummary = fromSummary;
 	}
 	
 }

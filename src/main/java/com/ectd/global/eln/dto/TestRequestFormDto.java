@@ -28,7 +28,7 @@ public class TestRequestFormDto extends Base implements Serializable {
     private String testNumber;
     private String testResult;
     private String testStatus;
-    private String purpose;
+//    private String purpose;
 
     ProjectDto project = new ProjectDto();
     ExperimentDto experiment = new ExperimentDto();
@@ -186,13 +186,13 @@ public class TestRequestFormDto extends Base implements Serializable {
 		this.experiment = experiment;
 	}
 
-	public String getPurpose() {
-		return purpose;
-	}
-
-	public void setPurpose(String purpose) {
-		this.purpose = purpose;
-	}
+//	public String getPurpose() {
+//		return purpose;
+//	}
+//
+//	public void setPurpose(String purpose) {
+//		this.purpose = purpose;
+//	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
