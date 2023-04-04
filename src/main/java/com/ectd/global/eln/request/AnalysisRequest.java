@@ -2,6 +2,7 @@
 package com.ectd.global.eln.request;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class AnalysisRequest extends Base implements Serializable {
@@ -17,6 +18,7 @@ public class AnalysisRequest extends Base implements Serializable {
 	private String summary;
 	private String batchSize;
 	private String batchNumber;
+	private Date analysisSubmitDate;
 
 	private List<AnalysisDetails> analysisDetailsList;
 	private List<AnalysisExcipient> excipients;
@@ -115,6 +117,14 @@ public class AnalysisRequest extends Base implements Serializable {
 		this.batchNumber = batchNumber;
 	}
 	
+	public Date getAnalysisSubmitDate() {
+		return analysisSubmitDate;
+	}
+
+	public void setAnalysisSubmitDate(Date analysisSubmitDate) {
+		this.analysisSubmitDate = analysisSubmitDate;
+	}
+
 	public static enum ANALYSIS_STATUS {
 
 		INPROGRESS("Inprogress"), COMPLETE("Complete"), INREVIEW("Inreview"), REVIEW_COMPLETED("Review Completed"), 

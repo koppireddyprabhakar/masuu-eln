@@ -1,6 +1,7 @@
 package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 import com.ectd.global.eln.request.Base;
@@ -18,6 +19,7 @@ public class AnalysisDto extends Base implements Serializable {
 	private String summary;
 	private String batchSize;
 	private String batchNumber;
+	private Date analysisSubmitDate;
     
     ProjectDto project;
     
@@ -127,6 +129,15 @@ public class AnalysisDto extends Base implements Serializable {
 
 	public void setBatchNumber(String batchNumber) {
 		this.batchNumber = batchNumber;
+	}
+	
+	
+	public Date getAnalysisSubmitDate() {
+		return analysisSubmitDate;
+	}
+
+	public void setAnalysisSubmitDate(Date analysisSubmitDate) {
+		this.analysisSubmitDate = analysisSubmitDate;
 	}
 	
 	public String toString() {

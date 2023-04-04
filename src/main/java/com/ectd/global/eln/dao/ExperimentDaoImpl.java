@@ -32,6 +32,7 @@ import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
+import com.ectd.global.eln.request.AnalysisRequest;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
@@ -297,6 +298,12 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("experimentId", experimentId);
 		parameters.addValue("experimentStatus", status);
+		
+		if(ExperimentRequest.EXPERIMENT_STATUS.ANLYSIS_SUBMIT.getValue().equals(status)) {
+			parameters.addValue("analysisSubmitDate", ElnUtils.getTimeStamp());	
+		} else {
+			parameters.addValue("analysisSubmitDate", null);
+		}
 
 		return namedParameterJdbcTemplate.update(UPDATE_EXPERIMENT_STATUS_QUERY, parameters);
 	}
@@ -477,6 +484,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		experimentDto.setInsertUser(resultSet.getString("INSERT_USER"));
 		experimentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 		experimentDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+	experimentDto.setAnalysisSubmitDate(resultSet.getDate("ANALYSIS_SUBMIT_DATE"));
 
 		return experimentDto;
 	}
