@@ -100,7 +100,8 @@ public class ExperimentRequest extends Base implements Serializable {
 
 	public static enum EXPERIMENT_STATUS {
 
-		INPROGRESS("Inprogress"), COMPLETE("Complete"), CREATED_TRF ("Created TRF"), ANLYSIS_SUBMIT("Analysis Submitted"), 
+		INPROGRESS("Inprogress"), COMPLETE("Complete"), PREREVIEW("Prereview"), NEED_CORRECTION(
+				"Need Correction"), PREREVIEW_COMPLETED("Prereview Completed"), CREATED_TRF ("Created TRF"), ANLYSIS_SUBMIT("Analysis Submitted"), 
 		INREVIEW("Inreview"), REVIEW_COMPLETED("Review Completed"), COA_GENERATED("COA Generated"), ARCHIVE("Archive");
 
 		String value;
