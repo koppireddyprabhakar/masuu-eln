@@ -127,7 +127,8 @@ public class AnalysisRequest extends Base implements Serializable {
 
 	public static enum ANALYSIS_STATUS {
 
-		INPROGRESS("Inprogress"), COMPLETE("Complete"), INREVIEW("Inreview"), REVIEW_COMPLETED("Review Completed"), 
+		INPROGRESS("Inprogress"), COMPLETE("Complete"), INREVIEW("Inreview"), NEED_CORRECTION(
+				"Need Correction"), REVIEW_COMPLETED("Review Completed"), 
 		ANLYSIS_SUBMIT("Analysis Submitted");
 
 		String value;

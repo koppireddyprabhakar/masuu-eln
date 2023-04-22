@@ -1,7 +1,6 @@
 package com.ectd.global.eln.services;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +139,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 	@Override
 	public Integer createExperimentReview(ExperimentReview experimentReview) {
 		experimentDao.createExperimentReview(experimentReview);
-
+		
 		return this.updateExperimentStatus(experimentReview.getExperimentId(), ExperimentRequest.EXPERIMENT_STATUS.INREVIEW.getValue());
 	}
 
@@ -149,7 +148,8 @@ public class ExperimentServiceImpl implements ExperimentService {
 	public Integer updateExperimentReview(ExperimentReview experimentReview) {
 		experimentDao.updateExperimentReview(experimentReview);
 
-		return this.updateExperimentStatus(experimentReview.getExperimentId(), ExperimentRequest.EXPERIMENT_STATUS.REVIEW_COMPLETED.getValue());
+		return this.updateExperimentStatus(experimentReview.getExperimentId(), experimentReview.getStatus());
+//		return this.updateExperimentStatus(experimentReview.getExperimentId(), ExperimentRequest.EXPERIMENT_STATUS.REVIEW_COMPLETED.getValue());
 	}
 
 	@Override

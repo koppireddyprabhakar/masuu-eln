@@ -3,6 +3,7 @@ package com.ectd.global.eln.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,7 +33,6 @@ import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
-import com.ectd.global.eln.request.AnalysisRequest;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
@@ -298,6 +298,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("experimentId", experimentId);
 		parameters.addValue("experimentStatus", status);
+		parameters.addValue("status", status);
 		
 		if(ExperimentRequest.EXPERIMENT_STATUS.ANLYSIS_SUBMIT.getValue().equals(status)) {
 			parameters.addValue("analysisSubmitDate", ElnUtils.getTimeStamp());	
@@ -322,6 +323,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		parameters.addValue("experimentId", experimentReview.getExperimentId());
 		parameters.addValue("reviewUserId", experimentReview.getReviewUserId());
 		parameters.addValue("comments", experimentReview.getComments());
+		parameters.addValue("reviewType", experimentReview.getReviewType());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
@@ -356,8 +358,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		if(experimentReviewDtos.isEmpty()) {
 			return null;
 		}
-
-		return experimentReviewDtos.get(0);
+return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDto::getExperimentReviewId)).get();
+//		return experimentReviewDtos.get(0);
 	}
 	
 	class ExperimentReviewRowMapper implements RowMapper<ExperimentReviewDto> {
@@ -368,6 +370,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 			experimentReviewDto.setExperimentId(resultSet.getInt("EXP_ID"));
 			experimentReviewDto.setComments(resultSet.getString("COMMENTS"));
 			experimentReviewDto.setReviewUserId(resultSet.getInt("REVIEW_USER_ID"));
+			experimentReviewDto.setReviewType(resultSet.getString("REVIEW_TYPE"));
 			
 			return experimentReviewDto;
 		};

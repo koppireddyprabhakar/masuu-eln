@@ -213,8 +213,8 @@ public class AnalysisServiceImpl implements AnalysisService {
 		
 		AnalysisRequest analysisRequest = new AnalysisRequest();
 		analysisRequest.setAnalysisId(analysisReview.getAnalysisId());
-		analysisRequest.setStatus(AnalysisRequest.ANALYSIS_STATUS.REVIEW_COMPLETED.getValue());
-		analysisRequest.setSummary(AnalysisRequest.ANALYSIS_STATUS.REVIEW_COMPLETED.getValue());
+		analysisRequest.setStatus(analysisReview.getStatus());
+		analysisRequest.setSummary(analysisReview.getStatus());
 		
 		return this.updateAnalysisStatus(analysisRequest);
 	}

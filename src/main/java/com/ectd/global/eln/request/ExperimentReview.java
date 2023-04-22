@@ -10,6 +10,7 @@ public class ExperimentReview extends Base implements Serializable {
 	private Integer experimentId;
 	private Integer reviewUserId;
 	private String comments;
+	private String reviewType;
 	
 	public Integer getReviewUserId() {
 		return reviewUserId;
@@ -39,4 +40,11 @@ public class ExperimentReview extends Base implements Serializable {
 		this.experimentId = experimentId;
 	}
 
+	public String getReviewType() {
+		return reviewType;
+	}
+	public void setReviewType(String reviewType) {
+		this.reviewType = reviewType;
+	}
+	
 }
