@@ -483,6 +483,7 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 		experimentDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
 		experimentDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
 		experimentDto.setStatus(resultSet.getString("STATUS"));
+		experimentDto.setExpStartDate(resultSet.getString("INSERT_DATE"));
 		experimentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 		experimentDto.setInsertUser(resultSet.getString("INSERT_USER"));
 		experimentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
@@ -525,6 +526,7 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 		experimentExcipientDto.setPotency(resultSet.getString("POTENCY"));
 		experimentExcipientDto.setGrade(resultSet.getString("GRADE"));
 		experimentExcipientDto.setStatus(resultSet.getString("STATUS"));
+		experimentExcipientDto.setExcipientsName(resultSet.getString("EXCIPIENTS_NAME"));
 
 		return experimentExcipientDto;
 	}

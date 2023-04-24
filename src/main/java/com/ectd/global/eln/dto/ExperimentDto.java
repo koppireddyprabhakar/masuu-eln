@@ -21,6 +21,7 @@ public class ExperimentDto extends Base implements Serializable {
     private String batchSize;
     private String batchNumber;
     private String departmentName;
+    private String expStartDate;
     private Date analysisSubmitDate;
     
 	private Set<ExperimentDetailsDto> experimentDetails = new HashSet<ExperimentDetailsDto>();
@@ -126,6 +127,12 @@ public class ExperimentDto extends Base implements Serializable {
 		this.analysisSubmitDate = analysisSubmitDate;
 	}
 	
+	public String getExpStartDate() {
+		return expStartDate;
+	}
+	public void setExpStartDate(String expStartDate) {
+		this.expStartDate = expStartDate;
+	}
 	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
 		sb.append(expId); 
