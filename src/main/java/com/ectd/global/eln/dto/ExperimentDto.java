@@ -1,7 +1,6 @@
 package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +21,7 @@ public class ExperimentDto extends Base implements Serializable {
     private String batchNumber;
     private String departmentName;
     private String expStartDate;
-    private Date analysisSubmitDate;
+    private String analysisSubmitDate;
     
 	private Set<ExperimentDetailsDto> experimentDetails = new HashSet<ExperimentDetailsDto>();
     private Set<ExperimentExcipientDto> experimentExcipients = new HashSet<ExperimentExcipientDto>();
@@ -119,14 +118,12 @@ public class ExperimentDto extends Base implements Serializable {
 		this.departmentName = departmentName;
 	}
 	
-	public Date getAnalysisSubmitDate() {
+	public String getAnalysisSubmitDate() {
 		return analysisSubmitDate;
 	}
-
-	public void setAnalysisSubmitDate(Date analysisSubmitDate) {
+	public void setAnalysisSubmitDate(String analysisSubmitDate) {
 		this.analysisSubmitDate = analysisSubmitDate;
 	}
-	
 	public String getExpStartDate() {
 		return expStartDate;
 	}

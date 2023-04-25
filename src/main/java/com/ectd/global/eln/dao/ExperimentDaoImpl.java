@@ -488,7 +488,7 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 		experimentDto.setInsertUser(resultSet.getString("INSERT_USER"));
 		experimentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 		experimentDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
-	experimentDto.setAnalysisSubmitDate(resultSet.getDate("ANALYSIS_SUBMIT_DATE"));
+		experimentDto.setAnalysisSubmitDate(resultSet.getString("ANALYSIS_SUBMIT_DATE"));
 
 		return experimentDto;
 	}

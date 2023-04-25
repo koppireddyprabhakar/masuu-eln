@@ -213,7 +213,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		public TestRequestFormDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			TestRequestFormDto testRequestFormDto = new TestRequestFormDto();
 			testRequestFormDto.setTestRequestFormId(resultSet.getInt("TRF_ID"));
-//			testRequestFormDto.setTrfNumber(resultSet.getString("TRF_NUMBER"));
+			testRequestFormDto.setTrfNumber(resultSet.getString("TRF_NUMBER"));
 			testRequestFormDto.setExpId(resultSet.getInt("EXP_ID"));
 			//testRequestFormDto.setProjectId(resultSet.getInt("PROJECT_ID"));
 			//testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
@@ -235,7 +235,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			testRequestFormDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			testRequestFormDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
-//			testRequestFormDto.setPurpose(resultSet.getString("PURPOSE"));
+			testRequestFormDto.setPurpose(resultSet.getString("PURPOSE"));
 
 			ProjectDto project = new ProjectDto();
 			project.setProjectId(resultSet.getInt("PROJECT_ID"));
