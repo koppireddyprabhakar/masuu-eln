@@ -11,6 +11,7 @@
 	<artifactId>ectd-eln</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ectd-eln</name>
+	<packaging>war</packaging>
 	<description>Electronic Lab Note</description>
 	<properties>
 		<java.version>1.8</java.version>
@@ -106,9 +107,16 @@
 			<artifactId>javax.mail</artifactId>
 			<version>1.6.2</version>
 		</dependency>
+		
+		<dependency>
+		   <groupId>org.springframework.boot</groupId>
+		   <artifactId>spring-boot-starter-tomcat</artifactId>
+		   <scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
+	 <finalName>${artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
