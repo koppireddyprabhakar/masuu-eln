@@ -90,7 +90,7 @@ public class DosageDaoImpl implements DosageDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("dosageName", dosageRequest.getDosageName());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
-		parameters.addValue("insertUser", "ELN");
+		parameters.addValue("insertUser", dosageRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());

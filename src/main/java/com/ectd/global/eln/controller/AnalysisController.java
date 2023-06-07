@@ -226,4 +226,10 @@ public class AnalysisController extends BaseController {
 		return  new ResponseEntity<>(analysisService.getAnalysisReview(analysisId), HttpStatus.OK);
 	}
 	
+	@GetMapping("/get-users-with-custom-roles")
+	public ResponseEntity<List<UsersDetailsDto>> getUsersWithCustomRoles(@RequestParam String departmentName) {
+		List<UsersDetailsDto> userDetailsList = usersDetailsService.getUsersWithCustomRoles(departmentName);
+		return ResponseEntity.ok(userDetailsList);
+	}
+	
 }

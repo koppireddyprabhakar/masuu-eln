@@ -14,13 +14,14 @@ import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.UserTeamRequest;
 import com.ectd.global.eln.request.UsersDetailsRequest;
+import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
 public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 	@Autowired
 	private UsersDetailsDao usersDetailsDao;
-
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public UsersDetailsDto getUsersDetailsById(Integer usersDetailsId) {
@@ -42,6 +43,13 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public List<UsersDetailsDto> getUsersWithCustomRoles(String departmentName) {
+		return usersDetailsDao.getUsersWithCustomRoles(departmentName);
 	}
 
 	@Override

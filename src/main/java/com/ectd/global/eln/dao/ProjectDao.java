@@ -10,6 +10,8 @@ public interface ProjectDao {
 	ProjectDto getProjectById(Integer projectId);
 	
 	List<ProjectDto> getProjects(Integer dosageId, Integer teamId);
+	
+	List<String> getTeamMembersByProjectId(Integer projectId);
 
 	Integer createProject(ProjectRequest projectRequest);
 	

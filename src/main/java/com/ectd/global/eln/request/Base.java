@@ -2,6 +2,8 @@ package com.ectd.global.eln.request;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Base {
 
 	private Date insertDate;
@@ -44,5 +46,14 @@ public class Base {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public Integer getInsertUserId() {
+	    if (StringUtils.isBlank(insertUser) || !StringUtils.isNumeric(insertUser)) {
+	        return 0; // or handle the invalid input case in a different way
+	    }
+	    
+	    return Integer.parseInt(insertUser);
+	}
+
 
 }

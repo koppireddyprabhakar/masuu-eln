@@ -97,7 +97,7 @@ public class TeamsDaoImpl implements TeamsDao {
 		parameters.addValue("teamName", teamsRequest.getTeamName());
 		parameters.addValue("deptId", teamsRequest.getDeptId());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
-		parameters.addValue("insertUser", "ELN");
+		parameters.addValue("insertUser", teamsRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());

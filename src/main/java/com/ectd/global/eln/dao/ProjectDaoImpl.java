@@ -59,6 +59,9 @@ public class ProjectDaoImpl implements ProjectDao {
 	
 	@Value("${inactivate.project.team}")
 	private String INACTIVATE_PROJECT_TEAM_QUERY;
+	
+	@Value("${getTeamMembersByProjectId}")
+    private String GET_TEAM_MEMBERS_BY_PROJECT_ID_QUERY;
 
 	@Override
 	public ProjectDto getProjectById(Integer projectId) {
@@ -90,6 +93,13 @@ public class ProjectDaoImpl implements ProjectDao {
 		return jdbcTemplate.query(sb.toString(), new ProjectRowMapper());
 	}
 
+	 @SuppressWarnings("deprecation")
+	    @Override
+	    public List<String> getTeamMembersByProjectId(Integer projectId) {
+	        return jdbcTemplate.queryForList(GET_TEAM_MEMBERS_BY_PROJECT_ID_QUERY, new Object[] { projectId }, String.class);
+	    }
+
+
 	@Override
 	public Integer createProject(ProjectRequest projectRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -110,7 +120,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		parameters.addValue("marketId", projectRequest.getMarketId());
 		parameters.addValue("markertName", projectRequest.getMarkertName());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
-		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
+		parameters.addValue("insertUser", projectRequest.getInsertUserId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 
@@ -239,6 +249,8 @@ public class ProjectDaoImpl implements ProjectDao {
 			return  projectDto;
 		};
 	}
+
+	
 
 
 }

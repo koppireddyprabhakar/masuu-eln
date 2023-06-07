@@ -17,4 +17,7 @@ public interface UsersDetailsService {
 
 	Integer deleteUsersDetails(UsersDetailsRequest usersDetailsRequest);
 	
+	List<UsersDetailsDto> getUsersWithCustomRoles(String departmentName);
+
+	
 }

@@ -1,5 +1,6 @@
 package com.ectd.global.eln.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.TestRequestFormDao;
+import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.TestRequestFormDto;
+import com.ectd.global.eln.dto.UsersDetailsDto;
+import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.utils.ElnUtils;
@@ -23,6 +27,15 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 
 	@Autowired
 	private ExperimentService experimentService;
+	
+	@Autowired
+	private UsersDetailsDao usersDetailsDao;
+	
+	@Autowired
+	private EmailNotificationService emailNotificationService;
+	
+	@Autowired
+	private ElnUtils elnUtils;
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -51,7 +64,14 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 //			testRequestFormRequest.getTrfTestResults().stream().forEach(tr -> tr.setTrfId(testRequestFormId));
 //			testRequestFormDao.batchInsert(testRequestFormRequest.getTrfTestResults());
 //		}
-		
+
+		 UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(testRequestFormRequest.getInsertUserId());
+	     String creatorMailId = creatorDetails.getMailId();
+	     
+		        // Send email notification to creator and team members
+		        List<String> teamMemberMailIds = new ArrayList<>();
+		        EmailNotification emailNotification =elnUtils.buildEmailNotification("Test Request Form Created", "Test Request Form has been created successfully.", creatorMailId, teamMemberMailIds);
+		        emailNotificationService.saveEmailNotification(emailNotification);
 		return rowsEffected[0];
 	}
 

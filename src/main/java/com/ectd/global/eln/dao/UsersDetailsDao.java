@@ -8,10 +8,10 @@ import com.ectd.global.eln.request.UsersDetailsRequest;
 
 public interface UsersDetailsDao {
 
-	UsersDetailsDto getUsersDetailsById(Integer experimentId);
+	UsersDetailsDto getUsersDetailsById(Integer userDetailsId);
 
 	List<UsersDetailsDto> getUsersDetails(Integer roleId, String departmentName);
-
+	
 	Integer createUsersDetails(UsersDetailsRequest experimentRequest);
 
 	Integer updateUsersDetails(UsersDetailsRequest experimentRequest);
@@ -23,5 +23,7 @@ public interface UsersDetailsDao {
 	int[] batchInsert(List<UserTeamRequest> userTeamRequests, Integer userId);
 	
 	Boolean createUserTeam(UsersDetailsRequest usersDetailsRequest, Integer userId);
+	
+	List<UsersDetailsDto> getUsersWithCustomRoles(String departmentName);		
 	
 }

@@ -97,6 +97,25 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 				.collect(Collectors.toList());
 		return sortedList;
 	}
+	
+	
+	@Override
+	public List<UsersDetailsDto> getUsersWithCustomRoles(String departmentName) {
+		StringBuilder sb = new StringBuilder(GET_USER_DETAILS_LIST_QUERY);
+
+		sb.append(" AND D.DEPARTMENT_NAME = '").append(departmentName + "'")
+				.append(" AND (U.ROLE_ID IN (2, 4) OR U.CERTIFIED_REVIEWER = 1)");
+
+		sb.append(" ORDER BY U.INSERT_DATE DESC");
+
+		List<UsersDetailsDto> sortedList = jdbcTemplate.query(sb.toString(), new UsersDetailsExtractor());
+		sortedList = sortedList.stream().sorted(Comparator.comparingInt(UsersDetailsDto::getUserId).reversed())
+				.collect(Collectors.toList());
+		return sortedList;
+	}
+	
+	
+	
 
 	@Override
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
@@ -165,7 +184,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("addressLine2", usersDetailsRequest.getAddressLine2());
 		parameters.addValue("city", usersDetailsRequest.getCity());
 		parameters.addValue("zipCode", usersDetailsRequest.getZipCode());
-		parameters.addValue("insertUser", usersDetailsRequest.getInsertUser());
+		parameters.addValue("insertUser", usersDetailsRequest.getUserId());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", usersDetailsRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());

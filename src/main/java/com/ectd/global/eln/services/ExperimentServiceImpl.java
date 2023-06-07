@@ -10,10 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.ExperimentDao;
+import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
+import com.ectd.global.eln.dto.UsersDetailsDto;
+import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
@@ -25,6 +28,15 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Autowired
 	ExperimentDao experimentDao;
+	
+	@Autowired
+	private UsersDetailsDao usersDetailsDao;
+	
+	@Autowired
+    private ElnUtils elnUtils;
+	
+	@Autowired
+    private EmailNotificationService emailNotificationService;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -42,21 +54,25 @@ public class ExperimentServiceImpl implements ExperimentService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer createExperiment(ExperimentRequest experimentRequest) {
 
-		Integer expermentId = experimentDao.createExperiment(experimentRequest);
+		Integer experimentId = experimentDao.createExperiment(experimentRequest);
+		
+		 UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(experimentRequest.getUserId());
+	     String creatorMailId = creatorDetails.getMailId();
+
 
 		if(CollectionUtils.isEmpty(experimentRequest.getExperimentDetailsList())) {
 			
 			List<ExperimentDetails> experimentDetailsList = new ArrayList<ExperimentDetails>();
 			
 			ExperimentDetails experimentDetails = new ExperimentDetails();
-			experimentDetails.setExperimentId(expermentId);
+			experimentDetails.setExperimentId(experimentId);
 			experimentDetails.setName("Purpose and Conclusion");
 			experimentDetails.setFileContent("");
 			experimentDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			experimentDetailsList.add(experimentDetails);
 			
 			experimentDetails = new ExperimentDetails();
-			experimentDetails.setExperimentId(expermentId);
+			experimentDetails.setExperimentId(experimentId);
 			experimentDetails.setName("Formulation");
 			experimentDetails.setFileContent("");
 			experimentDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
@@ -66,13 +82,15 @@ public class ExperimentServiceImpl implements ExperimentService {
 			
 			experimentDao.batchInsert(experimentRequest.getExperimentDetailsList());
 		}
-
+	       List<String> teamMemberMailIds = new ArrayList<String>();
+	       EmailNotification emailNotification = elnUtils.buildEmailNotification("Formulation Experiment Created", "Formulation Experiment with EXP_ID " + experimentId + "   has been created successfully.", creatorMailId, teamMemberMailIds);
+	       emailNotificationService.saveEmailNotification(emailNotification);
 //		if(!CollectionUtils.isEmpty(experimentRequest.getExcipients())) {
 //			experimentRequest.getExcipients().stream().forEach(e -> e.setExperimentId(expermentId));
 //			experimentDao.batchExcipientInsert(experimentRequest.getExcipients());
 //		}
 
-		return expermentId;
+		return experimentId;
 	}
 
 	@Override
@@ -139,8 +157,18 @@ public class ExperimentServiceImpl implements ExperimentService {
 	@Override
 	public Integer createExperimentReview(ExperimentReview experimentReview) {
 		experimentDao.createExperimentReview(experimentReview);
-		
-		return this.updateExperimentStatus(experimentReview.getExperimentId(), ExperimentRequest.EXPERIMENT_STATUS.INREVIEW.getValue());
+		Integer experimentId = experimentReview.getExperimentId();
+		this.updateExperimentStatus(experimentId, ExperimentRequest.EXPERIMENT_STATUS.INREVIEW.getValue());
+
+		 UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(experimentReview.getReviewUserId());
+	     String creatorMailId = creatorDetails.getMailId();
+
+
+		// Send email notification to creator and team members
+		List<String> teamMemberMailIds = new ArrayList<String>();
+		  EmailNotification emailNotification = elnUtils.buildEmailNotification("Experiment Review Created","An experiment with experiment ID " + experimentId + "  has been sent for your review", creatorMailId,teamMemberMailIds);
+		  emailNotificationService.saveEmailNotification(emailNotification);
+		return experimentId;
 	}
 
 	@Override

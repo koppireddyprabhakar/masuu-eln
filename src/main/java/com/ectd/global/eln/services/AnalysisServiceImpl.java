@@ -13,15 +13,18 @@ import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.AnalysisDao;
 import com.ectd.global.eln.dao.ExperimentDao;
+import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
 import com.ectd.global.eln.dto.AnalysisReviewDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
+import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
 import com.ectd.global.eln.request.AnalysisReview;
+import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.utils.ElnUtils;
@@ -34,6 +37,15 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Autowired
 	ExperimentDao experimentDao;
+	
+	@Autowired
+	private UsersDetailsDao usersDetailsDao;
+	
+	@Autowired
+    private ElnUtils elnUtils;
+	
+	@Autowired
+    private EmailNotificationService emailNotificationService;
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -51,6 +63,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer createAnalysis(AnalysisRequest analysisRequest) {
 		Integer analysisId = analysisDao.createAnalysis(analysisRequest);
+		
+		UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(analysisRequest.getUserId());
+	     String creatorMailId = creatorDetails.getMailId();
 
 		if(CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
 
@@ -82,6 +97,12 @@ public class AnalysisServiceImpl implements AnalysisService {
 		//		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
 		//		analysisDao.batchExcipientInsert(analysisRequest.getExcipients());
 		//		}
+		
+		 // Send email notification to creator and team members
+        List<String> teamMemberMailIds = new ArrayList<String>();
+        EmailNotification emailNotification = elnUtils.buildEmailNotification("Analysis Experiment Created", "Analysis Experiment with analysis ID " + analysisId + " has been created successfully.", creatorMailId, teamMemberMailIds);
+
+        emailNotificationService.saveEmailNotification(emailNotification);
 
 		if(!CollectionUtils.isEmpty(analysisRequest.getTestRequestFormList())) {
 			analysisDao.batchTRFUpdate(analysisRequest.getTestRequestFormList(), analysisId);
@@ -196,15 +217,29 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	public Integer createAnalysisReview(AnalysisReview analysisReview) {
-		
+
 		analysisDao.createAnalysisReview(analysisReview);
-		
+
 		AnalysisRequest analysisRequest = new AnalysisRequest();
 		analysisRequest.setAnalysisId(analysisReview.getAnalysisId());
 		analysisRequest.setStatus(AnalysisRequest.ANALYSIS_STATUS.INREVIEW.getValue());
 		analysisRequest.setSummary(AnalysisRequest.ANALYSIS_STATUS.INREVIEW.getValue());
-		
-		return this.updateAnalysisStatus(analysisRequest);
+
+		this.updateAnalysisStatus(analysisRequest);
+
+		Integer analysisId = analysisReview.getAnalysisId();
+
+		UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(analysisReview.getReviewUserId());
+		String reviewerMailId = creatorDetails.getMailId();
+
+		// Send email notification to the reviewer (exclude team members)
+		List<String> teamMemberMailIds = new ArrayList<String>();
+		EmailNotification emailNotification = elnUtils.buildEmailNotification("Analysis Review Created",
+				"Analysis Experiment with Analysis experiment id " + analysisId + " has been sent for your review.",
+				reviewerMailId, teamMemberMailIds);
+		emailNotificationService.saveEmailNotification(emailNotification);
+		return analysisId;
+
 	}
 
 	@Override
