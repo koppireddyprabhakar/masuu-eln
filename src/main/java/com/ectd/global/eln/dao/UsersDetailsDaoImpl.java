@@ -138,6 +138,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("updateUser", usersDetailsRequest.getUserId());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("certifiedReviewer", usersDetailsRequest.getCertifiedReviewer());
+		parameters.addValue("coaPermission",usersDetailsRequest.getCoaPermission());
 
 		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
 	}
@@ -191,6 +192,8 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("password", usersDetailsRequest.getPassword());
 		parameters.addValue("firstLogin", usersDetailsRequest.getFirstLogin());
 		parameters.addValue("certifiedReviewer", usersDetailsRequest.getCertifiedReviewer());
+		parameters.addValue("coaPermission", usersDetailsRequest.getCoaPermission());
+
 		
 		namedParameterJdbcTemplate.update(createUsersDetailsQuery, parameters, keyHolder);
 
@@ -269,6 +272,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		usersDetailsDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
 		usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
 		usersDetailsDto.setCertifiedReviewer(resultSet.getBoolean("CERTIFIED_REVIEWER"));
+		usersDetailsDto.setCoaPermission(resultSet.getBoolean("COA_PERMISSION"));
 
 		return usersDetailsDto;
 	}

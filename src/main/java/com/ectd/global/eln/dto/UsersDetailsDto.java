@@ -32,7 +32,9 @@ public class UsersDetailsDto extends Base implements Serializable {
     private String password;
  
     private Boolean certifiedReviewer = Boolean.FALSE;
+    private Boolean coaPermission = Boolean.FALSE;
 	private Set<UserTeamDto> userTeams;
+
 
 	public UsersDetailsDto() {
 		// Needed empty constructor for serialization
@@ -185,6 +187,15 @@ public class UsersDetailsDto extends Base implements Serializable {
 
 	public void setCertifiedReviewer(Boolean certifiedReviewer) {
 		this.certifiedReviewer = certifiedReviewer;
+	}
+	
+
+	public Boolean getCoaPermission() {
+		return coaPermission;
+	}
+
+	public void setCoaPermission(Boolean coaPermission) {
+		this.coaPermission = coaPermission;
 	}
 
 	public String toString() {

@@ -25,6 +25,7 @@ public class UsersDetailsRequest extends Base implements Serializable {
     private String password;
     private Boolean firstLogin = Boolean.TRUE;
     private Boolean certifiedReviewer = Boolean.FALSE;
+    private Boolean coaPermission = Boolean.FALSE;
     private List<UserTeamRequest> userTeams;
     
     public String getPassword() {
@@ -161,6 +162,14 @@ public class UsersDetailsRequest extends Base implements Serializable {
 
 	public void setCertifiedReviewer(Boolean certifiedReviewer) {
 		this.certifiedReviewer = certifiedReviewer;
+	}
+
+	public Boolean getCoaPermission() {
+		return coaPermission;
+	}
+
+	public void setCoaPermission(Boolean coaPermission) {
+		this.coaPermission = coaPermission;
 	}
 	
 	

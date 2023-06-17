@@ -35,7 +35,7 @@ public class EmailNotificationJob {
 				try {
 					MimeMessage message = javaMailSender.createMimeMessage();
 					MimeMessageHelper helper = new MimeMessageHelper(message, true);
-					helper.setFrom("raghuy@ectdglobal.com");
+					helper.setFrom("learning@ectdglobal.com");
 					helper.setTo(emailNotification.getEmailReceiver());
 					if (emailNotification.getEmailCc() != null && !emailNotification.getEmailCc().isEmpty()) {
 						helper.setCc(emailNotification.getEmailCc().split(","));
