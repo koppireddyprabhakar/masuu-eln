@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.ExperimentDao;
+import com.ectd.global.eln.dao.ProjectDao;
 import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
@@ -21,6 +22,7 @@ import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.ExperimentReview;
+import com.ectd.global.eln.request.ProjectRequest;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
@@ -37,6 +39,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 	
 	@Autowired
     private EmailNotificationService emailNotificationService;
+	
+	@Autowired
+	private ProjectDao projectDao;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -85,6 +90,12 @@ public class ExperimentServiceImpl implements ExperimentService {
 	       List<String> teamMemberMailIds = new ArrayList<String>();
 	       EmailNotification emailNotification = elnUtils.buildEmailNotification("Formulation Experiment Created", "Formulation Experiment with EXP_ID " + experimentId + "   has been created successfully.", creatorMailId, teamMemberMailIds);
 	       emailNotificationService.saveEmailNotification(emailNotification);
+	       
+	       ProjectRequest projectRequest = new ProjectRequest();
+	       projectRequest.setProjectId(experimentRequest.getProjectId());
+	       projectRequest.setStatus(ProjectRequest.PROJECT_STATUS.INPROGRESS.getValue());
+	       projectDao.updateProjectStatus(projectRequest);
+	       
 //		if(!CollectionUtils.isEmpty(experimentRequest.getExcipients())) {
 //			experimentRequest.getExcipients().stream().forEach(e -> e.setExperimentId(expermentId));
 //			experimentDao.batchExcipientInsert(experimentRequest.getExcipients());

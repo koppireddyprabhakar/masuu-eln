@@ -88,7 +88,17 @@ public class ProjectRequest extends Base implements Serializable {
 	}
 
 	public static enum PROJECT_STATUS {
-		NEW, INPROGRESS, COMPLETED, CLOSED, ARCHIVE
+		NEW("New"), INPROGRESS("Inprogress"), COMPLETED("Completed"), INACTIVE("Inactive"), CLOSED("Closed"), ARCHIVE("Archive");
+		
+		private String value;
+		
+		PROJECT_STATUS(String value) {
+			this.value = value;
+		}
+		
+		public String getValue() {
+			return this.value;
+		}
 	}
 
 	public String getProductName() {

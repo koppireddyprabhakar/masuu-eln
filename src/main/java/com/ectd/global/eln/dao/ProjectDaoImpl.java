@@ -109,7 +109,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		parameters.addValue("productId", projectRequest.getProductId());
 		parameters.addValue("productName", projectRequest.getProductName());
 		parameters.addValue("productCode", projectRequest.getProductCode());
-		parameters.addValue("status", ProjectRequest.PROJECT_STATUS.NEW.name());
+		parameters.addValue("status", ProjectRequest.PROJECT_STATUS.NEW.getValue());
 		parameters.addValue("strength", projectRequest.getStrength());
 		parameters.addValue("dosageId", projectRequest.getDosageId());
 		parameters.addValue("dosageName", projectRequest.getDosageName());
@@ -161,6 +161,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		return this.updateProjectTeam(projectRequest.getProjectTeam());
 	}
 	
+	
 	private Integer updateProjectTeam(ProjectTeamRequest projectTeamRequest) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId",  projectTeamRequest.getProjectId());
@@ -173,17 +174,21 @@ public class ProjectDaoImpl implements ProjectDao {
 	}
 	
 	@Override
-	public Integer inActivateProject(ProjectRequest projectRequest) {
+	public Integer updateProjectStatus(ProjectRequest projectRequest) {
 		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectRequest.getProjectId());
-		parameters.addValue("status", ElnUtils.STATUS.INACTIVE.getValue());
+		parameters.addValue("status", projectRequest.getStatus());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		
-		namedParameterJdbcTemplate.update(INACTIVATE_PROJECT_QUERY, parameters);
+		Integer rowsUpdated = namedParameterJdbcTemplate.update(INACTIVATE_PROJECT_QUERY, parameters);
 		
-		return this.inActivateProjectTeam(projectRequest.getProjectTeam());
+		if(ProjectRequest.PROJECT_STATUS.INACTIVE.getValue().equals(projectRequest.getStatus())) {
+			return this.inActivateProjectTeam(projectRequest.getProjectTeam());
+		}
+		
+		return rowsUpdated;
 	}
 	
 	private Integer inActivateProjectTeam(ProjectTeamRequest projectTeamRequest) {

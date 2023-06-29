@@ -19,7 +19,7 @@ public interface ProjectDao {
 
 	Integer deleteProject(Integer projectId);
 
-	Integer inActivateProject(ProjectRequest projectRequest);
+	Integer updateProjectStatus(ProjectRequest projectRequest);
 	
 //	Integer createProjectTeam(Integer projectId, Integer teamId);
 }

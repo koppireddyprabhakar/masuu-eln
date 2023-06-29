@@ -215,7 +215,7 @@ class ProjectControllerTest {
 	 */
 	@Test
 	void testDeleteProject() throws Exception {
-		when(this.projectService.inActivateProject((ProjectRequest) any())).thenReturn(1);
+		when(this.projectService.updateProjectStatus((ProjectRequest) any())).thenReturn(1);
 		ProjectRequest projectRequest = new ProjectRequest();
 		LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
 		projectRequest.setInsertDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));

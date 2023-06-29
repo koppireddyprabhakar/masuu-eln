@@ -1,6 +1,5 @@
 package com.ectd.global.eln.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +74,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer inActivateProject(ProjectRequest projectRequest) {
-		return projectDao.inActivateProject(projectRequest);
+	public Integer updateProjectStatus(ProjectRequest projectRequest) {
+		return projectDao.updateProjectStatus(projectRequest);
 	}
 	
 }
