@@ -20,6 +20,7 @@ public class AnalysisDto extends Base implements Serializable {
 	private String batchSize;
 	private String batchNumber;
 	private Date analysisSubmitDate;
+    private String expStartDate;
     
     ProjectDto project;
     
@@ -147,6 +148,15 @@ public class AnalysisDto extends Base implements Serializable {
 		return sb.toString();
 	}
 	
+	
+	public String getExpStartDate() {
+		return expStartDate;
+	}
+
+	public void setExpStartDate(String expStartDate) {
+		this.expStartDate = expStartDate;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 	    if (o == this)
