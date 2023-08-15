@@ -16,6 +16,7 @@ public class ExcipientDto extends Base implements Serializable {
 	private String sourceName;
 	private String potency;
 	private String grade;
+	private String creationSource;
 	
 	public Integer getExcipientId() {
 		return excipientId;
@@ -72,4 +73,12 @@ public class ExcipientDto extends Base implements Serializable {
 	public void setGrade(String grade) {
 		this.grade = grade;
 	}
+	
+	public String getCreationSource() {
+		return creationSource;
+	}
+	public void setCreationSource(String creationSource) {
+		this.creationSource = creationSource;
+	}
+	
 }

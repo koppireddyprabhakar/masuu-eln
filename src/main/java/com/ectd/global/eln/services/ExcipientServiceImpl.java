@@ -26,8 +26,8 @@ public class ExcipientServiceImpl implements ExcipientService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<ExcipientDto> getExcipients() {
-		return excipientDao.getExcipients();
+	public List<ExcipientDto> getExcipients(String creationSource) {
+		return excipientDao.getExcipients(creationSource);
 	}
 
 	@Override

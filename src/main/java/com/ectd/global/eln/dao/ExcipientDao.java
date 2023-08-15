@@ -9,7 +9,7 @@ public interface ExcipientDao {
 	
 	ExcipientDto getExcipientById(Integer excipientId);
 
-	List<ExcipientDto> getExcipients();
+	List<ExcipientDto> getExcipients(String creationSource);
 	
 	Integer createExcipient(ExcipientRequest excipientRequest);
 

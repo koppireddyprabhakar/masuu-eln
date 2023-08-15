@@ -32,7 +32,12 @@ public class ExcipientController extends BaseController{
 	
 	@GetMapping("/get-excipients")
 	public ResponseEntity<List<ExcipientDto>> getExcipients() throws Exception {
-		return  new ResponseEntity<>(excipientService.getExcipients(), HttpStatus.OK);
+		return  new ResponseEntity<>(excipientService.getExcipients(null), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-excipients-by-creation-source")
+	public ResponseEntity<List<ExcipientDto>> getExcipients(String creationSource) throws Exception {
+		return  new ResponseEntity<>(excipientService.getExcipients(creationSource), HttpStatus.OK);
 	}
 	
 	@PostMapping("/create-excipient")

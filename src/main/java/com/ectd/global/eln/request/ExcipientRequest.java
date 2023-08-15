@@ -15,6 +15,7 @@ public class ExcipientRequest extends Base implements Serializable {
 	private String sourceName;
 	private String potency;
 	private String grade;
+	private String creationSource;
 	
 	public Integer getExcipientId() {
 		return excipientId;
@@ -77,6 +78,13 @@ public class ExcipientRequest extends Base implements Serializable {
 	}
 	public void setExperimentId(Integer experimentId) {
 		this.experimentId = experimentId;
+	}
+	
+	public String getCreationSource() {
+		return creationSource;
+	}
+	public void setCreationSource(String creationSource) {
+		this.creationSource = creationSource;
 	}
 
 }

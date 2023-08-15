@@ -30,27 +30,27 @@ public class ExcipientDaoImpl implements ExcipientDao {
 	@Qualifier("namedParameterJdbcTemplate")
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Value(value="${getExcipientById}")
-	private String getExcipientByIdQuery;
+	@Value(value="${get.excipient.by.id}")
+	private String GET_EXCIPIENT_BY_ID_QUERY;
 
-	@Value(value="${getExcipientList}")
-	private String getExcipientListQuery;
+	@Value(value="${get.excipient.list}")
+	private String GET_EXCIPIENT_LIST_QUERY;
 	
-	@Value(value="${getExcipientsByMaterialName}")
-	private String getExcipientsByMaterialNameQuery;
+	@Value(value="${get.excipients.by.material.name}")
+	private String GET_EXCIPIENTS_BY_MATERIAL_NAME_QUERY;
 
-	@Value(value="${createExcipient}")
-	private String createExcipientQuery;
+	@Value(value="${create.excipient}")
+	private String CREATE_EXCIPIENT_QUERY;
 
-	@Value(value="${updateExcipient}")
-	private String updateExcipientQuery;
+	@Value(value="${update.excipient}")
+	private String UPDATE_EXCIPIENT_QUERY;
 
-	@Value(value="${deleteExcipient}")
-	private String deleteExcipientQuery;
+	@Value(value="${delete.excipient}")
+	private String DELETE_EXCIPIENT_QUERY;
 
 	@Override
 	public ExcipientDto getExcipientById(Integer excipientId) {
-		List<ExcipientDto> excipients = jdbcTemplate.query(getExcipientByIdQuery + excipientId,
+		List<ExcipientDto> excipients = jdbcTemplate.query(GET_EXCIPIENT_BY_ID_QUERY + excipientId,
 				new ExcipientRowMapper());
 
 		if(excipients.isEmpty()) {
@@ -61,15 +61,24 @@ public class ExcipientDaoImpl implements ExcipientDao {
 	}
 
 	@Override
-	public List<ExcipientDto> getExcipients() {
-		return jdbcTemplate.query(getExcipientListQuery, new ExcipientRowMapper());
+	public List<ExcipientDto> getExcipients(String creationSource) {
+
+		StringBuilder sb = new StringBuilder(GET_EXCIPIENT_LIST_QUERY);
+
+		if(creationSource != null) {
+			sb.append(" AND CREATION_SOURCE = '" + creationSource+"'");
+		}
+		
+		sb.append(" ORDER BY INSERT_DATE DESC");
+
+		return jdbcTemplate.query(sb.toString(), new ExcipientRowMapper());
 	}
 	
 	@Override
 	public List<ExcipientDto> getExcipientsByMaterialName(String materialName) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("materialName", materialName);
-		return namedParameterJdbcTemplate.query(getExcipientsByMaterialNameQuery, parameters, new ExcipientRowMapper());
+		return namedParameterJdbcTemplate.query(GET_EXCIPIENTS_BY_MATERIAL_NAME_QUERY, parameters, new ExcipientRowMapper());
 	}
 
 	@Override
@@ -83,12 +92,13 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("potency", excipientRequest.getPotency());
 		parameters.addValue("grade", excipientRequest.getGrade());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
+		parameters.addValue("creationSource", excipientRequest.getCreationSource());
 		parameters.addValue("insertUser", excipientRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
-		return namedParameterJdbcTemplate.update(createExcipientQuery, parameters);
+		return namedParameterJdbcTemplate.update(CREATE_EXCIPIENT_QUERY, parameters);
 	}
 
 	@Override
@@ -103,15 +113,16 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("potency", excipientRequest.getPotency());
 		parameters.addValue("grade", excipientRequest.getGrade());
 		parameters.addValue("status", excipientRequest.getStatus());
+		parameters.addValue("creationSource", excipientRequest.getCreationSource());
 		parameters.addValue("updateUser", excipientRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
-		return namedParameterJdbcTemplate.update(updateExcipientQuery, parameters);
+		return namedParameterJdbcTemplate.update(UPDATE_EXCIPIENT_QUERY, parameters);
 	}
 
 	@Override
 	public Integer deleteExcipient(Integer excipientId) {
-		return jdbcTemplate.update(deleteExcipientQuery, new Object[] {excipientId});
+		return jdbcTemplate.update(DELETE_EXCIPIENT_QUERY, new Object[] {excipientId});
 	}
 	
 	class ExcipientRowMapper implements RowMapper<ExcipientDto> {
@@ -126,6 +137,7 @@ public class ExcipientDaoImpl implements ExcipientDao {
 			excipientDto.setPotency(resultSet.getString("POTENCY"));
 			excipientDto.setGrade(resultSet.getString("GRADE"));
 			excipientDto.setStatus(resultSet.getString("STATUS"));
+			excipientDto.setCreationSource(resultSet.getString("CREATION_SOURCE"));
 			excipientDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			excipientDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			excipientDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
