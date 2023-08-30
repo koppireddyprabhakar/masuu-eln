@@ -69,7 +69,7 @@ public class LoginServiceImpl implements LoginService {
 
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(mailId);
-		message.setFrom("raghuy@ectdglobal.com");
+		message.setFrom("learning@ectdglobal.com");
 		message.setSubject("OTP for password reset");
 		message.setText("Your OTP is: " + otp);
 		mailSender.send(message);
