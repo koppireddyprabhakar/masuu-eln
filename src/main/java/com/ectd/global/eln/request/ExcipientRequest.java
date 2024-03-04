@@ -1,6 +1,7 @@
 package com.ectd.global.eln.request;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ExcipientRequest extends Base implements Serializable {
 
@@ -16,6 +17,11 @@ public class ExcipientRequest extends Base implements Serializable {
 	private String potency;
 	private String grade;
 	private String creationSource;
+	private Double quantity;
+	private Date expiryDate;
+	private Double remainingQuantity;
+	private Boolean lock;
+	private Double changedQuantity;
 	
 	public Integer getExcipientId() {
 		return excipientId;
@@ -85,6 +91,41 @@ public class ExcipientRequest extends Base implements Serializable {
 	}
 	public void setCreationSource(String creationSource) {
 		this.creationSource = creationSource;
+	}
+	
+	public Double getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Double quantity) {
+		this.quantity = quantity;
+	}
+	
+	public Double getRemainingQuantity() {
+		return remainingQuantity;
+	}
+	public void setRemainingQuantity(Double remainingQuantity) {
+		this.remainingQuantity = remainingQuantity;
+	}
+	
+	public Boolean getLock() {
+		return lock;
+	}
+	public void setLock(Boolean lock) {
+		this.lock = lock;
+	}
+	
+	public Double getChangedQuantity() {
+		return changedQuantity;
+	}
+	public void setChangedQuantity(Double changedQuantity) {
+		this.changedQuantity = changedQuantity;
+	}
+
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
 	}
 
 }

@@ -39,6 +39,21 @@ public class ExcipientServiceImpl implements ExcipientService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateExcipient(ExcipientRequest excipientRequest) {
+		
+		if(excipientRequest.getQuantity().doubleValue() == 0.00) {
+			excipientRequest.setQuantity(excipientRequest.getChangedQuantity());
+			excipientRequest.setRemainingQuantity(excipientRequest.getChangedQuantity());
+		}else if(excipientRequest.getChangedQuantity().doubleValue() <= excipientRequest.getQuantity().doubleValue()) {
+			Double difference = excipientRequest.getQuantity().doubleValue() - excipientRequest.getChangedQuantity().doubleValue();
+			excipientRequest.setRemainingQuantity(excipientRequest.getRemainingQuantity().doubleValue() - difference);
+			excipientRequest.setQuantity(excipientRequest.getChangedQuantity());
+		}else if(excipientRequest.getChangedQuantity().doubleValue() >= excipientRequest.getQuantity().doubleValue()) {
+			Double difference = excipientRequest.getChangedQuantity().doubleValue() - excipientRequest.getQuantity().doubleValue();
+			excipientRequest.setRemainingQuantity(excipientRequest.getRemainingQuantity().doubleValue() + difference);
+			excipientRequest.setQuantity(excipientRequest.getChangedQuantity());
+		}
+		
+		
 		return excipientDao.updateExcipient(excipientRequest);
 	}
 

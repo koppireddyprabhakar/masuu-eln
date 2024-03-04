@@ -526,6 +526,7 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 		experimentExcipientDto.setPotency(resultSet.getString("POTENCY"));
 		experimentExcipientDto.setGrade(resultSet.getString("GRADE"));
 		experimentExcipientDto.setStatus(resultSet.getString("STATUS"));
+		experimentExcipientDto.setQuantity(resultSet.getDouble("QUANTITY"));;
 		experimentExcipientDto.setExcipientsName(resultSet.getString("EXCIPIENTS_NAME"));
 
 		return experimentExcipientDto;

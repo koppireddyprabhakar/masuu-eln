@@ -17,6 +17,7 @@ public class ExperimentExcipientDto  extends Base implements Serializable {
 	private String sourceName;
 	private String potency;
 	private String grade;
+	private Double quantity;
 
 	public Integer getExcipientId() {
 		return excipientId;
@@ -79,6 +80,13 @@ public class ExperimentExcipientDto  extends Base implements Serializable {
 	}
 	public void setExperimentId(Integer experimentId) {
 		this.experimentId = experimentId;
+	}
+	
+	public Double getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Double quantity) {
+		this.quantity = quantity;
 	}
 	
 	public String toString() {

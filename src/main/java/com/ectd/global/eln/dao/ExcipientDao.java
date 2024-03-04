@@ -11,6 +11,8 @@ public interface ExcipientDao {
 
 	List<ExcipientDto> getExcipients(String creationSource);
 	
+	List<ExcipientDto> getExcipients(List<Integer> excipientIds);
+	
 	Integer createExcipient(ExcipientRequest excipientRequest);
 
 	Integer updateExcipient(ExcipientRequest excipientRequest);

@@ -2,6 +2,8 @@ package com.ectd.global.eln.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,14 +11,17 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.ectd.global.eln.dao.ExcipientDao;
 import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dao.ProjectDao;
 import com.ectd.global.eln.dao.UsersDetailsDao;
+import com.ectd.global.eln.dto.ExcipientDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ExperimentReviewDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.dto.UsersDetailsDto;
+import com.ectd.global.eln.exception.MaterialQuantityException;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentDetails;
@@ -42,6 +47,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 	
 	@Autowired
 	private ProjectDao projectDao;
+	
+	@Autowired
+	private ExcipientDao excipientDao; 
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -106,13 +114,63 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Integer saveExcipient(List<ExcipientRequest> excipientRequests) {
-		
+	public Integer saveExcipient(List<ExcipientRequest> excipientRequests)  {
+
 		if(CollectionUtils.isEmpty(excipientRequests)) {
 			return 0;
 		}
 		experimentDao.deleteExperimentExcipient(excipientRequests.get(0).getExperimentId());
-		return	experimentDao.batchExcipientInsert(excipientRequests);
+
+		List<Integer> ids = excipientRequests.stream().map(ExcipientRequest::getExcipientId).collect(Collectors.toList());
+		List<ExcipientDto> excipientDtos= excipientDao.getExcipients(ids);
+		
+		List<ExcipientRequest> excipientRequestList = new ArrayList<ExcipientRequest>();
+
+		synchronized (this) {
+			for(ExcipientDto excipientDto: excipientDtos) {
+
+				Optional<ExcipientRequest> excipientRequestOption =	excipientRequests.stream().filter(
+						r -> (r.getExcipientId().equals(excipientDto.getExcipientId()) &&
+						excipientDto.getRemainingQuantity() >= r.getChangedQuantity())
+						).findFirst();
+
+				if(excipientRequestOption.isEmpty()) {
+					throw new MaterialQuantityException();
+				}else {
+					excipientDto.setRemainingQuantity(excipientDto.getRemainingQuantity() - excipientRequestOption.get().getChangedQuantity());
+					excipientRequestList.add(excipientRequestOption.get());
+					
+					excipientDao.updateExcipient(mapFrom(excipientDto));
+				}
+
+			}
+		}
+		if(CollectionUtils.isEmpty(excipientRequestList)) {
+			return 0;
+		}
+
+		return	experimentDao.batchExcipientInsert(excipientRequestList);
+	}
+	
+	private ExcipientRequest mapFrom(ExcipientDto excipientDto) {
+		ExcipientRequest request = new ExcipientRequest();
+		
+		request.setExcipientId(excipientDto.getExcipientId());
+		request.setExcipientsName(excipientDto.getExcipientsName());
+		request.setMaterialType(excipientDto.getMaterialType());
+		request.setMaterialName(excipientDto.getMaterialName());
+		request.setBatchNo(excipientDto.getBatchNo());
+		request.setSourceName(excipientDto.getSourceName());
+		request.setPotency(excipientDto.getPotency());
+		request.setGrade(excipientDto.getGrade());
+		request.setStatus(excipientDto.getStatus());
+		request.setCreationSource(excipientDto.getCreationSource());
+		request.setQuantity(excipientDto.getQuantity());
+		request.setExpiryDate(excipientDto.getExpiryDate());
+		request.setUpdateUser(excipientDto.getUpdateUser());
+		request.setRemainingQuantity(excipientDto.getRemainingQuantity());
+		
+		return request;
 	}
 
 	@Override

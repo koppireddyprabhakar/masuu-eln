@@ -3,6 +3,7 @@ package com.ectd.global.eln.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -75,6 +76,16 @@ public class ExcipientDaoImpl implements ExcipientDao {
 	}
 	
 	@Override
+	public List<ExcipientDto> getExcipients(List<Integer> excipientIds) {
+
+		String qry = String.format(GET_EXCIPIENT_LIST_QUERY + " AND EXCIPIENT_ID IN (%s) ORDER BY INSERT_DATE DESC", 
+				excipientIds.stream()
+                .map(v -> "?")
+                .collect(Collectors.joining(", ")));
+		return jdbcTemplate.query(qry, new ExcipientRowMapper(), excipientIds.toArray());
+	}
+	
+	@Override
 	public List<ExcipientDto> getExcipientsByMaterialName(String materialName) {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("materialName", materialName);
@@ -93,6 +104,10 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("grade", excipientRequest.getGrade());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("creationSource", excipientRequest.getCreationSource());
+		parameters.addValue("quantity", excipientRequest.getQuantity());
+		parameters.addValue("remainingQuantity", excipientRequest.getRemainingQuantity());
+		parameters.addValue("lock", excipientRequest.getLock() ? "Y" : "N");
+		parameters.addValue("expiryDate", excipientRequest.getExpiryDate());
 		parameters.addValue("insertUser", excipientRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
@@ -114,6 +129,9 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("grade", excipientRequest.getGrade());
 		parameters.addValue("status", excipientRequest.getStatus());
 		parameters.addValue("creationSource", excipientRequest.getCreationSource());
+		parameters.addValue("quantity", excipientRequest.getQuantity());
+		parameters.addValue("remainingQuantity", excipientRequest.getRemainingQuantity());
+		parameters.addValue("expiryDate", excipientRequest.getExpiryDate());
 		parameters.addValue("updateUser", excipientRequest.getUpdateUser());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		
@@ -138,6 +156,11 @@ public class ExcipientDaoImpl implements ExcipientDao {
 			excipientDto.setGrade(resultSet.getString("GRADE"));
 			excipientDto.setStatus(resultSet.getString("STATUS"));
 			excipientDto.setCreationSource(resultSet.getString("CREATION_SOURCE"));
+			excipientDto.setQuantity(resultSet.getDouble("QUANTITY"));
+			excipientDto.setRemainingQuantity(resultSet.getDouble("REMAINING_QUANTITY"));
+			excipientDto.setChangedQuantity(resultSet.getDouble("QUANTITY"));
+			excipientDto.setLock(resultSet.getString("LOCK") == "Y" ? true : false);
+			excipientDto.setExpiryDate(resultSet.getDate("EXPIRE_DATE"));
 			excipientDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			excipientDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			excipientDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
