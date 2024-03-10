@@ -618,6 +618,8 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		analysisExcipientDto.setGrade(resultSet.getString("GRADE"));
 		analysisExcipientDto.setStatus(resultSet.getString("STATUS"));
 		analysisExcipientDto.setExcipientsName(resultSet.getString("EXCIPIENTS_NAME"));
+		analysisExcipientDto.setQuantity(resultSet.getDouble("QUANTITY"));
+		analysisExcipientDto.setExpiryDate(resultSet.getDate("EXPIRE_DATE"));
 
 		return analysisExcipientDto;
 	}

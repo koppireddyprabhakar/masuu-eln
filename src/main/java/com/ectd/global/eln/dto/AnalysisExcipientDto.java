@@ -1,6 +1,7 @@
 package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.ectd.global.eln.request.Base;
 
@@ -18,6 +19,10 @@ public class AnalysisExcipientDto extends Base implements Serializable {
 	private String sourceName;
 	private String potency;
 	private String grade;
+	private Double quantity;
+	private Double remainingQuantity;
+	private Date expiryDate;
+	private Double changedQuantity;
 
 	public Integer getExcipientId() {
 		return excipientId;
@@ -87,6 +92,34 @@ public class AnalysisExcipientDto extends Base implements Serializable {
 	}
 	public void setAnalysisId(Integer analysisId) {
 		this.analysisId = analysisId;
+	}
+	
+	public Double getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Double quantity) {
+		this.quantity = quantity;
+	}
+	
+	public Double getRemainingQuantity() {
+		return remainingQuantity;
+	}
+	public void setRemainingQuantity(Double remainingQuantity) {
+		this.remainingQuantity = remainingQuantity;
+	}
+		
+	public Double getChangedQuantity() {
+		return changedQuantity;
+	}
+	public void setChangedQuantity(Double changedQuantity) {
+		this.changedQuantity = changedQuantity;
+	}
+	
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
 	}
 	
 	public String toString() {

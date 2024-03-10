@@ -2,6 +2,7 @@ package com.ectd.global.eln.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,19 +13,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.ectd.global.eln.dao.AnalysisDao;
+import com.ectd.global.eln.dao.ExcipientDao;
 import com.ectd.global.eln.dao.ExperimentDao;
 import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
 import com.ectd.global.eln.dto.AnalysisReviewDto;
+import com.ectd.global.eln.dto.ExcipientDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.dto.UsersDetailsDto;
+import com.ectd.global.eln.exception.MaterialQuantityException;
 import com.ectd.global.eln.request.AnalysisDetails;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
 import com.ectd.global.eln.request.AnalysisReview;
 import com.ectd.global.eln.request.EmailNotification;
+import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.utils.ElnUtils;
@@ -46,6 +51,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 	
 	@Autowired
     private EmailNotificationService emailNotificationService;
+	
+	@Autowired
+	private ExcipientDao excipientDao;
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -164,9 +172,60 @@ public class AnalysisServiceImpl implements AnalysisService {
 			return 0;
 		}
 		analysisDao.deleteAnalysisExcipient(analysisExcipients.get(0).getAnalysisId());
-		return analysisDao.batchExcipientInsert(analysisExcipients);
+		
+		List<Integer> ids = analysisExcipients.stream().map(AnalysisExcipient::getExcipientId).collect(Collectors.toList());
+		List<ExcipientDto> excipientDtos= excipientDao.getExcipients(ids);
+		
+		List<AnalysisExcipient> excipientRequestList = new ArrayList<AnalysisExcipient>();
+		
+		synchronized (this) {
+			for(ExcipientDto excipientDto: excipientDtos) {
+
+				Optional<AnalysisExcipient> excipientRequestOption =	analysisExcipients.stream().filter(
+						r -> (r.getExcipientId().equals(excipientDto.getExcipientId()) &&
+						excipientDto.getRemainingQuantity() > r.getChangedQuantity())
+						).findFirst();
+
+				if(excipientRequestOption.isEmpty()) {
+					throw new MaterialQuantityException();
+				}else {
+					excipientDto.setRemainingQuantity(excipientDto.getRemainingQuantity() - excipientRequestOption.get().getChangedQuantity());
+					excipientRequestList.add(excipientRequestOption.get());
+					
+					excipientDao.updateExcipient(mapFrom(excipientDto));
+
+				}
+
+			}
+		}
+		if(CollectionUtils.isEmpty(excipientRequestList)) {
+			return 0;
+		}
+		
+		return analysisDao.batchExcipientInsert(excipientRequestList);
 	}
 
+	private ExcipientRequest mapFrom(ExcipientDto excipientDto) {
+		ExcipientRequest request = new ExcipientRequest();
+		
+		request.setExcipientId(excipientDto.getExcipientId());
+		request.setExcipientsName(excipientDto.getExcipientsName());
+		request.setMaterialType(excipientDto.getMaterialType());
+		request.setMaterialName(excipientDto.getMaterialName());
+		request.setBatchNo(excipientDto.getBatchNo());
+		request.setSourceName(excipientDto.getSourceName());
+		request.setPotency(excipientDto.getPotency());
+		request.setGrade(excipientDto.getGrade());
+		request.setStatus(excipientDto.getStatus());
+		request.setCreationSource(excipientDto.getCreationSource());
+		request.setQuantity(excipientDto.getQuantity());
+		request.setExpiryDate(excipientDto.getExpiryDate());
+		request.setUpdateUser(excipientDto.getUpdateUser());
+		request.setRemainingQuantity(excipientDto.getRemainingQuantity());
+		
+		return request;
+	}
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<TestRequestFormDto> getTestRequestByAnalysisId(Integer analysisId){
