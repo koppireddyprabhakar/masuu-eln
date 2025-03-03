@@ -15,5 +15,8 @@ public interface DashboardService {
 	List<MonthCountDto> getExperimentByStatus();
 
     List<MonthCountDto> getTRFByStatus();
+    
+	List<MonthCountDto> getAnalysisExpByStatus();
+
 
 }

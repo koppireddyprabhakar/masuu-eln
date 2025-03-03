@@ -42,5 +42,10 @@ public class DashboardServiceImpl implements DashboardService {
     public List<MonthCountDto> getTRFByStatus() {
         return dashboardDao.getTRFByStatus    ();
     }
+    
+    @Override
+	public List<MonthCountDto> getAnalysisExpByStatus() {
+		return dashboardDao.getAnalysisExpByStatus();
+	}
 
 }

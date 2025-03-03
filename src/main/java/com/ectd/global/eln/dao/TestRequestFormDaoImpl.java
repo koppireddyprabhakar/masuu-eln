@@ -112,6 +112,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 		parameters.addValue("testId", testRequestFormRequest.getTestId());
 		parameters.addValue("testName", testRequestFormRequest.getTestName());
 		parameters.addValue("testNumber", testRequestFormRequest.getTestNumber());
+		parameters.addValue("description", testRequestFormRequest.getDescription());
 		parameters.addValue("testResult", testRequestFormRequest.getTestResult());
 		parameters.addValue("testStatus", testRequestFormRequest.getTestStatus());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
@@ -230,12 +231,15 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
 			testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
 			testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
+			testRequestFormDto.setDescription(resultSet.getString("TEST_DESCRIPTION"));
 			testRequestFormDto.setStatus(resultSet.getString("STATUS"));		
 			testRequestFormDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			testRequestFormDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			testRequestFormDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			testRequestFormDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			testRequestFormDto.setPurpose(resultSet.getString("PURPOSE"));
+//			testRequestFormDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
+
 
 			ProjectDto project = new ProjectDto();
 			project.setProjectId(resultSet.getInt("PROJECT_ID"));
@@ -285,7 +289,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setStage(resultSet.getString("STAGE"));
 			testRequestFormDto.setPackaging(resultSet.getString("PACKAGING"));
 			testRequestFormDto.setLabelClaim(resultSet.getString("LABEL_CLAIM"));
-			testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
+//			testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
 			testRequestFormDto.setManufacturingDate(resultSet.getDate("MANUFACTURING_DATE"));
 			testRequestFormDto.setExpireDate(resultSet.getDate("EXPIRE_DATE"));
 			testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));
@@ -293,8 +297,10 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
 			testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
 			testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
+			testRequestFormDto.setDescription(resultSet.getString("TEST_DESCRIPTION"));
 			testRequestFormDto.setStatus(resultSet.getString("STATUS"));
 //			testRequestFormDto.setPurpose(resultSet.getString("PURPOSE"));
+
 			
 
 			ProjectDto projectDto = new ProjectDto();
@@ -343,16 +349,18 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 				testRequestFormDto.setStage(resultSet.getString("STAGE"));
 				testRequestFormDto.setPackaging(resultSet.getString("PACKAGING"));
 				testRequestFormDto.setLabelClaim(resultSet.getString("LABEL_CLAIM"));
-				testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
+//				testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
 				testRequestFormDto.setManufacturingDate(resultSet.getDate("MANUFACTURING_DATE"));
 				testRequestFormDto.setExpireDate(resultSet.getDate("EXPIRE_DATE"));
 				testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));
 				testRequestFormDto.setTestName(resultSet.getString("TEST_NAME"));
 				testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
 				testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
+				testRequestFormDto.setDescription(resultSet.getString("TEST_DESCRIPTION"));
 				testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
 				testRequestFormDto.setStatus(resultSet.getString("STATUS"));
 				testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+
 
 				TrfTestResultDto trfTestResultDto = new TrfTestResultDto();  
 
@@ -362,6 +370,8 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 				trfTestResultDto.setTestName(resultSet.getString("TEST_NAME"));
 				trfTestResultDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
 				trfTestResultDto.setTestResult(resultSet.getString("TEST_RESULT"));
+				trfTestResultDto.setDescription(resultSet.getString("TEST_DESCRIPTION"));
+
 				
 					if(CollectionUtils.isEmpty(testRequestFormDto.getTrfTestResults())) {
 						testRequestFormDto.setTrfTestResults(new ArrayList<TrfTestResultDto>());

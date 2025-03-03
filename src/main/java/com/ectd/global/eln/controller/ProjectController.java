@@ -61,6 +61,12 @@ public class ProjectController  extends BaseController {
 		return getResponseEntity(projectService.updateProjectStatus(projectRequest), "Project Delete");
 	}
 	
+	@PutMapping("/on-hold-project")
+	public ResponseEntity<String> putProjectOnHold(@RequestBody ProjectRequest projectRequest) throws Exception {
+	    projectRequest.setStatus(ProjectRequest.PROJECT_STATUS.ONHOLD.getValue());
+	    return getResponseEntity(projectService.updateProjectStatus(projectRequest), "Project On Hold");
+	}
+	
 	@GetMapping("/get-dosages-and-formulations")
 	public ResponseEntity<List<DosageDto>> getDosagesAndFormulations() throws Exception {
 		return  new ResponseEntity<>(dosageService.getDosagesAndFormulations(), HttpStatus.OK);

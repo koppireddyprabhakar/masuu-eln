@@ -1,7 +1,9 @@
 package com.ectd.global.eln.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -195,4 +197,10 @@ public class ExperimentController extends BaseController {
 		return new ResponseEntity<>(experimentService.getTRFByExpIds(experimentId), HttpStatus.OK);
 	}
 
+	@GetMapping("/experiment_unique _id")
+	public ResponseEntity<String> generateUniqueExperimentId() {
+	    String UniqueexperimentId = experimentService.generateUniqueexperimentId();
+	    return new ResponseEntity<String>(UniqueexperimentId, HttpStatus.OK);
+	}
+	
 }

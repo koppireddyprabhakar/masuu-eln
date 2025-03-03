@@ -41,6 +41,9 @@ public class DashboarDaoImpl implements DashboardDao {
 
     @Value("${getTrfByStatusQuery}")
     private String GET_TRF_BY_STATUS_QUERY;
+    
+    @Value("${getAnalysisExpStatusQuery}")
+    private String GET_ANALYSIS_EXP_BY_STATUS_QUERY;
 
 	@Override
 	public List<MonthCountDto> getProjectCountsByMonth() {
@@ -75,4 +78,9 @@ public class DashboarDaoImpl implements DashboardDao {
     public List<MonthCountDto> getTRFByStatus() {
         return jdbcTemplate.query(GET_TRF_BY_STATUS_QUERY, new MonthCountRowMapper());
     }
+    
+	@Override
+	public List<MonthCountDto> getAnalysisExpByStatus(){
+		return jdbcTemplate.query(GET_ANALYSIS_EXP_BY_STATUS_QUERY, new MonthCountRowMapper());
+	}
 }

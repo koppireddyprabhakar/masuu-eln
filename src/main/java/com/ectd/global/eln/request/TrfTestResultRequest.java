@@ -14,8 +14,16 @@ public class TrfTestResultRequest extends Base implements Serializable {
     private String testNumber;
     private String testResult;
     private String purpose;
+    private String description;
 
-    public Integer getTrfTestId() {
+
+    public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public Integer getTrfTestId() {
 		return trfTestId;
 	}
 	public void setTrfTestId(Integer trfTestId) {

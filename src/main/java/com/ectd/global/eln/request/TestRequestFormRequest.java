@@ -23,6 +23,7 @@ public class TestRequestFormRequest extends Base implements Serializable {
     private Integer testId;
     private String testName;
     private String testNumber;
+    private String description;
     private String testResult;
     private String testStatus;
     private Integer analysisId;
@@ -47,20 +48,14 @@ public class TestRequestFormRequest extends Base implements Serializable {
 		this.expId = expId;
 	}
 	
-//	public Integer getProjectId() {
-//		return this.projectId;
-//	}
-//	public void setProjectId(Integer projectId) {
-//		this.projectId = projectId;
-//	}
-//	
-//	public Integer getAnalysisId() {
-//		return this.analysisId;
-//	}
-//	public void setAnalysisId(Integer analysisId) {
-//		this.analysisId = analysisId;
-//	}
-	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getTestRequestFormStatus() {
 		return testRequestFormStatus;
 	}

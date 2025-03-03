@@ -88,7 +88,7 @@ public class ProjectRequest extends Base implements Serializable {
 	}
 
 	public static enum PROJECT_STATUS {
-		NEW("New"), INPROGRESS("Inprogress"), COMPLETED("Completed"), INACTIVE("Inactive"), CLOSED("Closed"), ARCHIVE("Archive");
+		NEW("New"), INPROGRESS("Inprogress"), COMPLETED("Completed"), INACTIVE("Inactive"), CLOSED("Closed"), ARCHIVE("Archive"),ONHOLD("OnHold");
 		
 		private String value;
 		

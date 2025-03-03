@@ -105,8 +105,9 @@ public class ExcipientDaoImpl implements ExcipientDao {
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
 		parameters.addValue("creationSource", excipientRequest.getCreationSource());
 		parameters.addValue("quantity", excipientRequest.getQuantity());
-		parameters.addValue("remainingQuantity", excipientRequest.getRemainingQuantity());
-		parameters.addValue("lock", excipientRequest.getLock() ? "Y" : "N");
+		parameters.addValue("remainingQuantity", excipientRequest.getQuantity());
+	  //parameters.addValue("lock", excipientRequest.getLock() ? "Y" : "N");
+		parameters.addValue("lock", (excipientRequest.getLock() !=null && excipientRequest.getLock()) ? "Y" : "N");
 		parameters.addValue("expiryDate", excipientRequest.getExpiryDate());
 		parameters.addValue("insertUser", excipientRequest.getInsertUser());
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());

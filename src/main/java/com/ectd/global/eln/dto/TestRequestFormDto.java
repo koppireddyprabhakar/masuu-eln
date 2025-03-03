@@ -26,10 +26,10 @@ public class TestRequestFormDto extends Base implements Serializable {
     private Integer testId;
     private String testName;
     private String testNumber;
+    private String description;
     private String testResult;
     private String testStatus;
     private String purpose;
-
     ProjectDto project = new ProjectDto();
     ExperimentDto experiment = new ExperimentDto();
     
@@ -51,6 +51,14 @@ public class TestRequestFormDto extends Base implements Serializable {
 		this.expId = expId;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public Integer getProjectId() {
 		return this.projectId;
 	}

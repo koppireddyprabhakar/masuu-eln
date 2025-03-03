@@ -54,8 +54,33 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		List<String> teamMemberMailIds = projectDao.getTeamMembersByProjectId(projectId);
 		// Send email notification to creator and team members
-		
-		 EmailNotification emailNotification = elnUtils.buildEmailNotification("Project Created","Project with project ID " + projectId + " has been created successfully.", creatorMailId,teamMemberMailIds);
+		// Create the email body with HTML formatting for line breaks and bold text
+	    String emailBody = String.format(
+	        "<html>" +
+	        "<body>" +
+	        "<p>Dear Team,</p>" +
+	        "<p>We are pleased to inform you that a new project has been successfully created. Here are the project details:</p>" +
+	        "<ul>" +
+	        "<li><b>Project Name:</b> %s</li>" +
+	        "<li><b>Project ID:</b> %d</li>" +
+	        "<li><b>Team:</b> %s</li>" +
+	        "</ul>" +
+	        "<p>Thank you for your commitment and effort. Please reach out if you have any questions or need further assistance.</p>" +
+	        "<p>Best regards,</p>" +
+	        "<p>[Your Team/Company Name]</p>" +
+	        "</body>" +
+	        "</html>",
+	        projectRequest.getProjectName(),
+	        projectId,
+	        projectRequest.getTeamName()
+	    );
+	 // Build the email notification using the HTML email body
+	    EmailNotification emailNotification = elnUtils.buildEmailNotification(
+	        "Project Created",
+	        emailBody,
+	        creatorMailId,
+	        teamMemberMailIds
+	    );
 		 emailNotificationService.saveEmailNotification(emailNotification);
 		 return projectId;
 	}
@@ -75,7 +100,22 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateProjectStatus(ProjectRequest projectRequest) {
-		return projectDao.updateProjectStatus(projectRequest);
+	    Integer rowsUpdated = projectDao.updateProjectStatus(projectRequest);
+		 
+	    if (ProjectRequest.PROJECT_STATUS.ONHOLD.getValue().equals(projectRequest.getStatus())) {
+	        // Additional logic for OnHold status
+	        // For example, you can send an email notification here
+	        UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(projectRequest.getInsertUserId());
+	        String creatorMailId = creatorDetails.getMailId();
+	 
+	        List<String> teamMemberMailIds = projectDao.getTeamMembersByProjectId(projectRequest.getProjectId());
+	 
+	        EmailNotification emailNotification = elnUtils.buildEmailNotification("Project On Hold",
+	                "Project with project ID " + projectRequest.getProjectId() + " is now On Hold.", creatorMailId, teamMemberMailIds);
+	        emailNotificationService.saveEmailNotification(emailNotification);
+	    }
+	    return rowsUpdated;
 	}
+	
 	
 }

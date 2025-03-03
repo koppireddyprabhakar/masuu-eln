@@ -232,4 +232,9 @@ public class AnalysisController extends BaseController {
 		return ResponseEntity.ok(userDetailsList);
 	}
 	
+	@GetMapping("/analysis_experiment_unique_id")
+	public ResponseEntity<String> generateUniqueExperimentId() {
+	    String UniqueAnalyisisexperimentId = analysisService.generateUniqueAnalyisisexperimentId();
+	    return new ResponseEntity<String>(UniqueAnalyisisexperimentId, HttpStatus.OK);
+	}
 }

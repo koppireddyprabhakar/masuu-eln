@@ -15,4 +15,6 @@ public interface DashboardDao {
     List<MonthCountDto> getExperimentByStatus();
 
     List<MonthCountDto> getTRFByStatus();
+    
+    List<MonthCountDto> getAnalysisExpByStatus();
 }

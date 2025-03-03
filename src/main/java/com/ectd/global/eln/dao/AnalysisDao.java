@@ -60,4 +60,6 @@ public interface AnalysisDao {
 	
 	AnalysisReviewDto getAnalysisReview(Integer analysisId);
 	
+	String generateUniqueAnalyisisexperimentId();
+	
 }

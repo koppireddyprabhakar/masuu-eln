@@ -97,21 +97,32 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 			analysisDao.batchAnalysisDetailsInsert(analysisRequest.getAnalysisDetailsList());
 		}
-
-		//		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
-		//		analysisDao.batchAnalysisDetailsInsert(analysisRequest.getAnalysisDetailsList());
-		//		}
-		//		
-		//		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
-		//		analysisDao.batchExcipientInsert(analysisRequest.getExcipients());
-		//		}
+		List<String> teamMemberMailIds = new ArrayList<String>();
+	       String emailBody = String.format(
+	    		    "<html>" +
+	    		    "<body>" +
+	    		    "<p>Dear Team,</p>" +
+	    		    "<p>We are pleased to inform you that a new experiment has been successfully created. Here are the experiment details:</p>" +
+	    		    "<ul>" +
+	    		    "<li><b>Experiment Name:</b> %s</li>" +
+	    		    "<li><b>Batch Size:</b> %s</li>" + // Ensure getBatchSize() returns an int or Integer
+	    		    "</ul>" +
+	    		    "<p>Thank you for your commitment and effort. Please reach out if you have any questions or need further assistance.</p>" +
+	    		    "<p>Best regards,</p>" +
+	    		    "<p>[Your Team/Company Name]</p>" +
+	    		    "</body>" +
+	    		    "</html>",
+	    		    analysisRequest.getAnalysisName(),
+	    		    analysisRequest.getBatchSize() != null ? analysisRequest.getBatchSize() : 0 // Fallback to 0 if null
+	    		);
+	       EmailNotification emailNotification = elnUtils.buildEmailNotification(
+	               "Formulation Experiment Created",
+	               emailBody,
+	               creatorMailId,
+	               teamMemberMailIds
+	       );
+	       emailNotificationService.saveEmailNotification(emailNotification);
 		
-		 // Send email notification to creator and team members
-        List<String> teamMemberMailIds = new ArrayList<String>();
-        EmailNotification emailNotification = elnUtils.buildEmailNotification("Analysis Experiment Created", "Analysis Experiment with analysis ID " + analysisId + " has been created successfully.", creatorMailId, teamMemberMailIds);
-
-        emailNotificationService.saveEmailNotification(emailNotification);
-
 		if(!CollectionUtils.isEmpty(analysisRequest.getTestRequestFormList())) {
 			analysisDao.batchTRFUpdate(analysisRequest.getTestRequestFormList(), analysisId);
 		}
@@ -249,6 +260,133 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public Integer updateAnalysisStatus(AnalysisRequest analysisRequest) {
 
 		analysisDao.updateAnalysisStatus(analysisRequest);
+		AnalysisDto analysis = analysisDao.getAnalysisById(analysisRequest.getAnalysisId());
+		UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(analysis.getUserId());
+		    String creatorMailId = creatorDetails.getMailId();
+		    
+		    // Prepare the email content based on the status
+		    String emailSubject = "Experiment Status Update: " + analysisRequest.getAnalysisName();
+		    String emailBody = "";
+		    List<String> teamMemberMailIds = new ArrayList<String>();
+		    switch (analysisRequest.getStatus()) {
+	        case "Inprogress":
+	            emailBody = String.format(
+	                "<html>" +
+	                "<body>" +
+	                "<p>Dear Team,</p>" +
+	                "<p>The experiment  now is in progress. Here are the details:</p>" +
+	                "<ul>" +                                     
+	                "<li><b>Experiment Name:</b> %s</li>" +
+	                "<li><b>Batch:</b> %s</li>" +
+	                "<li><b>Status:</b> %s</li>" +
+	                "</ul>" +
+	                "<p>Please review the updated status and take necessary actions if required.</p>" +
+	                "<p>Best regards,</p>" +
+	                "<p>[Your Team/Company Name]</p>" +
+	                "</body>" +
+	                "</html>",
+	                analysis.getAnalysisName(),
+	                analysis.getBatchSize(),
+	                analysis.getStatus()
+	            );
+	            break;
+	        case "Complete":
+	            emailBody = String.format(
+	                "<html>" +
+	                "<body>" +
+	                "<p>Dear Team,</p>" +
+	                "<p>The experiment  has been completed. Here are the details:</p>" +
+	                "<ul>" +                                     
+	                "<li><b>Experiment Name:</b> %s</li>" +
+	                "<li><b>Batch:</b> %s</li>" +
+	                "<li><b>Status:</b> %s</li>" +
+	                "</ul>" +
+	                "<p>Please review the updated status and take necessary actions if required.</p>" +
+	                "<p>Best regards,</p>" +
+	                "<p>[Your Team/Company Name]</p>" +
+	                "</body>" +
+	                "</html>",
+	                analysis.getAnalysisName(),
+	                analysis.getBatchSize(),
+	                analysis.getStatus()
+	            );
+	            break;
+	        case "Inreview":
+	            emailBody = String.format(
+	                "<html>" +
+	                "<body>" +
+	                "<p>Dear Team,</p>" +
+	                "<p>The experiment  is now under review. Here are the details:</p>" +
+	                "<ul>" +                                     
+	                "<li><b>Experiment Name:</b> %s</li>" +
+	                "<li><b>Batch:</b> %s</li>" +
+	                "<li><b>Status:</b> %s</li>" +
+	                "</ul>" +
+	                "<p>Please review the updated status and take necessary actions if required.</p>" +
+	                "<p>Best regards,</p>" +
+	                "<p>[Your Team/Company Name]</p>" +
+	                "</body>" +
+	                "</html>",
+	                analysis.getAnalysisName(),
+	                analysis.getBatchSize(),
+	                analysis.getStatus()
+	            );
+	            break;
+	        case "Review Completed":
+	            emailBody = String.format(
+	                "<html>" +
+	                "<body>" +
+	                "<p>Dear Team,</p>" +
+	                "<p>The experiment   review completed. Here are the details:</p>" +
+	                "<ul>" +                                     
+	                "<li><b>Experiment Name:</b> %s</li>" +
+	                "<li><b>Batch:</b> %s</li>" +
+	                "<li><b>Status:</b> %s</li>" +
+	                "</ul>" +
+	                "<p>Please review the updated status and take necessary actions if required.</p>" +
+	                "<p>Best regards,</p>" +
+	                "<p>[Your Team/Company Name]</p>" +
+	                "</body>" +
+	                "</html>",
+	                analysis.getAnalysisName(),
+	                analysis.getBatchSize(),
+	                analysis.getStatus()
+	            );
+	            break;
+	        case "Analysis Submitted":
+	            emailBody = String.format(
+	                "<html>" +
+	                "<body>" +
+	                "<p>Dear Team,</p>" +
+	                "<p>The experiment  Analysis has been submitted . Here are the details:</p>" +
+	                "<ul>" +                                     
+	                "<li><b>Experiment Name:</b> %s</li>" +
+	                "<li><b>Batch:</b> %s</li>" +
+	                "<li><b>Status:</b> %s</li>" +
+	                "</ul>" +
+	                "<p>Please review the updated status and take necessary actions if required.</p>" +
+	                "<p>Best regards,</p>" +
+	                "<p>[Your Team/Company Name]</p>" +
+	                "</body>" +
+	                "</html>",
+	                analysis.getAnalysisName(),
+	                analysis.getBatchSize(),
+	                analysis.getStatus()
+	            );
+	            break;
+	        default:
+	            emailBody = "<html><body><p>Status update received with unknown status.</p></body></html>";
+	            break;
+	    }
+		    // Send email notification to the creator and relevant team members
+		    EmailNotification emailNotification = elnUtils.buildEmailNotification(
+		            emailSubject,
+		            emailBody,
+		            creatorMailId,
+		            teamMemberMailIds
+		    );
+		    
+		    emailNotificationService.saveEmailNotification(emailNotification);
 
 		if(TestRequestFormRequest.TRF_STATUS.ANLYSIS_SUBMIT.getValue().equals(analysisRequest.getStatus())) {
 			analysisDao.updateTRFStatus(analysisRequest.getAnalysisId(), TestRequestFormRequest.TRF_STATUS.ANLYSIS_SUBMIT.getValue());
@@ -283,20 +421,44 @@ public class AnalysisServiceImpl implements AnalysisService {
 		analysisRequest.setAnalysisId(analysisReview.getAnalysisId());
 		analysisRequest.setStatus(AnalysisRequest.ANALYSIS_STATUS.INREVIEW.getValue());
 		analysisRequest.setSummary(AnalysisRequest.ANALYSIS_STATUS.INREVIEW.getValue());
-
+		analysisRequest.setUserId(analysisReview.getReviewUserId());
 		this.updateAnalysisStatus(analysisRequest);
-
 		Integer analysisId = analysisReview.getAnalysisId();
-
+		AnalysisDto analysis = analysisDao.getAnalysisById(analysisRequest.getAnalysisId());
 		UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(analysisReview.getReviewUserId());
 		String reviewerMailId = creatorDetails.getMailId();
+		  String emailBody = String.format(
+		            "<html>" +
+		            "<body>" +
+		            "<p>Dear Reviewer,</p>" +
+		            "<p>The status of the analysis Experiment  Status has been updated. Here are the details:</p>" +
+		            "<ul>" +
+		            "<li><b>Status:</b> %s</li>" +
+		            "<li><b>Summary:</b> %s</li>" +
+		            "<li><b>Experiment Name:</b> %s</li>" +
+		            "<li><b>Batch:</b> %s</li>" +
+		            "</ul>" +
+		            "<p>Please review the updated status and take necessary actions if required.</p>" +
+		            "<p>Best regards,</p>" +
+		            "<p>[Your Team/Company Name]</p>" +
+		            "</body>" +
+		            "</html>",
+		            analysisRequest.getStatus(),
+		            analysisRequest.getSummary(),
+		            analysis.getAnalysisName(),  // Assuming this is a field in the analysis object
+		            analysis.getBatchSize()      // Assuming this is a field in the analysis object
+		    );
 
-		// Send email notification to the reviewer (exclude team members)
-		List<String> teamMemberMailIds = new ArrayList<String>();
-		EmailNotification emailNotification = elnUtils.buildEmailNotification("Analysis Review Created",
-				"Analysis Experiment with Analysis experiment id " + analysisId + " has been sent for your review.",
-				reviewerMailId, teamMemberMailIds);
-		emailNotificationService.saveEmailNotification(emailNotification);
+
+		    // Send email notification to the reviewer (excluding team members)
+		    List<String> teamMemberMailIds = new ArrayList<>();
+		    EmailNotification emailNotification = elnUtils.buildEmailNotification(
+		            "Analysis Review Created",
+		            emailBody,  // Use the HTML-formatted email body
+		            reviewerMailId,
+		            teamMemberMailIds
+		    );
+		    emailNotificationService.saveEmailNotification(emailNotification);
 		return analysisId;
 
 	}
@@ -317,5 +479,33 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public AnalysisReviewDto getAnalysisReview(Integer analysisId) {
 		return analysisDao.getAnalysisReview(analysisId);
 	}
+	
+	public String generateUniqueAnalyisisexperimentId() {
+	    String lastExperimentName = analysisDao.generateUniqueAnalyisisexperimentId();
+	    if (lastExperimentName == null || lastExperimentName.length() < 4) {
+	        return "mgss001";
+	    }
+	    if (!lastExperimentName.startsWith("mgss") || lastExperimentName.length() <= 4) {
+	        return "mgss001"; // If the format is incorrect, handle it appropriately
+	    }
+	    
+	    String numberPart = lastExperimentName.substring(4);
+
+	    // Ensure the numberPart contains only digits before parsing
+	    if (!numberPart.matches("\\d+")) {
+	        throw new RuntimeException("Invalid numeric part in experiment name: " + lastExperimentName);
+	    }
+
+	    try {
+	        int number = Integer.parseInt(numberPart);
+	        number++;
+	        int paddingLength = numberPart.length();
+	        String newNumberPart = String.format("%0" + paddingLength + "d", number);
+	        return "mgss" + newNumberPart;
+	    } catch (NumberFormatException e) {
+	        throw new RuntimeException("Invalid numeric part in experiment name: " + lastExperimentName, e);
+	    }
+	}
+
 
 }

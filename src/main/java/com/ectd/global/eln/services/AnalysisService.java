@@ -45,4 +45,6 @@ public interface AnalysisService {
 	
 	AnalysisReviewDto getAnalysisReview(Integer analysisId);
 	
+	String generateUniqueAnalyisisexperimentId();
+	
 }

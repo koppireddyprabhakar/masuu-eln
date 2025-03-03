@@ -50,5 +50,7 @@ public interface ExperimentDao {
 	Integer updateExperimentReview(ExperimentReview experimentReview);
 	
 	ExperimentReviewDto getExperimentReview(Integer experimentId);
+		
+	 String findLastExperimentId();
 	
 }

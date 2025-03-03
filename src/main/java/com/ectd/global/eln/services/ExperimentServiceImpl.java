@@ -62,6 +62,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 	public List<ExperimentDto> getExperiments(Integer userId, String status) {
 		return experimentDao.getExperiments(userId, status);
 	}
+	
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -96,7 +97,29 @@ public class ExperimentServiceImpl implements ExperimentService {
 			experimentDao.batchInsert(experimentRequest.getExperimentDetailsList());
 		}
 	       List<String> teamMemberMailIds = new ArrayList<String>();
-	       EmailNotification emailNotification = elnUtils.buildEmailNotification("Formulation Experiment Created", "Formulation Experiment with EXP_ID " + experimentId + "   has been created successfully.", creatorMailId, teamMemberMailIds);
+	       String emailBody = String.format(
+	    		    "<html>" +
+	    		    "<body>" +
+	    		    "<p>Dear Team,</p>" +
+	    		    "<p>We are pleased to inform you that a new experiment has been successfully created. Here are the experiment details:</p>" +
+	    		    "<ul>" +
+	    		    "<li><b>Experiment Name:</b> %s</li>" +
+	    		    "<li><b>Batch Size:</b> %s</li>" + // Ensure getBatchSize() returns an int or Integer
+	    		    "</ul>" +
+	    		    "<p>Thank you for your commitment and effort. Please reach out if you have any questions or need further assistance.</p>" +
+	    		    "<p>Best regards,</p>" +
+	    		    "<p>[Your Team/Company Name]</p>" +
+	    		    "</body>" +
+	    		    "</html>",
+	    		    experimentRequest.getExperimentName(),
+	    		    experimentRequest.getBatchSize() != null ? experimentRequest.getBatchSize() : 0 // Fallback to 0 if null
+	    		);
+	       EmailNotification emailNotification = elnUtils.buildEmailNotification(
+	               "Formulation Experiment Created",
+	               emailBody,
+	               creatorMailId,
+	               teamMemberMailIds
+	       );
 	       emailNotificationService.saveEmailNotification(emailNotification);
 	       
 	       ProjectRequest projectRequest = new ProjectRequest();
@@ -104,11 +127,6 @@ public class ExperimentServiceImpl implements ExperimentService {
 	       projectRequest.setStatus(ProjectRequest.PROJECT_STATUS.INPROGRESS.getValue());
 	       projectDao.updateProjectStatus(projectRequest);
 	       
-//		if(!CollectionUtils.isEmpty(experimentRequest.getExcipients())) {
-//			experimentRequest.getExcipients().stream().forEach(e -> e.setExperimentId(expermentId));
-//			experimentDao.batchExcipientInsert(experimentRequest.getExcipients());
-//		}
-
 		return experimentId;
 	}
 
@@ -200,7 +218,38 @@ public class ExperimentServiceImpl implements ExperimentService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public Integer updateExperimentStatus(Integer experimentId, String status) {
-		return experimentDao.updateExperimentStatus(experimentId, status);
+		Integer updatedRows = experimentDao.updateExperimentStatus(experimentId, status);
+		
+		ExperimentDto experiment = experimentDao.getExperimentById(experimentId);
+		UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(experiment.getUserId());
+		String creatorMailId = creatorDetails.getMailId();
+		  String emailBody = String.format(
+			        "<html>" +
+			        "<body>" +
+			        "<p>Dear Team,</p>" +
+			        "<p>The status of the following experiment has been updated:</p>" +
+			        "<ul>" +
+			        "<li><b>Experiment Name:</b> %s</li>" +
+			        "<li><b>Status:</b> %s</li>" +
+			        "</ul>" +
+			        "<p>Thank you for your attention to this update. Please reach out if you have any questions or need further assistance.</p>" +
+			        "<p>Best regards,</p>" +
+			        "<p>[Your Team/Company Name]</p>" +
+			        "</body>" +
+			        "</html>",
+			        experiment.getExperimentName(),
+			        status
+			    );
+		  // Create the email notification
+		    EmailNotification emailNotification = elnUtils.buildEmailNotification(
+		            "Experiment Status Updated",
+		            emailBody,
+		            creatorMailId,
+		            new ArrayList<>()
+		    );
+		    // Save the email notification
+		    emailNotificationService.saveEmailNotification(emailNotification);
+		 return updatedRows;
 	}
 
 	private Integer update(ExperimentRequest experimentRequest) {
@@ -231,12 +280,30 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 		 UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(experimentReview.getReviewUserId());
 	     String creatorMailId = creatorDetails.getMailId();
+	     ExperimentDto experiment = experimentDao.getExperimentById(experimentId); // Assuming this fetches experiment details
+	     String experimentName = experiment.getExperimentName();
 
+	     String emailBody = String.format(
+	             "<html>" +
+	             "<body>" +
+	             "<p>Dear %s,</p>" +
+	             "<p>An experiment review for <b>%s</b> has been created and is awaiting your attention.</p>" +
+	             "<p>Please log in to the system to view and proceed with the review process.</p>" +
+	             "<p>Best regards,</p>" +
+	             "<p>[Your Team/Company Name]</p>" +
+	             "</body>" +
+	             "</html>",
+	             creatorDetails.getFirstName(),
+	             experimentName
+	     );
 
-		// Send email notification to creator and team members
-		List<String> teamMemberMailIds = new ArrayList<String>();
-		  EmailNotification emailNotification = elnUtils.buildEmailNotification("Experiment Review Created","An experiment with experiment ID " + experimentId + "  has been sent for your review", creatorMailId,teamMemberMailIds);
-		  emailNotificationService.saveEmailNotification(emailNotification);
+	     EmailNotification emailNotification = elnUtils.buildEmailNotification(
+	             "Experiment Review Created",
+	             emailBody,
+	             creatorMailId,
+	             new ArrayList<>()
+	     );
+	    emailNotificationService.saveEmailNotification(emailNotification);
 		return experimentId;
 	}
 
@@ -261,4 +328,23 @@ public class ExperimentServiceImpl implements ExperimentService {
 		return experimentDao.getTRFByExpIds(experimentId);
 	}
 
+	public String generateUniqueexperimentId() {
+	    String lastExperimentName = experimentDao.findLastExperimentId();
+	    if (lastExperimentName == null || lastExperimentName.length() < 4) {
+	        return "mgss001"; 
+	    }
+	    if (!lastExperimentName.startsWith("mgss") || lastExperimentName.length() <= 4) {
+	        return "mgss001"; // If the format is incorrect, handle it appropriately
+	    }
+	    String numberPart = lastExperimentName.substring(4);
+	    try {
+	        int number = Integer.parseInt(numberPart);
+	        number++; 
+	        int paddingLength = numberPart.length();
+	        String newNumberPart = String.format("%0" + paddingLength + "d", number);
+	        return "mgss" + newNumberPart;
+	    } catch (NumberFormatException e) {
+	        throw new RuntimeException("Invalid numeric part in experiment name: " + lastExperimentName, e);
+	    }
+	}
 }

@@ -58,4 +58,12 @@ public class DashboardController extends BaseController {
 		Integer[] arr = counts.toArray(new Integer[0]);
 		return ResponseEntity.ok(arr);
 	}
+	
+	@GetMapping("/analysis-experiments-by-status")
+	public ResponseEntity<Integer[]> getAnalysisExpByStatus() {
+		List<MonthCountDto> AnalysisExpCount = dashboardService.getAnalysisExpByStatus();
+		List<Integer> counts = AnalysisExpCount.stream().map(MonthCountDto::getCount).collect(Collectors.toList());
+		Integer[] arr = counts.toArray(new Integer[0]);
+		return ResponseEntity.ok(arr);
+	}
 }

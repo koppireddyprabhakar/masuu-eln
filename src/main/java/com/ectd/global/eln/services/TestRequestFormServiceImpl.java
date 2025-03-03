@@ -145,6 +145,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 			testRequest.setTestNumber(tr.getTestNumber());
 			testRequest.setTestResult(tr.getTestResult());
 			testRequest.setTestStatus(tr.getTestStatus());
+			testRequest.setDescription(tr.getDescription());
 			
 			return testRequest;
 		}).collect(Collectors.toList());

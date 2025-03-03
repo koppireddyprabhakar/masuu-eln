@@ -12,6 +12,7 @@ public class AnalysisDto extends Base implements Serializable {
 
 	private Integer analysisId;  
 	private Integer projectId;  
+	private String productCode;
 	private Integer teamId;  
 	private Integer userId;
 	private String analysisName;  
@@ -21,9 +22,8 @@ public class AnalysisDto extends Base implements Serializable {
 	private String batchNumber;
 	private Date analysisSubmitDate;
     private String expStartDate;
-    
-    ProjectDto project;
-    
+    private String departmentName;
+	ProjectDto project;
     private Set<AnalysisDetailsDto> analysisDetails;
     private Set<AnalysisExcipientDto> analysisExcipients;
     private Set<TestRequestFormDto> testRequestForms;
@@ -180,6 +180,22 @@ public class AnalysisDto extends Base implements Serializable {
 	        result = 31 * result + projectId.hashCode();
 	    }
 	    return result;
+	}
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String string) {
+		this.productCode = string;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 
 }

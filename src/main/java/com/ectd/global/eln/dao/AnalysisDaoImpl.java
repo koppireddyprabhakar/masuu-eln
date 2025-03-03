@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -31,6 +32,7 @@ import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
 import com.ectd.global.eln.dto.AnalysisReviewDto;
+import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
@@ -111,6 +113,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	@Value("${get.anlaysis.review}")
 	private String GET_ANALYSIS_REVIEW_QUERY;
+	
+	@Value("${select.unique.analysisExperiment.name}")
+	 private String FIND_LAST_ANALYSIS_ID_QUERY;
 
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -150,7 +155,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		StringBuilder sb = new StringBuilder(GET_ANALYSIS_LIST_QUERY);
 
 		if(userID != null) {
-			sb.append(" AND USER_ID = ").append(userID);
+			sb.append(" AND AE.USER_ID = ").append(userID);
 		}
 		
 		if(teamId != null) {
@@ -237,12 +242,15 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			analysisDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			analysisDto.setUpdateDate(resultSet.getDate("INSERT_DATE"));
 			analysisDto.setUpdateUser(resultSet.getString("INSERT_USER"));
+			analysisDto.setDepartmentName(resultSet.getString("DEPARTMENT_NAME"));
+			analysisDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
 
 			ProjectDto projectDto = new ProjectDto();
 			projectDto.setProjectId(resultSet.getInt("PROJECT_ID"));
 			projectDto.setProjectName(resultSet.getString("PROJECT_NAME"));
 			projectDto.setProductId(resultSet.getInt("PRODUCT_ID"));
 			projectDto.setProductName(resultSet.getString("PRODUCT_NAME"));
+			projectDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
 			projectDto.setStrength(resultSet.getString("STRENGTH"));
 			projectDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
 			projectDto.setDosageName(resultSet.getString("DOSAGE_NAME"));
@@ -492,6 +500,16 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		return analysisReviewDtos.get(0);
 	}
 	
+	public String generateUniqueAnalyisisexperimentId() {
+        try {
+            // Execute the query to get the last analysis experiment ID
+            return namedParameterJdbcTemplate.queryForObject(FIND_LAST_ANALYSIS_ID_QUERY, new MapSqlParameterSource(), String.class);
+        } catch (EmptyResultDataAccessException e) {
+            // Return null if no analysis experiment ID is found
+            return null;
+        }
+    }
+	
 	class AnalysisReviewRowMapper implements RowMapper<AnalysisReviewDto> {
 		public AnalysisReviewDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			AnalysisReviewDto analysisReviewDto = new AnalysisReviewDto();
@@ -504,7 +522,6 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			return analysisReviewDto;
 		};
 	}
-
 	class AnalysisExcipientRowMapper implements RowMapper<AnalysisExcipientDto> {
 		public AnalysisExcipientDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			AnalysisExcipientDto excipientDto = getAnalysisExcipientDto(resultSet);
@@ -519,7 +536,6 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		@Override
 		public List<AnalysisDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
 			List<AnalysisDto> analysisDtoList = new ArrayList<AnalysisDto>();
-
 			while(resultSet.next()) {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
 
@@ -547,7 +563,6 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		@Override
 		public List<AnalysisDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
 			List<AnalysisDto> analysisDtoList = new ArrayList<AnalysisDto>();
-
 			while(resultSet.next()) {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
 
@@ -576,6 +591,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		analysisDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
 		analysisDto.setAnalysisName(resultSet.getString("ANALYSIS_NAME"));
 		analysisDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+//		analysisDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
 		analysisDto.setTeamId(resultSet.getInt("TEAM_ID"));
 		analysisDto.setSummary(resultSet.getString("SUMMARY"));
 		analysisDto.setStatus(resultSet.getString("STATUS"));
@@ -632,6 +648,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));
 		testRequestFormDto.setTestName(resultSet.getString("TEST_NAME"));
 		testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
+		testRequestFormDto.setDescription(resultSet.getString("TEST_DESCRIPTION"));
 		testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
 		testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
 
@@ -655,9 +672,11 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));
 			testRequestFormDto.setTestName(resultSet.getString("TEST_NAME"));
 			testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
+			testRequestFormDto.setDescription(resultSet.getString("TEST_DESCRIPTION"));
 			testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
 			testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
-			testRequestFormDto.setStatus(resultSet.getString("STATUS"));		
+			testRequestFormDto.setStatus(resultSet.getString("STATUS"));
+
 
 			return testRequestFormDto;
 		};

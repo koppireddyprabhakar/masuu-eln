@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -107,6 +108,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	
 	@Value("${get.experiment.review}")
 	private String GET_EXPERIMENT_REVIEW_QUERY;
+	
+	@Value("${select.unique.Experiment.name}")
+	 private String FIND_LAST_EXPERIMENT_ID_QUERY;
 
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
@@ -147,14 +151,14 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		StringBuilder sb = new StringBuilder(GET_EXPERIMENT_LIST_QUERY);
 
 		if(userId != null) {
-			sb.append(" AND USER_ID = ").append(userId);
+			sb.append(" AND E.USER_ID = ").append(userId);
 		}
 		
 		if(status != null) {
-			sb.append(" AND EXPERIMENT_STATUS = ").append("'"+status+"'");
+			sb.append(" AND E.EXPERIMENT_STATUS = ").append("'"+status+"'");
 		}
 
-		sb.append(" ORDER BY INSERT_DATE DESC");
+		sb.append(" ORDER BY E.INSERT_DATE DESC");
 
 		return jdbcTemplate.query(sb.toString(), new ExperimentRowMapper());
 	}
@@ -183,6 +187,19 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		return keyHolder.getKey().intValue();
 	}
 
+
+	@Override
+	public String findLastExperimentId() {
+	    try {
+	        // Execute the query to get the last experiment ID
+	        return namedParameterJdbcTemplate.queryForObject(FIND_LAST_EXPERIMENT_ID_QUERY, new MapSqlParameterSource(), String.class);
+	    } catch (EmptyResultDataAccessException e) {
+	        // Return null if no experiment ID is found
+	        return null;
+	    }
+	}
+
+	
 	@Override
 	public int[] batchInsert(List<ExperimentDetails> experimentDetailsList) {
 
@@ -576,6 +593,7 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 			testRequestFormDto.setTestNumber(resultSet.getString("TEST_NUMBER"));
 			testRequestFormDto.setTestResult(resultSet.getString("TEST_RESULT"));
 			testRequestFormDto.setTestStatus(resultSet.getString("TEST_STATUS"));
+			testRequestFormDto.setDescription(resultSet.getString("TEST_DESCRIPTION"));
 			testRequestFormDto.setStatus(resultSet.getString("STATUS"));
 			testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
 			
