@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.DosageDao;
 import com.ectd.global.eln.dto.DosageDto;
 import com.ectd.global.eln.request.DosageRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class DosageServiceImpl implements DosageService {
@@ -31,6 +32,7 @@ public class DosageServiceImpl implements DosageService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Dosage created")
 	public Integer createDosage(DosageRequest dosageRequest) {
 		return dosageDao.createDosage(dosageRequest);
 	}
@@ -49,6 +51,7 @@ public class DosageServiceImpl implements DosageService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	@Auditable(action = "Got dosage formulations")
 	public List<DosageDto> getDosagesAndFormulations() {
 		return dosageDao.getDosagesAndFormulations();
 	}
