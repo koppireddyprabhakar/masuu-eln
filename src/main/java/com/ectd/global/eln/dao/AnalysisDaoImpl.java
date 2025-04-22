@@ -116,6 +116,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	@Value("${select.unique.analysisExperiment.name}")
 	 private String FIND_LAST_ANALYSIS_ID_QUERY;
+	
+	@Value("${get.analysis.details.by.exp.id}")
+	private String GET_ANALYSIS_DETAILS_BY_EXPERIMENT_ID;
 
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -129,12 +132,23 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		return analysisList.get(0);
 	}
 
+	@Override
 	public List<AnalysisDto> getAnalysisExperiments(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
 				new AnalysisExtractor());
 
 		return analysisList;
 	}
+	
+	@Override
+	public List<AnalysisDto> getAnalysisDetailByExperimentId(Integer experimentId) {
+		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_DETAILS_BY_EXPERIMENT_ID + " AND E.EXP_ID = " + experimentId,
+				new AnalysisExperimentRowMapper());
+
+		return analysisList;
+	}
+	
+	
 
 	@Override
 	public AnalysisDto getAnalysisByIdWithoutTRF(Integer analysisId) {
@@ -682,5 +696,21 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		};
 	}
 
+	
+	class AnalysisExperimentRowMapper implements RowMapper<AnalysisDto> {
+		public AnalysisDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			AnalysisDto analysisDto = new AnalysisDto();
+			analysisDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+			analysisDto.setAnalysisName(resultSet.getString("ANALYSIS_NAME"));
+			analysisDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+			analysisDto.setStatus(resultSet.getString("STATUS"));
+			analysisDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
+			analysisDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
+			analysisDto.setUserId(resultSet.getInt("USER_ID"));
+			analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+
+			return  analysisDto;
+		};
+	}
 
 }

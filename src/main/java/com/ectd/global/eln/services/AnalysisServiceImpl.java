@@ -480,6 +480,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return analysisDao.getAnalysisReview(analysisId);
 	}
 	
+	@Override
+	public List<AnalysisDto> getAnalysisDetailByExperimentId(Integer experimentId){
+		return analysisDao.getAnalysisDetailByExperimentId(experimentId);
+	}
+	
 	public String generateUniqueAnalyisisexperimentId() {
 	    String lastExperimentName = analysisDao.generateUniqueAnalyisisexperimentId();
 	    if (lastExperimentName == null || lastExperimentName.length() < 4) {

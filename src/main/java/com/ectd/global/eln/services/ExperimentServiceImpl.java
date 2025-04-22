@@ -205,8 +205,8 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public List<ExperimentDto> getExperimentsWithProject() {
-		return experimentDao.getExperimentsWithProject();
+	public List<ExperimentDto> getExperimentsByProjectId(Integer projectId) {
+		return experimentDao.getExperimentsByProjectId(projectId);
 	}
 
 	@Override

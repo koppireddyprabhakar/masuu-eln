@@ -31,7 +31,7 @@ public interface ExperimentDao {
 	
 	int[] batchUpdate(List<ExperimentDetails> experimentDetails);
 
-	List<ExperimentDto> getExperimentsWithProject();
+	List<ExperimentDto> getExperimentsByProjectId(Integer projectId);
 
 	List<ExperimentDto> getExperimentsInfo(Integer experimentId);
 

@@ -217,7 +217,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setTrfNumber(resultSet.getString("TRF_NUMBER"));
 			testRequestFormDto.setExpId(resultSet.getInt("EXP_ID"));
 			//testRequestFormDto.setProjectId(resultSet.getInt("PROJECT_ID"));
-			//testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+			testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
 			testRequestFormDto.setTestRequestFormStatus(resultSet.getString("TRF_STATUS"));
 			testRequestFormDto.setCondition(resultSet.getString("CONDITION"));
 			testRequestFormDto.setStage(resultSet.getString("STAGE"));

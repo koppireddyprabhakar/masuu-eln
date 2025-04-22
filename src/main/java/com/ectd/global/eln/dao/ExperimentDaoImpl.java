@@ -300,8 +300,8 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	}
 	
 	@Override
-	public List<ExperimentDto> getExperimentsWithProject() {
-		return jdbcTemplate.query(GET_EXPERIMENT_PROJECT_QUERY, new ExperimentProjectRowMapper());
+	public List<ExperimentDto> getExperimentsByProjectId(Integer projectId) {
+		return jdbcTemplate.query(GET_EXPERIMENT_PROJECT_QUERY + " AND EX.PROJECT_ID = " + projectId, new ExperimentProjectRowMapper());
 	}
 
 	@Override

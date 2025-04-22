@@ -47,4 +47,6 @@ public interface AnalysisService {
 	
 	String generateUniqueAnalyisisexperimentId();
 	
+	List<AnalysisDto> getAnalysisDetailByExperimentId(Integer experimentId);
+	
 }

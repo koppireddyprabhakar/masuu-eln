@@ -237,4 +237,10 @@ public class AnalysisController extends BaseController {
 	    String UniqueAnalyisisexperimentId = analysisService.generateUniqueAnalyisisexperimentId();
 	    return new ResponseEntity<String>(UniqueAnalyisisexperimentId, HttpStatus.OK);
 	}
+	
+	@GetMapping("/get_analysis_details_by_experiment_id")
+	public ResponseEntity<List<AnalysisDto>> getAnalysisDetailByExperimentId(@RequestParam Integer experimentId) {
+		List<AnalysisDto> analysisDtoList = analysisService.getAnalysisDetailByExperimentId(experimentId);
+		return ResponseEntity.ok(analysisDtoList);
+	}
 }

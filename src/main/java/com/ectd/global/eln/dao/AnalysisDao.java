@@ -62,4 +62,6 @@ public interface AnalysisDao {
 	
 	String generateUniqueAnalyisisexperimentId();
 	
+	List<AnalysisDto> getAnalysisDetailByExperimentId(Integer experimentId);
+	
 }

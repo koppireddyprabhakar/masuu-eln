@@ -22,7 +22,7 @@ public interface ExperimentService {
 
 	Integer deleteExperiment(ExperimentRequest experimentRequest);
 	
-	List<ExperimentDto> getExperimentsWithProject();
+	List<ExperimentDto> getExperimentsByProjectId(Integer projectId);
 
 	List<ExperimentDto> getExperimentsInfo(Integer experimentId);
 	
