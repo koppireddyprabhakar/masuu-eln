@@ -596,6 +596,7 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 			testRequestFormDto.setDescription(resultSet.getString("TEST_DESCRIPTION"));
 			testRequestFormDto.setStatus(resultSet.getString("STATUS"));
 			testRequestFormDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+			testRequestFormDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			
 			return testRequestFormDto;
 		};

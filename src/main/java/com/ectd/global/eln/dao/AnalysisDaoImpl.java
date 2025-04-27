@@ -32,7 +32,6 @@ import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
 import com.ectd.global.eln.dto.AnalysisReviewDto;
-import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisDetails;
@@ -119,6 +118,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	@Value("${get.analysis.details.by.exp.id}")
 	private String GET_ANALYSIS_DETAILS_BY_EXPERIMENT_ID;
+	
+	@Value("${get.analysis.by.project.id}")
+	private String GET_ANALYSIS_BY_PROJECT_ID;
 
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -514,6 +516,14 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		return analysisReviewDtos.get(0);
 	}
 	
+	public List<AnalysisDto> getAnalysisByProjectId(Integer projectId) {
+		
+		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_PROJECT_ID + " AND A.PROJECT_ID = " + projectId,
+				new AnalysisProjectExtractor());
+
+		return analysisList;
+	}
+	
 	public String generateUniqueAnalyisisexperimentId() {
         try {
             // Execute the query to get the last analysis experiment ID
@@ -594,6 +604,19 @@ public class AnalysisDaoImpl implements AnalysisDao {
 					analysisDtoList.add(analysisDto);
 				}
 
+			}
+			return analysisDtoList;
+		};
+	}
+	
+	class AnalysisProjectExtractor implements ResultSetExtractor<List<AnalysisDto>> {
+
+		@Override
+		public List<AnalysisDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+			List<AnalysisDto> analysisDtoList = new ArrayList<AnalysisDto>();
+			while(resultSet.next()) {
+				AnalysisDto analysisDto = getAnalysisDto(resultSet);
+				analysisDtoList.add(analysisDto);
 			}
 			return analysisDtoList;
 		};

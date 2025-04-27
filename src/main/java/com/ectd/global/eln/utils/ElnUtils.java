@@ -1,14 +1,10 @@
 package com.ectd.global.eln.utils;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ectd.global.eln.request.EmailNotification;
-import com.ectd.global.eln.services.EmailNotificationService;
 import com.ectd.global.eln.request.EmailNotification;
 
 
