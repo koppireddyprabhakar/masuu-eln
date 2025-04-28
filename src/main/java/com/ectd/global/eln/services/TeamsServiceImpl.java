@@ -14,6 +14,7 @@ import com.ectd.global.eln.dao.TeamsDao;
 import com.ectd.global.eln.dto.TeamsDto;
 import com.ectd.global.eln.request.TeamDosage;
 import com.ectd.global.eln.request.TeamsRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class TeamsServiceImpl implements TeamsService {
@@ -35,12 +36,14 @@ public class TeamsServiceImpl implements TeamsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Team  Created")
 	public Boolean createTeams(TeamsRequest teamsRequest) {
 		return teamsDao.createTeams(teamsRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Team  Updated")
 	public Integer updateTeams(TeamsRequest teamsRequest) {
 		teamsDao.updateTeams(teamsRequest);
 

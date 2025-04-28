@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.FormulationDao;
 import com.ectd.global.eln.dto.FormulationDto;
 import com.ectd.global.eln.request.FormulationRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class FormulationServiceImpl implements FormulationService {
@@ -31,12 +32,14 @@ public class FormulationServiceImpl implements FormulationService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Formulation Created")
 	public Integer createFormulation(FormulationRequest formulationRequest) {
 		return formulationDao.createFormulation(formulationRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Formulation Updated")
 	public Integer updateFormulation(FormulationRequest formulationRequest) {
 		return formulationDao.updateFormulation(formulationRequest);
 	}

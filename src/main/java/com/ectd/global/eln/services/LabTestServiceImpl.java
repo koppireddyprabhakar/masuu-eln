@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.LabTestDao;
 import com.ectd.global.eln.dto.TestDto;
 import com.ectd.global.eln.request.TestRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class LabTestServiceImpl implements LabTestService {
@@ -32,12 +33,14 @@ public class LabTestServiceImpl implements LabTestService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Tests Created")
 	public Integer createTest(TestRequest testRequest) {
 		return labTestDao.createTest(testRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Tests Updated")
 	public Integer updateTest(TestRequest testRequest) {
 		return labTestDao.updateTest(testRequest);
 	}

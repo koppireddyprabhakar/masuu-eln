@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.ProjectTeamDao;
 import com.ectd.global.eln.dto.ProjectTeamDto;
 import com.ectd.global.eln.request.ProjectTeamRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class ProjectTeamServiceImpl implements ProjectTeamService {
@@ -31,12 +32,14 @@ public class ProjectTeamServiceImpl implements ProjectTeamService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "ProjectTeam  Created")
 	public Integer createProjectTeam(ProjectTeamRequest projectTeamRequest) {
 		return projectTeamDao.createProjectTeam(projectTeamRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "ProjectTeam  Updated")
 	public Integer updateProjectTeam(ProjectTeamRequest projectTeamRequest) {
 		return projectTeamDao.updateProjectTeam(projectTeamRequest);
 	}

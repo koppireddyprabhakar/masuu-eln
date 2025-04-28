@@ -22,6 +22,7 @@ import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.UserTeamRequest;
 import com.ectd.global.eln.request.UsersDetailsRequest;
+import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
@@ -61,6 +62,7 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 		@Override
 		@Transactional(propagation = Propagation.REQUIRED)
+		@Auditable(action = "User Details Added")
 		public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 			Integer userId = usersDetailsDao.createUsersDetails(usersDetailsRequest);
 			if(userId != null) {
@@ -113,6 +115,7 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "User Details Updated")
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		usersDetailsDao.updateUsersDetails(usersDetailsRequest);
 		

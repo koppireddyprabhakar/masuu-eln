@@ -11,6 +11,7 @@ import com.ectd.global.eln.request.AnalysisRequest;
 import com.ectd.global.eln.request.AnalysisReview;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 
+
 public interface AnalysisService {
 	
 	AnalysisDto getAnalysisById(Integer analysisId);
@@ -48,5 +49,9 @@ public interface AnalysisService {
 	String generateUniqueAnalyisisexperimentId();
 	
 	List<AnalysisDto> getAnalysisDetailByExperimentId(Integer experimentId);
+	
+    AnalysisDto getAnalysisByAnalysisExperimentId(Integer analysisId);
+	
+	List<AnalysisDto> getAnalysisListWithNullExpId(Integer teamId, String status, Integer userID);
 	
 }

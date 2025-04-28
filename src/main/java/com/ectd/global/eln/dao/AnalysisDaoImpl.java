@@ -121,6 +121,13 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	@Value("${get.analysis.by.project.id}")
 	private String GET_ANALYSIS_BY_PROJECT_ID;
+	
+	@Value("${get.analysis.experiment.info}")
+	 private String getAnalysisByAnalysisIdQuery;
+	
+	@Value("${select.analysis.list.without.expid}")
+	 private String GET_ANALYSIS_LIST_WITHOUT_EXPID_QUERY;
+
 
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -187,6 +194,38 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return jdbcTemplate.query(sb.toString(), new AnalysisRowMapper());
 	}
+	
+	@Override
+	 public AnalysisDto getAnalysisByAnalysisExperimentId(Integer analysisId) {
+	     List<AnalysisDto> analysisList = jdbcTemplate.query(getAnalysisByAnalysisIdQuery + analysisId, new AnalysisRowMapper());
+
+	     if (analysisList.isEmpty()) {
+	         return null;
+	     }
+
+	     return analysisList.get(0);
+	 }
+	 
+	 
+	@Override
+	public List<AnalysisDto> getAnalysisListWithNullExpId(Integer teamId, String status, Integer userID) {
+	    StringBuilder sb = new StringBuilder(GET_ANALYSIS_LIST_WITHOUT_EXPID_QUERY);
+	    if (userID != null) {
+	        sb.append(" AND AE.USER_ID = ").append(userID);
+	    }
+	    if (teamId != null) {
+	        sb.append(" AND AE.TEAM_ID = ").append(teamId);
+	    }
+	    if (status != null) {
+	        sb.append(" AND AE.STATUS = '").append(status).append("'");
+	    }
+	    // Add condition to filter only analysis experiments where TRF.EXP_ID is NULL
+	    //sb.append(" AND T.EXP_ID IS NULL");
+	    sb.append(" ORDER BY AE.INSERT_DATE DESC");
+
+	    return jdbcTemplate.query(sb.toString(), new AnalysisRowMapper());
+	}
+
 
 	@Override
 	public Integer createAnalysis(AnalysisRequest analysisRequest) {

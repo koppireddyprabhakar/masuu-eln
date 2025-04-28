@@ -17,6 +17,7 @@ import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
+import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
@@ -51,6 +52,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "TestRequestForm  Created")
 	public Integer createTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
 	
 		int[] rowsEffected = testRequestFormDao.batchTestRequestInsert(prepareTestRequest(testRequestFormRequest));
@@ -77,6 +79,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "TestRequestForm  Updated")
 	public Integer updateTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
 		List<TestRequestFormRequest> testRequests = prepareTestRequest(testRequestFormRequest);
 		

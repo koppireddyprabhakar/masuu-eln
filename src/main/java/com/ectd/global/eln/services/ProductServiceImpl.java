@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.ProductDao;
 import com.ectd.global.eln.dto.ProductDto;
 import com.ectd.global.eln.request.ProductRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,12 +32,14 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "product created")
 	public Integer createProduct(ProductRequest productRequest) {
 		return productRepository.createProduct(productRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Product  Updated")
 	public Integer updateProduct(ProductRequest productRequest) {
 		return productRepository.updateProduct(productRequest);
 	}

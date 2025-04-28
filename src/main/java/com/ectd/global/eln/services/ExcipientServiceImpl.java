@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.ExcipientDao;
 import com.ectd.global.eln.dto.ExcipientDto;
 import com.ectd.global.eln.request.ExcipientRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class ExcipientServiceImpl implements ExcipientService {
@@ -32,12 +33,14 @@ public class ExcipientServiceImpl implements ExcipientService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Formulation Excipients Created")
 	public Integer createExcipient(ExcipientRequest excipientRequest) {
 		return excipientDao.createExcipient(excipientRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Formulation Excipients Updated")
 	public Integer updateExcipient(ExcipientRequest excipientRequest) {
 		
 		if(excipientRequest.getQuantity().doubleValue() == 0.00) {

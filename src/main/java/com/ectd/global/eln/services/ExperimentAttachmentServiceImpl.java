@@ -21,6 +21,7 @@ import com.ectd.global.eln.dao.ExperimentAttachmentDao;
 import com.ectd.global.eln.dto.ExperimentAttachmentDto;
 import com.ectd.global.eln.request.ExperimentAttachment;
 import com.ectd.global.eln.request.FileInfo;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 @PropertySource(value = {"classpath:/application.properties"})
@@ -43,6 +44,7 @@ public class ExperimentAttachmentServiceImpl implements ExperimentAttachmentServ
 	}
 
 	@Override
+	@Auditable(action = "Formulation Experiment Attachments added")
 	public List<FileInfo> createExperimentAttachment(ExperimentAttachment experimentAttachment) {
 		this.save(experimentAttachment);
 		expermentAttachmentDao.createExperimentAttachment(experimentAttachment);
@@ -50,6 +52,7 @@ public class ExperimentAttachmentServiceImpl implements ExperimentAttachmentServ
 	}
 
 	@Override
+	@Auditable(action = "Formulation Experiment Attachments Updated")
 	public Integer updateExperimentAttachment(ExperimentAttachment experimentAttachment) {
 		return expermentAttachmentDao.updateExperimentAttachment(experimentAttachment);
 	}

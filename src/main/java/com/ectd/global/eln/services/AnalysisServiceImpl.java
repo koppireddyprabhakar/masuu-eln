@@ -32,6 +32,7 @@ import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
+import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
@@ -69,6 +70,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis Experiment Created")
 	public Integer createAnalysis(AnalysisRequest analysisRequest) {
 		Integer analysisId = analysisDao.createAnalysis(analysisRequest);
 		
@@ -132,6 +134,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis Experiment Updated")
 	public Integer updateAnalysis(AnalysisRequest analysisRequest) {
 		return this.update(analysisRequest);
 	}
@@ -165,18 +168,21 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis Excipients Created")
 	public Integer createAnalysisExcipient(AnalysisExcipient analysisExcipient) {
 		return analysisDao.createAnalysisExcipient(analysisExcipient);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis Excipients Updated")
 	public Integer updateAnalysisExcipient(AnalysisExcipient analysisExcipient) {
 		return analysisDao.updateAnalysisExcipient(analysisExcipient);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis Excipients Saved")
 	public Integer saveAnalysisExcipients(List<AnalysisExcipient> analysisExcipients) {
 
 		if(CollectionUtils.isEmpty(analysisExcipients)) {
@@ -245,6 +251,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis TrfResult Created")
 	public Integer updateTestRequestFormResult(List<TestRequestFormRequest> results) {
 		return analysisDao.updateTestRequestFormResult(results);
 	}
@@ -257,6 +264,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis  Status Updated")
 	public Integer updateAnalysisStatus(AnalysisRequest analysisRequest) {
 
 		analysisDao.updateAnalysisStatus(analysisRequest);
@@ -413,6 +421,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
+	@Auditable(action = "Analysis  Review Created")
 	public Integer createAnalysisReview(AnalysisReview analysisReview) {
 
 		analysisDao.createAnalysisReview(analysisReview);
@@ -464,6 +473,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
+	@Auditable(action = "Analysis  Review Updated")
 	public Integer updateAnalysisReview(AnalysisReview analysisReview) {
 		analysisDao.updateAnalysisReview(analysisReview);
 		
@@ -511,6 +521,18 @@ public class AnalysisServiceImpl implements AnalysisService {
 	        throw new RuntimeException("Invalid numeric part in experiment name: " + lastExperimentName, e);
 	    }
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public AnalysisDto getAnalysisByAnalysisExperimentId(Integer analysisId) {
+	    return analysisDao.getAnalysisByAnalysisExperimentId(analysisId);
+	}
+	
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public List<AnalysisDto> getAnalysisListWithNullExpId(Integer teamId, String status, Integer userId) {
+	    return analysisDao.getAnalysisListWithNullExpId(teamId, status, userId);
+	}
 
 }

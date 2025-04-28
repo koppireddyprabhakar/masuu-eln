@@ -76,6 +76,7 @@ public class AnalysisController extends BaseController {
 	}
 
 	@PostMapping("/create-analysis")
+	
 	public ResponseEntity<String> createAnalysis(@RequestBody AnalysisRequest analysisRequest) {
 		Integer analysisId = analysisService.createAnalysis(analysisRequest);
 		return new ResponseEntity<String>(this.getJson(analysisId+""), HttpStatus.OK);
@@ -243,4 +244,14 @@ public class AnalysisController extends BaseController {
 		List<AnalysisDto> analysisDtoList = analysisService.getAnalysisDetailByExperimentId(experimentId);
 		return ResponseEntity.ok(analysisDtoList);
 	}
+	
+	@GetMapping("/get-analysis-by-analysis-experiment-id")
+	public ResponseEntity<AnalysisDto> getAnalysisByExperimentId(@RequestParam Integer analysisId) throws Exception {
+	    return new ResponseEntity<>(analysisService.getAnalysisByAnalysisExperimentId(analysisId), HttpStatus.OK);
+	}
+	@GetMapping("/get-analysis-by-status-without-expid")
+	public ResponseEntity<List<AnalysisDto>> getAnalysisByStatusWithoutExpId(@RequestParam String status) throws Exception {
+	    return new ResponseEntity<>(analysisService.getAnalysisListWithNullExpId(null, status, null), HttpStatus.OK);
+    }
+	
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.TrfTestResultDao;
 import com.ectd.global.eln.dto.TrfTestResultDto;
 import com.ectd.global.eln.request.TrfTestResultRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class TrfTestResultServiceImpl implements TrfTestResultService {
@@ -31,12 +32,14 @@ public class TrfTestResultServiceImpl implements TrfTestResultService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "TestResults Created")
 	public Integer createTrfTestResult(TrfTestResultRequest trfTestResultRequest) {
 		return trfTestResultDao.createTrfTestResult(trfTestResultRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "TestResults Updated")
 	public Integer updateTrfTestResult(TrfTestResultRequest trfTestResultRequest) {
 		return trfTestResultDao.updateTrfTestResult(trfTestResultRequest);
 	}

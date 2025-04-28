@@ -66,4 +66,9 @@ public interface AnalysisDao {
 	
 	List<AnalysisDto> getAnalysisByProjectId(Integer projectId);
 	
+	AnalysisDto getAnalysisByAnalysisExperimentId(Integer analysisId);
+	
+	List<AnalysisDto> getAnalysisListWithNullExpId(Integer teamId, String status, Integer userID);
+
+	
 }

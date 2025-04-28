@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.ExperimentDetailsDao;
 import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.request.ExperimentDetails;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class ExperimentDetailsServiceImpl implements ExperimentDetailsService {
@@ -31,12 +32,14 @@ public class ExperimentDetailsServiceImpl implements ExperimentDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Formulation Experiment Details Created")
 	public Integer createExperimentDetails(ExperimentDetails experimentDetails) {
 		return experimentDetailsDao.createExperimentDetails(experimentDetails);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Formulation Experiment Details Updated")
 	public Integer updateExperimentDetails(ExperimentDetails experimentDetails) {
 		return experimentDetailsDao.updateExperimentDetails(experimentDetails);
 	}
@@ -49,6 +52,7 @@ public class ExperimentDetailsServiceImpl implements ExperimentDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Formulation Experiment Details Created")
 	public Integer saveExperimentDetails(ExperimentDetails experimentDetails) {
 
 		if(experimentDetails.getExperimentDetailId() == null) {

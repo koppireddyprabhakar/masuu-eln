@@ -13,6 +13,7 @@ import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.ProjectRequest;
+import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
@@ -44,6 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@Auditable(action = "Project  Created")
 	public Integer createProject(ProjectRequest projectRequest) {
 		Integer projectId = projectDao.createProject(projectRequest);
 
@@ -87,6 +89,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Project  Updated")
 	public Integer updateProject(ProjectRequest projectRequest) {
 		return projectDao.updateProject(projectRequest);
 	}
@@ -99,6 +102,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Project  Status Updated")
 	public Integer updateProjectStatus(ProjectRequest projectRequest) {
 	    Integer rowsUpdated = projectDao.updateProjectStatus(projectRequest);
 		 
