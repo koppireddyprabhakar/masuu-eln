@@ -179,6 +179,7 @@ public class ProjectDaoImpl implements ProjectDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("projectId", projectRequest.getProjectId());
 		parameters.addValue("status", projectRequest.getStatus());
+		parameters.addValue("previousStatus", projectRequest.getPreviousStatus());
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		
@@ -244,6 +245,7 @@ public class ProjectDaoImpl implements ProjectDao {
 			projectDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
 			projectDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			projectDto.setInsertUser(resultSet.getString("INSERT_USER"));
+			projectDto.setPreviousStatus(resultSet.getString("PREVIOUS_STATUS"));
 
 			ProjectTeamRequest projectTeamRequest = new ProjectTeamRequest();
 			projectTeamRequest.setProjectTeamId(resultSet.getInt("PROJECT_TEAM_ID"));

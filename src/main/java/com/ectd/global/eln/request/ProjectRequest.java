@@ -21,6 +21,7 @@ public class ProjectRequest extends Base implements Serializable {
     private String teamName;
     private Integer marketId;
     private String markertName;
+    private String previousStatus;
     
     private ProjectTeamRequest projectTeam;
     
@@ -148,6 +149,13 @@ public class ProjectRequest extends Base implements Serializable {
 	}
 	public void setProjectTeam(ProjectTeamRequest projectTeam) {
 		this.projectTeam = projectTeam;
+	}
+
+	public String getPreviousStatus() {
+		return previousStatus;
+	}
+	public void setPreviousStatus(String previousStatus) {
+		this.previousStatus = previousStatus;
 	}
 	
 }

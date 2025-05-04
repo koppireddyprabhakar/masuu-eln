@@ -251,7 +251,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			project.setStrength(resultSet.getString("STRENGTH"));
 			project.setMarkertName(resultSet.getString("MARKET_NAME"));
 			project.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			project.setStatus(resultSet.getString("STATUS"));
+			project.setStatus(resultSet.getString("PROJECT_STATUS"));
 
 
 			ExperimentDto experiment = new ExperimentDto();
@@ -262,7 +262,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			experiment.setUserId(resultSet.getInt("USER_ID"));
 			experiment.setExpId(resultSet.getInt("EXP_ID"));
 			experiment.setInsertDate(resultSet.getDate("INSERT_DATE"));
-			experiment.setStatus(resultSet.getString("STATUS"));
+			experiment.setStatus(resultSet.getString("EXPERIMENT_STATUS"));
 
 
 			testRequestFormDto.setProject(project);

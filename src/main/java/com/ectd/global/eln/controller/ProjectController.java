@@ -63,7 +63,6 @@ public class ProjectController  extends BaseController {
 	
 	@PutMapping("/on-hold-project")
 	public ResponseEntity<String> putProjectOnHold(@RequestBody ProjectRequest projectRequest) throws Exception {
-	    projectRequest.setStatus(ProjectRequest.PROJECT_STATUS.ONHOLD.getValue());
 	    return getResponseEntity(projectService.updateProjectStatus(projectRequest), "Project On Hold");
 	}
 	

@@ -517,7 +517,7 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 		projectDto.setProductId(resultSet.getInt("PRODUCT_ID"));
 		projectDto.setProductName(resultSet.getString("PRODUCT_NAME"));
 		projectDto.setProductCode(resultSet.getString("PRODUCT_CODE"));
-		projectDto.setStatus(resultSet.getString("STATUS"));
+		projectDto.setStatus(resultSet.getString("PROJECT_STATUS"));
 		projectDto.setStrength(resultSet.getString("STRENGTH"));
 		projectDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
 		projectDto.setDosageName(resultSet.getString("DOSAGE_NAME"));

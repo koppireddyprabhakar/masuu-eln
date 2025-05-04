@@ -314,6 +314,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 			projectDto.setTeamName(resultSet.getString("TEAM_NAME"));
 			projectDto.setMarketId(resultSet.getInt("MARKET_ID"));
 			projectDto.setMarkertName(resultSet.getString("MARKET_NAME"));
+			projectDto.setStatus(resultSet.getString("PROJECT_STATUS"));
 
 			analysisDto.setProject(projectDto);
 
