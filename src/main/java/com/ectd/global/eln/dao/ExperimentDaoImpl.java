@@ -499,7 +499,7 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 		experimentDto.setSummary(resultSet.getString("SUMMARY"));
 		experimentDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
 		experimentDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
-		experimentDto.setStatus(resultSet.getString("STATUS"));
+		experimentDto.setStatus(resultSet.getString("PROJECT_STATUS"));
 		experimentDto.setExpStartDate(resultSet.getString("INSERT_DATE"));
 		experimentDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 		experimentDto.setInsertUser(resultSet.getString("INSERT_USER"));
