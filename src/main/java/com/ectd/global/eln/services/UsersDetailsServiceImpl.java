@@ -66,40 +66,39 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 		public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 			Integer userId = usersDetailsDao.createUsersDetails(usersDetailsRequest);
 			if(userId != null) {
-				usersDetailsDao.createUserTeam(usersDetailsRequest, userId);
-				
+				usersDetailsDao.createUserTeam(usersDetailsRequest, userId);				
 				 UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(userId);
 			     String creatorMailId = creatorDetails.getMailId();
 			     DepartmentDto department = departmentDao.getDepartmentById(usersDetailsRequest.getDeptId());
 			     UserRoleDto role = userRoleDao.getUserRoleById(usersDetailsRequest.getRoleId());
 			     List<String> teamMemberMailIds = new ArrayList<>();
 			     String emailBody = String.format(
-			                "<html>" +
-			                "<body>" +
-			                "<p>Dear %s %s,</p>" +
-			                "<p>Your ELN account has been successfully created. Below are your details:</p>" +
-			                "<ul>" +
-			                "<li><b>Role:</b> %s</li>" +
-			                "<li><b>Department:</b> %s</li>" +
-			                "</ul>" +
-			                "<p>Please log in to your account using your email address: <b>%s</b> and the default password: <b>eln@123456</b>. After logging in, please set a new password for your account and complete your profile.</p>" +
-			                "<p>Best regards,</p>" +
-			                "<p>[Your Company Name]</p>" +
-			                "</body>" +
-			                "</html>",
-			                usersDetailsRequest.getFirstName(),
-			                usersDetailsRequest.getLastName(),
-			                usersDetailsRequest.getMailId(),
-			                role != null ? role.getRoleName() : "Unknown",
-			                department != null ? department.getDepartmentName() : "Unknown"
-			                
-			    		 );
+			    		    "<html>" +
+			    		    "<body>" +
+			    		    "<p>We are pleased to inform you that your <b>eLN</b> account has been successfully created. Below are your account details:</p>" +
+			    		    "<p>&#128313; <b>Role:</b> %s</p>" +
+			    		    "<p>&#128313; <b>Department:</b> %s</p>" +
+			    		    "<p>&#128313; <b>Email Address:</b> %s</p>" +
+			    		    "<p>You can log in to your account using the following credentials:</p>" +
+			    		    "<p>&#128231; <b>Username:</b> %s</p>" +
+			    		    "<p>&#128273; <b>Default Password:</b> eln@123456</p>" +
+			    		    "<p>For security reasons, please log in and change your password immediately.</p>" +
+			    		    "<p>If you have any questions or require assistance, feel free to reach out to our support team.</p>" +
+			    		    "<p>Best regards,</p>" +
+			    		    "<p>[Your Company Name]</p>" +
+			    		    "</body>" +
+			    		    "</html>",
+			    		    role.getRoleName(),
+			    		    department.getDepartmentName(),
+			    		    usersDetailsRequest.getMailId(),
+			    		    usersDetailsRequest.getMailId()
+			    		);
 			     EmailNotification emailNotification = elnUtils.buildEmailNotification(
-			 	        "Project Created",
-			 	        emailBody,
-			 	        creatorMailId,
-			 	        teamMemberMailIds
-			 	    );
+				 	        "eLN User Account Created",
+				 	        emailBody,
+				 	        creatorMailId,
+				 	        teamMemberMailIds
+				 	    );
 			 		 emailNotificationService.saveEmailNotification(emailNotification);
 				return true;
 			}
@@ -115,23 +114,57 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "User Details Updated")
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
-		usersDetailsDao.updateUsersDetails(usersDetailsRequest);
-		
-		if(!CollectionUtils.isEmpty(usersDetailsRequest.getUserTeams())) {
-			List<UserTeamRequest> updateUserTeams = usersDetailsRequest.getUserTeams().stream().filter(ut -> !ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
-			List<UserTeamRequest> insertUserTeams = usersDetailsRequest.getUserTeams().stream().filter(ut -> ObjectUtils.isEmpty(ut.getUserId())).collect(Collectors.toList());
+	    boolean wasLocked = usersDetailsDao.isUserLocked(usersDetailsRequest.getUserId()); // Check before update
+	    usersDetailsDao.updateUsersDetails(usersDetailsRequest);
+	    
+	    boolean isUnlocked = Boolean.FALSE.equals(usersDetailsRequest.getunLock());
 
-			if(!CollectionUtils.isEmpty(updateUserTeams)) {
-				usersDetailsDao.batchUpdate(updateUserTeams);
-			}
+	    if (wasLocked && isUnlocked) {
+	        // Fetch user details to get full name
+	        UsersDetailsDto userDetails = usersDetailsDao.getUsersDetailsById(usersDetailsRequest.getUserId());
+	        String fullName = (userDetails != null) ? userDetails.getFirstName() + " " + userDetails.getLastName() : "User";
 
-			if(!CollectionUtils.isEmpty(insertUserTeams)) {
-				usersDetailsDao.batchInsert(insertUserTeams, usersDetailsRequest.getUserId());
-			}
-		}
-		return 1;
+	        // Construct email body with personalized name
+	        String emailBody = "<html><body>" +
+	                "<p>Dear " + fullName + ",</p>" +
+	                "<p>Your account has been unlocked successfully. You can now log in.</p>" +
+	                "<p>Best regards,</p>" +
+	                "<p>[Your Company Name]</p>" +
+	                "</body></html>";
+
+	        EmailNotification emailNotification = elnUtils.buildEmailNotification(
+	                "Account Unlocked",
+	                emailBody,
+	                usersDetailsRequest.getMailId(),
+	                new ArrayList<>()
+	        );
+
+	        try {
+	            emailNotificationService.saveEmailNotification(emailNotification);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    if (!CollectionUtils.isEmpty(usersDetailsRequest.getUserTeams())) {
+	        List<UserTeamRequest> updateUserTeams = usersDetailsRequest.getUserTeams().stream()
+	                .filter(ut -> !ObjectUtils.isEmpty(ut.getUserId()))
+	                .collect(Collectors.toList());
+
+	        List<UserTeamRequest> insertUserTeams = usersDetailsRequest.getUserTeams().stream()
+	                .filter(ut -> ObjectUtils.isEmpty(ut.getUserId()))
+	                .collect(Collectors.toList());
+
+	        if (!CollectionUtils.isEmpty(updateUserTeams)) {
+	            usersDetailsDao.batchUpdate(updateUserTeams);
+	        }
+
+	        if (!CollectionUtils.isEmpty(insertUserTeams)) {
+	            usersDetailsDao.batchInsert(insertUserTeams, usersDetailsRequest.getUserId());
+	        }
+	    }
+	    return 1;
 	}
 
 	@Override
@@ -139,5 +172,8 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 	public Integer deleteUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		return this.updateUsersDetails(usersDetailsRequest);
 	}
+	
+
+       
 	
 }

@@ -34,6 +34,8 @@ public class UsersDetailsDto extends Base implements Serializable {
     private Boolean certifiedReviewer = Boolean.FALSE;
     private Boolean coaPermission = Boolean.FALSE;
 	private Set<UserTeamDto> userTeams;
+	 private Boolean accountLocked;
+	 
 
 
 	public UsersDetailsDto() {
@@ -227,5 +229,13 @@ public class UsersDetailsDto extends Base implements Serializable {
 	    }
 	    return result;
 	}
+	
+	 public Boolean getAccountLocked() {
+			return accountLocked;
+		}
+
+		public void setAccountLocked(Boolean accountLocked) {
+			this.accountLocked = accountLocked;
+		}
 
 }

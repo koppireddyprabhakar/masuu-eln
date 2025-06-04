@@ -102,7 +102,7 @@ public class ExperimentRequest extends Base implements Serializable {
 
 		INPROGRESS("Inprogress"), COMPLETE("Complete"), PREREVIEW("Prereview"), INPREREVIEW("Inprereview"), NEED_CORRECTION(
 				"Need Correction"), PREREVIEW_COMPLETED("Prereview Completed"), CREATED_TRF ("Created TRF"), ANLYSIS_SUBMIT("Analysis Submitted"), 
-		INREVIEW("Inreview"), REVIEW_COMPLETED("Review Completed"), COA_GENERATED("COA Generated"), ARCHIVE("Archive");
+		INREVIEW("Inreview"), REVIEW_COMPLETED("Review Completed"), COA_GENERATED("COA Generated"),  COA_REVIEWED("COA Reviewed"),  COA_APPROVED("COA Approved"), ARCHIVE("Archive");
 
 		String value;
 

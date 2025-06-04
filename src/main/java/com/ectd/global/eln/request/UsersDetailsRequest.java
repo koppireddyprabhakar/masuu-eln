@@ -27,6 +27,8 @@ public class UsersDetailsRequest extends Base implements Serializable {
     private Boolean certifiedReviewer = Boolean.FALSE;
     private Boolean coaPermission = Boolean.FALSE;
     private List<UserTeamRequest> userTeams;
+    private boolean unLock; 
+
     
     public String getPassword() {
 		return password;
@@ -170,6 +172,14 @@ public class UsersDetailsRequest extends Base implements Serializable {
 
 	public void setCoaPermission(Boolean coaPermission) {
 		this.coaPermission = coaPermission;
+	}
+	
+	public Boolean getunLock( ) {
+		return unLock;
+	}
+
+	public void setunLock(Boolean unLock) {
+		this.unLock = unLock;
 	}
 	
 	

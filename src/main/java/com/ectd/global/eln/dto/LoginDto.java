@@ -26,6 +26,13 @@ public class LoginDto implements Serializable {
 	private int otp;
 	private Date TimeStamp;
 	private Integer teamId;
+	private Boolean accountLocked;
+    private int failedAttempts;
+    private Date passwordUpdateDate;
+    private boolean expiryPanel;  //flag for expiry check
+    private boolean isSuperAdmin; 
+    private String passwordExpiryWarning;
+    private boolean passwordExpired;
 
 	public int getOtp() {
 		return otp;
@@ -178,5 +185,68 @@ public class LoginDto implements Serializable {
 	public void setTeamId(Integer teamId) {
 		this.teamId = teamId;
 	}
+	
+
+    public Boolean isAccountLocked() { // Add this getter
+        return accountLocked;
+    }
+
+    public void setAccountLocked(boolean b) { // Add this setter
+        this.accountLocked = b;
+    }
+    
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+    
+    public Date getPasswordUpdateDate() {
+        return passwordUpdateDate;
+    }
+
+    public void setPasswordUpdateDate(Date passwordUpdateDate) {
+        this.passwordUpdateDate = passwordUpdateDate;
+    }
+    
+    
+ // Additional fields for password expiry
+    public String getPasswordExpiryWarning() {
+        return passwordExpiryWarning;
+    }
+
+    public void setPasswordExpiryWarning(String passwordExpiryWarning) {
+        this.passwordExpiryWarning = passwordExpiryWarning;
+    }
+
+    public boolean isPasswordExpired() {
+        return passwordExpired;
+    }
+
+    public void setPasswordExpired(boolean passwordExpired) {
+        this.passwordExpired = passwordExpired;
+    }
+     
+   
+    public boolean isExpiryPanel() {
+        return expiryPanel;
+    }
+
+    public void setExpiryPanel(boolean expiryPanel) {
+        this.expiryPanel = expiryPanel;
+    }
+ 
+    public boolean isSuperAdmin() {
+        return isSuperAdmin;
+    }
+
+    public void setSuperAdmin(boolean isSuperAdmin) {
+        this.isSuperAdmin = isSuperAdmin;
+    }
+
+	
+    
 
 }

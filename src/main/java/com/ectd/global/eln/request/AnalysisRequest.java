@@ -129,7 +129,8 @@ public class AnalysisRequest extends Base implements Serializable {
 
 		INPROGRESS("Inprogress"), COMPLETE("Complete"), INREVIEW("Inreview"), NEED_CORRECTION(
 				"Need Correction"), REVIEW_COMPLETED("Review Completed"), 
-		ANLYSIS_SUBMIT("Analysis Submitted");
+		ANLYSIS_SUBMIT("Analysis Submitted"), COA_GENERATED("COA Generated"), 
+	    COA_REVIEWED("COA Reviewed"),  COA_APPROVED("COA Approved");
 
 		String value;
 

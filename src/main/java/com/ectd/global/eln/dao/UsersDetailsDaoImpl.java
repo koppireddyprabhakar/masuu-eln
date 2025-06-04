@@ -139,6 +139,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
 		parameters.addValue("certifiedReviewer", usersDetailsRequest.getCertifiedReviewer());
 		parameters.addValue("coaPermission",usersDetailsRequest.getCoaPermission());
+		parameters.addValue("unlock",usersDetailsRequest.getunLock());
 
 		return namedParameterJdbcTemplate.update(updateUsersDetailsQuery, parameters);
 	}
@@ -273,6 +274,7 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 		usersDetailsDto.setTeamId(resultSet.getInt("TEAM_ID"));
 		usersDetailsDto.setCertifiedReviewer(resultSet.getBoolean("CERTIFIED_REVIEWER"));
 		usersDetailsDto.setCoaPermission(resultSet.getBoolean("COA_PERMISSION"));
+		usersDetailsDto.setAccountLocked(resultSet.getBoolean("ACCOUNT_LOCKED")); 
 
 		return usersDetailsDto;
 	}
@@ -303,5 +305,13 @@ public class UsersDetailsDaoImpl implements UsersDetailsDao {
 
 		return false;
 	}
-
+	
+	public boolean isUserLocked(Integer userId) {
+	    String sql = "SELECT ACCOUNT_LOCKED FROM USERS_DETAILS WHERE USER_ID = :userId";
+	    MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
+	    Integer locked = namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
+	    return locked != null && locked == 1;  // If ACCOUNT_LOCKED = 1, user is locked
+	}
+	
+	
 }

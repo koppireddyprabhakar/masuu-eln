@@ -289,7 +289,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 			testRequestFormDto.setStage(resultSet.getString("STAGE"));
 			testRequestFormDto.setPackaging(resultSet.getString("PACKAGING"));
 			testRequestFormDto.setLabelClaim(resultSet.getString("LABEL_CLAIM"));
-//			testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
+			testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
 			testRequestFormDto.setManufacturingDate(resultSet.getDate("MANUFACTURING_DATE"));
 			testRequestFormDto.setExpireDate(resultSet.getDate("EXPIRE_DATE"));
 			testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));
@@ -349,7 +349,7 @@ public class TestRequestFormDaoImpl implements TestRequestFormDao {
 				testRequestFormDto.setStage(resultSet.getString("STAGE"));
 				testRequestFormDto.setPackaging(resultSet.getString("PACKAGING"));
 				testRequestFormDto.setLabelClaim(resultSet.getString("LABEL_CLAIM"));
-//				testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
+				testRequestFormDto.setQuantity(resultSet.getInt("QUANTITY"));
 				testRequestFormDto.setManufacturingDate(resultSet.getDate("MANUFACTURING_DATE"));
 				testRequestFormDto.setExpireDate(resultSet.getDate("EXPIRE_DATE"));
 				testRequestFormDto.setTestId(resultSet.getInt("TEST_ID"));

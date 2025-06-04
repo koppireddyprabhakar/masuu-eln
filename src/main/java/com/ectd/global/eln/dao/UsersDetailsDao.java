@@ -24,6 +24,11 @@ public interface UsersDetailsDao {
 	
 	Boolean createUserTeam(UsersDetailsRequest usersDetailsRequest, Integer userId);
 	
-	List<UsersDetailsDto> getUsersWithCustomRoles(String departmentName);		
+	List<UsersDetailsDto> getUsersWithCustomRoles(String departmentName);	
+	
+	boolean isUserLocked(Integer userId);
+	
+	
+
 	
 }

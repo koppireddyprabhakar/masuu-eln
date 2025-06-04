@@ -28,6 +28,7 @@ import com.ectd.global.eln.request.ExperimentDetails;
 import com.ectd.global.eln.request.ExperimentRequest;
 import com.ectd.global.eln.request.ExperimentReview;
 import com.ectd.global.eln.request.ProjectRequest;
+import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
@@ -66,6 +67,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = " Formulation Experiment Created")
 	public Integer createExperiment(ExperimentRequest experimentRequest) {
 
 		Integer experimentId = experimentDao.createExperiment(experimentRequest);
@@ -132,6 +134,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = " Formulation Excipient saved")
 	public Integer saveExcipient(List<ExcipientRequest> excipientRequests)  {
 
 		if(CollectionUtils.isEmpty(excipientRequests)) {
@@ -193,6 +196,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Formulation Experiment updated")
 	public Integer updateExperiment(ExperimentRequest experimentRequest) {
 		return this.update(experimentRequest);
 	}
@@ -217,6 +221,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	@Auditable(action = "Formulation Experiment status updated")
 	public Integer updateExperimentStatus(Integer experimentId, String status) {
 		Integer updatedRows = experimentDao.updateExperimentStatus(experimentId, status);
 		
@@ -273,6 +278,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 	}
 
 	@Override
+	@Auditable(action = "Formulation Experiment review created")
 	public Integer createExperimentReview(ExperimentReview experimentReview) {
 		experimentDao.createExperimentReview(experimentReview);
 		Integer experimentId = experimentReview.getExperimentId();
@@ -309,6 +315,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	@Auditable(action = "Formulation Experiment review updated")
 	public Integer updateExperimentReview(ExperimentReview experimentReview) {
 		experimentDao.updateExperimentReview(experimentReview);
 

@@ -14,4 +14,12 @@ public class ExceptionController {
 		return new ResponseEntity<>("Requested Quantity is not available", HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(value = AccountLockedException.class)
+    public ResponseEntity<Object> handleAccountLockedException(AccountLockedException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
+	
+	
+
+	
 }

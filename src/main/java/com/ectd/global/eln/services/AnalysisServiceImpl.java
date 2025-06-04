@@ -118,7 +118,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	    		    analysisRequest.getBatchSize() != null ? analysisRequest.getBatchSize() : 0 // Fallback to 0 if null
 	    		);
 	       EmailNotification emailNotification = elnUtils.buildEmailNotification(
-	               "Formulation Experiment Created",
+	               "Analysis Experiment Created",
 	               emailBody,
 	               creatorMailId,
 	               teamMemberMailIds
@@ -272,6 +272,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 		UsersDetailsDto creatorDetails = usersDetailsDao.getUsersDetailsById(analysis.getUserId());
 		    String creatorMailId = creatorDetails.getMailId();
 		    
+		    List<String> hodMailIds = usersDetailsDao.getUsersDetails(1, "ANALYSIS")
+		    	    .stream()
+		    	    .map(UsersDetailsDto::getMailId) // Use getMailId() instead of getEmail()
+		    	    .collect(Collectors.toList());
+		    
 		    // Prepare the email content based on the status
 		    String emailSubject = "Experiment Status Update: " + analysisRequest.getAnalysisName();
 		    String emailBody = "";
@@ -382,10 +387,99 @@ public class AnalysisServiceImpl implements AnalysisService {
 	                analysis.getStatus()
 	            );
 	            break;
-	        default:
-	            emailBody = "<html><body><p>Status update received with unknown status.</p></body></html>";
-	            break;
-	    }
+	       	    		   	    
+	case "COA Generated":
+        emailBody = String.format(
+            "<html>" +
+            "<body>" +
+            "<p>Dear User,</p>" +
+            "<p>The Certificate of Analysis (COA) has been generated. Here are the details:</p>" +
+            "<ul>" +                                     
+            "<li><b>Experiment Name:</b> %s</li>" +
+            "<li><b>Batch:</b> %s</li>" +
+            "<li><b>Status:</b> %s</li>" +
+            "</ul>" +
+            "<p>Please review the COA document and proceed with further steps if required.</p>" +
+            "<p>Best regards,</p>" +
+            "<p>[Your Team/Company Name]</p>" +
+            "</body>" +
+            "</html>",
+            analysis.getAnalysisName(),
+            analysis.getBatchSize(),
+            analysis.getStatus()
+        );
+     // Email specifically for HODs
+        String hodEmailSubject = "COA Review Required: " + analysis.getAnalysisName();
+        String hodEmailBody = String.format(
+            "<html><body><p>Dear HOD,</p>" +
+            "<p>The Certificate of Analysis (COA) has been generated and requires your review. Here are the details:</p>" +
+            "<ul><li><b>Experiment Name:</b> %s</li>" +
+            "<li><b>Batch:</b> %s</li>" +
+            "<li><b>Status:</b> %s</li></ul>" +
+            "<p>Please review the COA document and provide your approval.</p>" +
+            "<p>Best regards,</p><p>[Your Team/Company Name]</p></body></html>",
+            analysis.getAnalysisName(), analysis.getBatchSize(), analysis.getStatus()
+        );
+
+        // Send HOD email notification
+        EmailNotification hodEmailNotification = elnUtils.buildEmailNotification(
+            hodEmailSubject, hodEmailBody, creatorMailId, hodMailIds
+        );
+        emailNotificationService.saveEmailNotification(hodEmailNotification);
+        break;
+        
+	
+        
+    case "COA Reviewed":
+        emailBody = String.format(
+            "<html>" +
+            "<body>" +
+            "<p>Dear User,</p>" +
+            "<p>The Certificate of Analysis (COA) has been reviewed. Here are the details:</p>" +
+            "<ul>" +                                     
+            "<li><b>Experiment Name:</b> %s</li>" +
+            "<li><b>Batch:</b> %s</li>" +
+            "<li><b>Status:</b> %s</li>" +
+            "</ul>" +
+            "<p>The COA review has been completed and sent to qa department for coa approval. </p>" +
+            "<p>Best regards,</p>" +
+            "<p>[Your Team/Company Name]</p>" +
+            "</body>" +
+            "</html>",
+            analysis.getAnalysisName(),
+            analysis.getBatchSize(),
+            analysis.getStatus()
+        );
+        break;
+        
+    case "COA Approved":
+        emailBody = String.format(
+            "<html>" +
+            "<body>" +
+            "<p>Dear User,</p>" +
+            "<p>The Certificate of Analysis (COA) has been approved by the QA department. Here are the details:</p>" +
+            "<ul>" +                                     
+            "<li><b>Experiment Name:</b> %s</li>" +
+            "<li><b>Batch:</b> %s</li>" +
+            "<li><b>Status:</b> %s</li>" +
+            "</ul>" +
+            "<p>The COA approval process has been successfully completed. The final COA PDF form is downloaded.</p>" +
+            "<p>Please ensure to proceed with the necessary next steps.</p>" +
+            "<p>Best regards,</p>" +
+            "<p>[Your Team/Company Name]</p>" +
+            "</body>" +
+            "</html>",
+            analysis.getAnalysisName(),
+            analysis.getBatchSize(),
+            analysis.getStatus()
+        );
+        break;
+
+        
+    default:
+        emailBody = "<html><body><p>Status update received with unknown status.</p></body></html>";
+        break;
+}
 		    // Send email notification to the creator and relevant team members
 		    EmailNotification emailNotification = elnUtils.buildEmailNotification(
 		            emailSubject,

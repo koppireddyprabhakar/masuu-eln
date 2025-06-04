@@ -167,7 +167,7 @@ public class AnalysisController extends BaseController {
 		return getResponseEntity(analysisService.saveAnalysisExcipients(analysisExcipients), "Analysis Excipient Created");
 	}
 
-	@GetMapping("get-test-requests-by-analysi-id")
+	@GetMapping("/get-test-requests-by-analysi-id")
 	public ResponseEntity<List<TestRequestFormDto>> getTestRequestByAnalysisId(@RequestParam Integer analysisId) {
 		return new ResponseEntity<>(analysisService.getTestRequestByAnalysisId(analysisId), HttpStatus.OK);
 	}
@@ -249,6 +249,7 @@ public class AnalysisController extends BaseController {
 	public ResponseEntity<AnalysisDto> getAnalysisByExperimentId(@RequestParam Integer analysisId) throws Exception {
 	    return new ResponseEntity<>(analysisService.getAnalysisByAnalysisExperimentId(analysisId), HttpStatus.OK);
 	}
+	
 	@GetMapping("/get-analysis-by-status-without-expid")
 	public ResponseEntity<List<AnalysisDto>> getAnalysisByStatusWithoutExpId(@RequestParam String status) throws Exception {
 	    return new ResponseEntity<>(analysisService.getAnalysisListWithNullExpId(null, status, null), HttpStatus.OK);

@@ -15,5 +15,13 @@ public interface LoginDao {
 	Timestamp getTimestamp(String email, String otp);
 
 	int countEmail(String email);
+	
+	  void incrementFailedAttempts(String mailId);
+	  
+		int getFailedAttempts(String mailId);
+		
+		void lockAccount(String mailId);
+		
+		void resetFailedAttempts(String mailId);
 
 }
