@@ -276,6 +276,11 @@ public class ExperimentServiceImpl implements ExperimentService {
 	public List<ExperimentExcipientDto> getExcipientByExperimentId(Integer experimentId) {
 		return experimentDao.getExcipientByExperimentId(experimentId);
 	}
+	
+	@Override
+	public List<ExperimentExcipientDto> getExcipientHistoryByExperimentId(Integer experimentHistoryId) {
+		return experimentDao.getExcipientHistoryByExperimentId(experimentHistoryId);
+	}
 
 	@Override
 	@Auditable(action = "Formulation Experiment review created")
@@ -334,7 +339,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 	public List<TestRequestFormDto> getTRFByExpIds(Integer experimentId) {
 		return experimentDao.getTRFByExpIds(experimentId);
 	}
-
+	
 	public String generateUniqueexperimentId() {
 	    String lastExperimentName = experimentDao.findLastExperimentId();
 	    if (lastExperimentName == null || lastExperimentName.length() < 4) {
@@ -353,5 +358,15 @@ public class ExperimentServiceImpl implements ExperimentService {
 	    } catch (NumberFormatException e) {
 	        throw new RuntimeException("Invalid numeric part in experiment name: " + lastExperimentName, e);
 	    }
+	}
+	
+	@Override
+	public List<ExperimentDto> getExperimentHistory(Integer projectId) {
+		return experimentDao.getExperimentHistory(projectId);
+	}
+	
+	@Override
+	public ExperimentDto getExperimentHistoryById(Integer experimentHistoryId) {
+		return experimentDao.getExperimentHistoryById(experimentHistoryId);
 	}
 }

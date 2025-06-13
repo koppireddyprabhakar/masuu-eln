@@ -19,6 +19,9 @@ public class ExperimentExcipientDto  extends Base implements Serializable {
 	private String grade;
 	private Double quantity;
 
+	private Integer experimentExcipientHistoryId;
+	private Integer experimentHistoryId;
+	
 	public Integer getExcipientId() {
 		return excipientId;
 	}
@@ -87,6 +90,20 @@ public class ExperimentExcipientDto  extends Base implements Serializable {
 	}
 	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
+	}
+	
+	public Integer getExperimentExcipientHistoryId() {
+		return experimentExcipientHistoryId;
+	}
+	public void setExperimentExcipientHistoryId(Integer experimentExcipientHistoryId) {
+		this.experimentExcipientHistoryId = experimentExcipientHistoryId;
+	}
+	
+	public Integer getExperimentHistoryId() {
+		return experimentHistoryId;
+	}
+	public void setExperimentHistoryId(Integer experimentHistoryId) {
+		this.experimentHistoryId = experimentHistoryId;
 	}
 	
 	public String toString() {

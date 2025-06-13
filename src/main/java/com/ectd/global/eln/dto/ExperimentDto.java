@@ -26,8 +26,10 @@ public class ExperimentDto extends Base implements Serializable {
 	private Set<ExperimentDetailsDto> experimentDetails = new HashSet<ExperimentDetailsDto>();
     private Set<ExperimentExcipientDto> experimentExcipients = new HashSet<ExperimentExcipientDto>();
     private ProjectDto project;
+    
+    private Integer experimentHistoryId;
 
-    public Integer getExpId() {
+	public Integer getExpId() {
 		return expId;
 	}
 	public void setExpId(Integer expId) {
@@ -130,6 +132,14 @@ public class ExperimentDto extends Base implements Serializable {
 	public void setExpStartDate(String expStartDate) {
 		this.expStartDate = expStartDate;
 	}
+	
+	public Integer getExperimentHistoryId() {
+		return experimentHistoryId;
+	}
+	public void setExperimentHistoryId(Integer experimentHistoryId) {
+		this.experimentHistoryId = experimentHistoryId;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
 		sb.append(expId); 

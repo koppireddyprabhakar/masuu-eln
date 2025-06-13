@@ -13,6 +13,9 @@ public class ExperimentDetailsDto extends Base implements Serializable{
 	private String name;
 	private String fileContent;
 	
+	private Integer experimentDetailHistoryId;
+	private Integer experimentHistoryId;
+	
 	public Integer getExperimentDetailId() {
 		return experimentDetailId;
 	}
@@ -39,6 +42,20 @@ public class ExperimentDetailsDto extends Base implements Serializable{
 	}
 	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
+	}
+	
+	public Integer getExperimentDetailHistoryId() {
+		return experimentDetailHistoryId;
+	}
+	public void setExperimentDetailHistoryId(Integer experimentDetailHistoryId) {
+		this.experimentDetailHistoryId = experimentDetailHistoryId;
+	}
+	
+	public Integer getExperimentHistoryId() {
+		return experimentHistoryId;
+	}
+	public void setExperimentHistoryId(Integer experimentHistoryId) {
+		this.experimentHistoryId = experimentHistoryId;
 	}
 	
 	public String toString() {

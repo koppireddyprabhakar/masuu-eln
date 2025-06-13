@@ -52,5 +52,11 @@ public interface ExperimentDao {
 	ExperimentReviewDto getExperimentReview(Integer experimentId);
 		
 	 String findLastExperimentId();
+	 
+	 List<ExperimentDto> getExperimentHistory(Integer projectId);
+	 
+	 ExperimentDto getExperimentHistoryById(Integer experimentHistoryId);
+	 
+	 List<ExperimentExcipientDto> getExcipientHistoryByExperimentId(Integer experimentHistoryId);
 	
 }

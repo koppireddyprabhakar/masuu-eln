@@ -64,4 +64,8 @@ public class ExperimentDetailsServiceImpl implements ExperimentDetailsService {
 		return experimentDetails.getExperimentDetailId();
 	}
 
+	@Override
+	public ExperimentDetailsDto getExperimentDetailsHistoryById(Integer experimentDetailHistoryId) {
+		return experimentDetailsDao.getExperimentDetailsHistoryById(experimentDetailHistoryId);
+	}
 }

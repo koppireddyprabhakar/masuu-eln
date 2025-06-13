@@ -1,9 +1,7 @@
 package com.ectd.global.eln.controller;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -172,6 +170,11 @@ public class ExperimentController extends BaseController {
 		return new ResponseEntity<List<ExperimentExcipientDto>>(experimentService.getExcipientByExperimentId(experimentId), HttpStatus.OK);
 	}
 	
+	@GetMapping("/get-excipient-history-by-experimentId")
+	public ResponseEntity<List<ExperimentExcipientDto>> getExcipientHistoryByExperimentId(@RequestParam Integer experimentHistoryId){
+		return new ResponseEntity<List<ExperimentExcipientDto>>(experimentService.getExcipientHistoryByExperimentId(experimentHistoryId), HttpStatus.OK);
+	}
+	
 	@GetMapping("/get-experiments-by-status")
 	public ResponseEntity<List<ExperimentDto>> getExperimentsByUserId(@RequestParam(required = false) String status) {
 		return new ResponseEntity<List<ExperimentDto>>(experimentService.getExperiments(null, status), HttpStatus.OK);
@@ -201,6 +204,21 @@ public class ExperimentController extends BaseController {
 	public ResponseEntity<String> generateUniqueExperimentId() {
 	    String UniqueexperimentId = experimentService.generateUniqueexperimentId();
 	    return new ResponseEntity<String>(UniqueexperimentId, HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-experiment-history")
+	public ResponseEntity<List<ExperimentDto>> getExperimentHistory(@RequestParam Integer projectId) {
+		return new ResponseEntity<List<ExperimentDto>>(experimentService.getExperimentHistory(projectId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-experiment-history-by-id")
+	public ResponseEntity<ExperimentDto> getExperimentHistoryById(@RequestParam Integer experimentHistoryId) {
+		return new ResponseEntity<>(experimentService.getExperimentHistoryById(experimentHistoryId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-experiment-details-history-by-id")
+	public ResponseEntity<ExperimentDetailsDto> getExperimentDetailsHistoryById(@RequestParam Integer experimentDetailsHistoryId) {
+		return new ResponseEntity<>(experimentDetailsService.getExperimentDetailsHistoryById(experimentDetailsHistoryId), HttpStatus.OK);
 	}
 	
 }

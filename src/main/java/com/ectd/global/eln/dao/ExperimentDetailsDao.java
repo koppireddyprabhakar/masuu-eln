@@ -16,5 +16,7 @@ public interface ExperimentDetailsDao {
 	Integer updateExperimentDetails(ExperimentDetails experimentDetails);
 
 	Integer deleteExperimentDetails(ExperimentDetails experimentDetails);
+	
+	ExperimentDetailsDto getExperimentDetailsHistoryById(Integer experimentDetailHistoryId);
 
 }

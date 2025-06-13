@@ -45,11 +45,27 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 	@Value(value="${update.experiment.details}")
 	private String UPDATE_EXPERIMENT_DETAILS_QUERY;
 	
+	@Value("${get.experiment.details.history.by.id}")
+	private String GET_EXPERIMENT_DETAILS_HISTORY_BY_ID_QUERY;
+	
 	@Override
 	public ExperimentDetailsDto getExperimentDetailsById(Integer experimentDetailId) {
 		
 		List<ExperimentDetailsDto> experimentDetailsDtos = jdbcTemplate.query(GET_EXPERIMENT_DETAILS_BY_ID_QUERY + experimentDetailId, 
 				new ExperimentDetailsRowMapper());
+		
+		if(CollectionUtils.isEmpty(experimentDetailsDtos)) {
+			return null;
+		}
+		
+		return experimentDetailsDtos.get(0);
+	}
+	
+	@Override
+	public ExperimentDetailsDto getExperimentDetailsHistoryById(Integer experimentDetailHistoryId) {
+		
+		List<ExperimentDetailsDto> experimentDetailsDtos = jdbcTemplate.query(GET_EXPERIMENT_DETAILS_HISTORY_BY_ID_QUERY + experimentDetailHistoryId, 
+				new ExperimentDetailsHistoryRowMapper());
 		
 		if(CollectionUtils.isEmpty(experimentDetailsDtos)) {
 			return null;
@@ -120,6 +136,30 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 			experimentDetailsDto.setInsertDate(rs.getDate("INSERT_DATE"));
 			experimentDetailsDto.setUpdateUser(rs.getString("UPDATE_USER"));
 			experimentDetailsDto.setUpdateDate(rs.getDate("UPDATE_DATE"));
+			
+			return experimentDetailsDto;
+		}
+		
+	}
+	
+	class ExperimentDetailsHistoryRowMapper implements RowMapper<ExperimentDetailsDto> {
+
+		@Override
+		public ExperimentDetailsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+			ExperimentDetailsDto experimentDetailsDto = new ExperimentDetailsDto();
+			experimentDetailsDto.setExperimentDetailId(rs.getInt("EXP_DETAIL_ID"));
+			experimentDetailsDto.setExperimentId(rs.getInt("EXP_ID"));
+			experimentDetailsDto.setName(rs.getString("NAME"));
+			experimentDetailsDto.setFileContent(new String(rs.getBytes("LOB_DETAILS")));
+			experimentDetailsDto.setStatus(rs.getString("STATUS"));
+			experimentDetailsDto.setInsertUser(rs.getString("INSERT_USER"));
+			experimentDetailsDto.setInsertDate(rs.getDate("INSERT_DATE"));
+			experimentDetailsDto.setUpdateUser(rs.getString("UPDATE_USER"));
+			experimentDetailsDto.setUpdateDate(rs.getDate("UPDATE_DATE"));
+			
+			experimentDetailsDto.setExperimentDetailHistoryId(rs.getInt("EXP_DETAIL_HIST_ID"));
+			experimentDetailsDto.setExperimentHistoryId(rs.getInt("EXP_HIST_ID"));
 			
 			return experimentDetailsDto;
 		}

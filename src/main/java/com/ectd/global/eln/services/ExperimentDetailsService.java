@@ -18,5 +18,7 @@ public interface ExperimentDetailsService {
 	Integer deleteExperimentDetails(ExperimentDetails experimentDetails);
 	
 	Integer saveExperimentDetails(ExperimentDetails experimentDetails);
+	
+	ExperimentDetailsDto getExperimentDetailsHistoryById(Integer experimentDetailHistoryId);
 
 }

@@ -42,5 +42,10 @@ public interface ExperimentService {
 		
 	String generateUniqueexperimentId();
 	
+	List<ExperimentDto> getExperimentHistory(Integer projectId);
 	
+	ExperimentDto getExperimentHistoryById(Integer experimentHistoryId);
+	
+	List<ExperimentExcipientDto> getExcipientHistoryByExperimentId(Integer experimentHistoryId);
+		
 }
