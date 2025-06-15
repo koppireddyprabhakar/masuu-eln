@@ -127,7 +127,15 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	@Value("${select.analysis.list.without.expid}")
 	 private String GET_ANALYSIS_LIST_WITHOUT_EXPID_QUERY;
+	
+	@Value("${get.analysis.details.history.by.exp.id}")
+	private String GET_ANALYSIS_DETAILS_HISTORY_BY_EXPERIMENT_ID;
 
+	@Value("${get.analysis.history.by.id}")
+	private String GET_ANALYSIS_HISTORY_BY_ID;
+	
+	@Value("${get.excipients.history.by.analysisHistoryId}")
+	private String GET_EXCIPIENTS_HISTORY_BY_ANALYSIS_HISTORY_ID_QUERY;
 
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -140,7 +148,19 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return analysisList.get(0);
 	}
+	
+	@Override
+	public AnalysisDto getAnalysisHistoryById(Integer analysisHistoryId) {
+		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_HISTORY_BY_ID + analysisHistoryId,
+				new AnalysisHistoryExtractor());
 
+		if(analysisList.isEmpty()) {
+			return null;
+		}
+
+		return analysisList.get(0);
+	}
+	
 	@Override
 	public List<AnalysisDto> getAnalysisExperiments(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
@@ -157,6 +177,13 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		return analysisList;
 	}
 	
+	@Override
+	public List<AnalysisDto> getAnalysisDetailHistoryByExperimentId(Integer experimentId) {
+		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_DETAILS_HISTORY_BY_EXPERIMENT_ID + " AND E.EXP_ID = " + experimentId,
+				new AnalysisExperimentHistoryRowMapper());
+
+		return analysisList;
+	}
 	
 
 	@Override
@@ -490,6 +517,13 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	}
 
 	@Override
+	public List<AnalysisExcipientDto> getExcipientHistoryByAnalysisHistoryId(Integer analysisHistoryId) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("analysisHistoryId", analysisHistoryId);
+		return namedParameterJdbcTemplate.query(GET_EXCIPIENTS_HISTORY_BY_ANALYSIS_HISTORY_ID_QUERY, parameters, new AnalysisExcipientHistoryRowMapper());
+	}
+	
+	@Override
 	public Integer updateAnalysisStatus(AnalysisRequest analysisRequest) {
 
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -589,7 +623,21 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	class AnalysisExcipientRowMapper implements RowMapper<AnalysisExcipientDto> {
 		public AnalysisExcipientDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 			AnalysisExcipientDto excipientDto = getAnalysisExcipientDto(resultSet);
+			excipientDto.setAnalysisExcipientId(resultSet.getInt("ANALYSIS_EXCIPIENT_ID"));
+			excipientDto.setExcipientId(resultSet.getInt("EXCIPIENT_ID"));
+			
+			return excipientDto;
+		};
+	}
+	
+	class AnalysisExcipientHistoryRowMapper implements RowMapper<AnalysisExcipientDto> {
+		public AnalysisExcipientDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			AnalysisExcipientDto excipientDto = getAnalysisExcipientDto(resultSet);
 
+			excipientDto.setAnalysisExcipientId(resultSet.getInt("ANALYSIS_EXCIPIENTS_ID"));
+			excipientDto.setExcipientId(resultSet.getInt("EXCIPIENTS_ID"));
+			excipientDto.setAnalysisHistoryId(resultSet.getInt("ANALYSIS_EXP_HIST_ID"));
+			excipientDto.setAnalysisExcipientHistoryId(resultSet.getInt("ANALYSIS_EXCIPIENTS_HIST_ID"));
 			return excipientDto;
 		};
 	}
@@ -604,6 +652,35 @@ public class AnalysisDaoImpl implements AnalysisDao {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
 
 				AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
+
+				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
+					int index = analysisDtoList.indexOf(analysisDto);
+					analysisDtoList.get(index).getAnalysisDetails().add(analysisDetails);	
+				} else {
+
+					Set<AnalysisDetailsDto> analysisDetailsList = new LinkedHashSet<>();
+
+					analysisDetailsList.add(analysisDetails);
+					analysisDto.setAnalysisDetails(analysisDetailsList);
+					analysisDtoList.add(analysisDto);
+				}
+
+			}
+			return analysisDtoList;
+		};
+	}
+	
+	class AnalysisHistoryExtractor implements ResultSetExtractor<List<AnalysisDto>> {
+
+		@Override
+		public List<AnalysisDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+			List<AnalysisDto> analysisDtoList = new ArrayList<AnalysisDto>();
+			while(resultSet.next()) {
+				AnalysisDto analysisDto = getAnalysisDto(resultSet);
+
+				analysisDto.setAnalysisHistoryId(resultSet.getInt("ANALYSIS_EXP_HIST_ID"));
+				
+				AnalysisDetailsDto analysisDetails = getAnalysisDetailsHistoryWithOutContent(resultSet);
 
 				if(CollectionUtils.contains(analysisDtoList.iterator(), analysisDto)) {
 					int index = analysisDtoList.indexOf(analysisDto);
@@ -696,12 +773,21 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return analysisDetails;
 	}
+	
+	private AnalysisDetailsDto getAnalysisDetailsHistoryWithOutContent(ResultSet resultSet) throws SQLException {
+
+		AnalysisDetailsDto analysisDetails = getAnalysisDetailsWithOutContent(resultSet);
+		
+		analysisDetails.setAnalysisHistoryDetailId(resultSet.getInt("ANALYSIS_EXP_DTL_HIST_ID"));
+		analysisDetails.setAnalysisHistoryId(resultSet.getInt("ANALYSIS_EXP_HIST_ID"));
+		
+		return analysisDetails;
+	}
 
 	private AnalysisExcipientDto getAnalysisExcipientDto(ResultSet resultSet) throws SQLException {
 
 		AnalysisExcipientDto analysisExcipientDto = new AnalysisExcipientDto();
-		analysisExcipientDto.setAnalysisExcipientId(resultSet.getInt("ANALYSIS_EXCIPIENT_ID"));
-		analysisExcipientDto.setExcipientId(resultSet.getInt("EXCIPIENT_ID"));
+		
 		analysisExcipientDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
 		analysisExcipientDto.setMaterialType(resultSet.getString("MATERIAL_TYPE"));
 		analysisExcipientDto.setMaterialName(resultSet.getString("MATERIAL_NAME"));
@@ -762,18 +848,33 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	class AnalysisExperimentRowMapper implements RowMapper<AnalysisDto> {
 		public AnalysisDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-			AnalysisDto analysisDto = new AnalysisDto();
-			analysisDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
-			analysisDto.setAnalysisName(resultSet.getString("ANALYSIS_NAME"));
-			analysisDto.setProjectId(resultSet.getInt("PROJECT_ID"));
-			analysisDto.setStatus(resultSet.getString("STATUS"));
-			analysisDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
-			analysisDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
-			analysisDto.setUserId(resultSet.getInt("USER_ID"));
-			analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+			return  buildAnalysisDto(resultSet);
+		};
+	}
+	
+	class AnalysisExperimentHistoryRowMapper implements RowMapper<AnalysisDto> {
+		public AnalysisDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+			AnalysisDto analysisDto = buildAnalysisDto(resultSet);
 
+			analysisDto.setAnalysisHistoryId(resultSet.getInt("ANALYSIS_EXP_HIST_ID"));
+			
 			return  analysisDto;
 		};
+	}
+	
+	private AnalysisDto buildAnalysisDto(ResultSet resultSet) throws SQLException {
+		
+		AnalysisDto analysisDto = new AnalysisDto();
+		analysisDto.setAnalysisId(resultSet.getInt("ANALYSIS_EXP_ID"));
+		analysisDto.setAnalysisName(resultSet.getString("ANALYSIS_NAME"));
+		analysisDto.setProjectId(resultSet.getInt("PROJECT_ID"));
+		analysisDto.setStatus(resultSet.getString("STATUS"));
+		analysisDto.setBatchSize(resultSet.getString("BATCH_SIZE"));
+		analysisDto.setBatchNumber(resultSet.getString("BATCH_NUMBER"));
+		analysisDto.setUserId(resultSet.getInt("USER_ID"));
+		analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
+		
+		return analysisDto;
 	}
 
 }

@@ -64,6 +64,12 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public AnalysisDto getAnalysisHistoryById(Integer analysisHistoryId) {
+		return analysisDao.getAnalysisHistoryById(analysisHistoryId);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<AnalysisDto> getAnalysisList(Integer teamId, String status, Integer userId) {
 		return analysisDao.getAnalysisList(teamId, status, userId);
 	}
@@ -260,6 +266,12 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<AnalysisExcipientDto> getExcipientByAnalysisId(Integer analysisId) {
 		return analysisDao.getExcipientByAnalysisId(analysisId);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public List<AnalysisExcipientDto> getExcipientHistoryByAnalysisHistoryId(Integer analysisHistoryId) {
+		return analysisDao.getExcipientHistoryByAnalysisHistoryId(analysisHistoryId);
 	}
 
 	@Override
@@ -587,6 +599,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Override
 	public List<AnalysisDto> getAnalysisDetailByExperimentId(Integer experimentId){
 		return analysisDao.getAnalysisDetailByExperimentId(experimentId);
+	}
+	
+	@Override
+	public List<AnalysisDto> getAnalysisDetailHistoryByExperimentId(Integer experimentId) {
+		return analysisDao.getAnalysisDetailHistoryByExperimentId(experimentId);
 	}
 	
 	public String generateUniqueAnalyisisexperimentId() {

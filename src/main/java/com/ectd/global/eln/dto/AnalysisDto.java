@@ -28,6 +28,8 @@ public class AnalysisDto extends Base implements Serializable {
     private Set<AnalysisExcipientDto> analysisExcipients;
     private Set<TestRequestFormDto> testRequestForms;
     
+    private Integer analysisHistoryId;
+
 	// Constructor
 	public AnalysisDto() {
 		// Needed empty constructor for serialization
@@ -148,13 +150,20 @@ public class AnalysisDto extends Base implements Serializable {
 		return sb.toString();
 	}
 	
-	
 	public String getExpStartDate() {
 		return expStartDate;
 	}
 
 	public void setExpStartDate(String expStartDate) {
 		this.expStartDate = expStartDate;
+	}
+	
+	public Integer getAnalysisHistoryId() {
+		return analysisHistoryId;
+	}
+
+	public void setAnalysisHistoryId(Integer analysisHistoryId) {
+		this.analysisHistoryId = analysisHistoryId;
 	}
 
 	@Override

@@ -19,4 +19,6 @@ public interface AnalysisExpeimentDetailsService {
 	
 	Integer saveAnalysisDetails(AnalysisDetails analysisDetails);
 	
+	AnalysisDetailsDto getAnalysisDetailsHistoryById(Integer analysisDetailHistoryId);
+	
 }

@@ -23,6 +23,9 @@ public class AnalysisExcipientDto extends Base implements Serializable {
 	private Double remainingQuantity;
 	private Date expiryDate;
 	private Double changedQuantity;
+	
+	private Integer analysisHistoryId;
+	private Integer analysisExcipientHistoryId;
 
 	public Integer getExcipientId() {
 		return excipientId;
@@ -120,6 +123,20 @@ public class AnalysisExcipientDto extends Base implements Serializable {
 	}
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
+	}
+	
+	public Integer getAnalysisHistoryId() {
+		return analysisHistoryId;
+	}
+	public void setAnalysisHistoryId(Integer analysisHistoryId) {
+		this.analysisHistoryId = analysisHistoryId;
+	}
+	
+	public Integer getAnalysisExcipientHistoryId() {
+		return analysisExcipientHistoryId;
+	}
+	public void setAnalysisExcipientHistoryId(Integer analysisExcipientHistoryId) {
+		this.analysisExcipientHistoryId = analysisExcipientHistoryId;
 	}
 	
 	public String toString() {

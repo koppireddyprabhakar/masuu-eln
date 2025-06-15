@@ -25,6 +25,12 @@ public class AnalysisExpeimentDetailsServiceImpl implements AnalysisExpeimentDet
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	public AnalysisDetailsDto getAnalysisDetailsHistoryById(Integer analysisDetailHistoryId) {
+		return analysisExpeimentDetailsDao.getAnalysisDetailsHistoryById(analysisDetailHistoryId);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<AnalysisDetailsDto> getAnalysisDetails() {
 		return analysisExpeimentDetailsDao.getAnalysisDetails();
 	}

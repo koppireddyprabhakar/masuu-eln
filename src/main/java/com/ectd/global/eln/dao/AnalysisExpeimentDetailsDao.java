@@ -16,5 +16,7 @@ public interface AnalysisExpeimentDetailsDao {
 	Integer updateAnalysisDetails(AnalysisDetails analysisDetails);
 
 	Integer deleteAnalysisDetails(AnalysisDetails analysisDetails);
+	
+	AnalysisDetailsDto getAnalysisDetailsHistoryById(Integer analysisDetailHistoryId);
 
 }

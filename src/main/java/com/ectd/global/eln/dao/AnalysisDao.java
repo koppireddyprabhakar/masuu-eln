@@ -70,5 +70,10 @@ public interface AnalysisDao {
 	
 	List<AnalysisDto> getAnalysisListWithNullExpId(Integer teamId, String status, Integer userID);
 
+	List<AnalysisDto> getAnalysisDetailHistoryByExperimentId(Integer experimentId);
+	
+	AnalysisDto getAnalysisHistoryById(Integer analysisHistoryId);
+	
+	List<AnalysisExcipientDto> getExcipientHistoryByAnalysisHistoryId(Integer analysisHistoryId);
 	
 }

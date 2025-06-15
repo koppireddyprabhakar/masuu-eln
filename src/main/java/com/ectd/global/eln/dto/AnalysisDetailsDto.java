@@ -12,7 +12,10 @@ public class AnalysisDetailsDto extends Base implements Serializable  {
 	private Integer analysisId;
 	private String name;
 	private String fileContent;
-
+	
+	private Integer analysisHistoryId;
+	private Integer analysisHistoryDetailId;
+	
 	public Integer getAnalysisDetailId() {
 		return analysisDetailId;
 	}
@@ -39,6 +42,20 @@ public class AnalysisDetailsDto extends Base implements Serializable  {
 	}
 	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
+	}
+	
+	public Integer getAnalysisHistoryId() {
+		return analysisHistoryId;
+	}
+	public void setAnalysisHistoryId(Integer analysisHistoryId) {
+		this.analysisHistoryId = analysisHistoryId;
+	}
+	
+	public Integer getAnalysisHistoryDetailId() {
+		return analysisHistoryDetailId;
+	}
+	public void setAnalysisHistoryDetailId(Integer analysisHistoryDetailId) {
+		this.analysisHistoryDetailId = analysisHistoryDetailId;
 	}
 
 	public String toString() {

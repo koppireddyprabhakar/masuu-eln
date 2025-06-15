@@ -64,6 +64,11 @@ public class AnalysisController extends BaseController {
 	public ResponseEntity<AnalysisDto> getAnalysisById(@RequestParam Integer analysisId) throws Exception {
 		return new ResponseEntity<>(analysisService.getAnalysisById(analysisId), HttpStatus.OK);
 	}
+	
+	@GetMapping("/get-analysis-history-by-id")
+	public ResponseEntity<AnalysisDto> getAnalysisHistoryById(@RequestParam Integer analysisHistoryId) throws Exception {
+		return new ResponseEntity<>(analysisService.getAnalysisHistoryById(analysisHistoryId), HttpStatus.OK);
+	}
 
 	@GetMapping("/get-analysis-list")
 	public ResponseEntity<List<AnalysisDto>> getAnalysisList() throws Exception {
@@ -103,6 +108,11 @@ public class AnalysisController extends BaseController {
 	@GetMapping("/get-analysis-details-by-id")
 	public ResponseEntity<AnalysisDetailsDto> getAnalysisDetailsById(@RequestParam Integer analysisDetailsId) {
 		return new ResponseEntity<>(analysisExpeimentDetailsService.getAnalysisDetailsById(analysisDetailsId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-analysis-details-history-by-id")
+	public ResponseEntity<AnalysisDetailsDto> getAnalysisDetailsHistoryById(@RequestParam Integer analysisDetailHistoryId) {
+		return new ResponseEntity<>(analysisExpeimentDetailsService.getAnalysisDetailsHistoryById(analysisDetailHistoryId), HttpStatus.OK);
 	}
 
 	@GetMapping("/get-analysis-details")
@@ -182,6 +192,11 @@ public class AnalysisController extends BaseController {
 		return new ResponseEntity<List<AnalysisExcipientDto>>(analysisService.getExcipientByAnalysisId(analysisId), HttpStatus.OK);
 	}
 	
+	@GetMapping("/get-excipient-history-by-analysis-historyId")
+	public ResponseEntity<List<AnalysisExcipientDto>> getExcipientHistoryByAnalysisHistoryId(@RequestParam Integer analysisHistoryId){
+		return new ResponseEntity<List<AnalysisExcipientDto>>(analysisService.getExcipientHistoryByAnalysisHistoryId(analysisHistoryId), HttpStatus.OK);
+	}
+	
 	@PostMapping("/create-test-request-form")
 	public ResponseEntity<String> createTestRequestForm(@RequestBody TestRequestFormRequest testRequestFormRequest) {
 		return getResponseEntity(testRequestFormService.createTestRequestForm(testRequestFormRequest), "Test Request Form Create");
@@ -242,6 +257,12 @@ public class AnalysisController extends BaseController {
 	@GetMapping("/get_analysis_details_by_experiment_id")
 	public ResponseEntity<List<AnalysisDto>> getAnalysisDetailByExperimentId(@RequestParam Integer experimentId) {
 		List<AnalysisDto> analysisDtoList = analysisService.getAnalysisDetailByExperimentId(experimentId);
+		return ResponseEntity.ok(analysisDtoList);
+	}
+	
+	@GetMapping("/get_analysis_details_history_by_experiment_id")
+	public ResponseEntity<List<AnalysisDto>> getAnalysisDetailHistoryByExperimentId(@RequestParam Integer experimentId) {
+		List<AnalysisDto> analysisDtoList = analysisService.getAnalysisDetailHistoryByExperimentId(experimentId);
 		return ResponseEntity.ok(analysisDtoList);
 	}
 	

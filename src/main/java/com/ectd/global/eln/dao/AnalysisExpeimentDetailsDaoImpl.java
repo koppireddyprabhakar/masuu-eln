@@ -43,11 +43,20 @@ public class AnalysisExpeimentDetailsDaoImpl implements AnalysisExpeimentDetails
 	
 	@Value(value="${update.analysis.details}")
 	private String UPDATE_ANALYSIS_DETAILS_QUERY;
+	
+	@Value("${get.analysis.details.history.by.id}")
+	private String GET_ANALYSIS_DETAILS_HISTORY_BY_ID_QUERY;
 
 	@Override
 	public AnalysisDetailsDto getAnalysisDetailsById(Integer analysisDetailId) {
 		return this.jdbcTemplate.queryForObject(GET_ANALYSIS_DETAILS_BY_ID_QUERY + analysisDetailId, 
 				new AnalysisDetailsDtoRowMapper());
+	}
+	
+	@Override
+	public AnalysisDetailsDto getAnalysisDetailsHistoryById(Integer analysisDetailHistoryId) {
+		return this.jdbcTemplate.queryForObject(GET_ANALYSIS_DETAILS_HISTORY_BY_ID_QUERY + analysisDetailHistoryId, 
+				new AnalysisDetailsHistoryDtoRowMapper());
 	}
 
 	@Override
@@ -101,20 +110,41 @@ public class AnalysisExpeimentDetailsDaoImpl implements AnalysisExpeimentDetails
 		@Override
 		public AnalysisDetailsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-			AnalysisDetailsDto analysisDetailsDto = new AnalysisDetailsDto();
-			analysisDetailsDto.setAnalysisDetailId(rs.getInt("ANALYSIS_EXP_DTL_ID"));
-			analysisDetailsDto.setAnalysisId(rs.getInt("ANALYSIS_EXP_ID"));
-			analysisDetailsDto.setName(rs.getString("NAME"));
-			analysisDetailsDto.setFileContent(new String(rs.getBytes("LOB_DETAILS")));
-			analysisDetailsDto.setStatus(rs.getString("STATUS"));
-			analysisDetailsDto.setInsertUser(rs.getString("INSERT_USER"));
-			analysisDetailsDto.setInsertDate(rs.getDate("INSERT_DATE"));
-			analysisDetailsDto.setUpdateUser(rs.getString("UPDATE_USER"));
-			analysisDetailsDto.setUpdateDate(rs.getDate("UPDATE_DATE"));
+			AnalysisDetailsDto analysisDetailsDto = buildAnalysisDetailsDto(rs);
 			
 			return analysisDetailsDto;
 		}
 		
+	}
+	
+	class AnalysisDetailsHistoryDtoRowMapper implements RowMapper<AnalysisDetailsDto> {
+		
+		@Override
+		public AnalysisDetailsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+			AnalysisDetailsDto analysisDetailsDto = buildAnalysisDetailsDto(rs);
+						
+			analysisDetailsDto.setAnalysisHistoryId(rs.getInt("ANALYSIS_EXP_HIST_ID"));
+			analysisDetailsDto.setAnalysisHistoryDetailId(rs.getInt("ANALYSIS_EXP_DTL_HIST_ID"));
+			
+			return analysisDetailsDto;
+		}
+		
+	}
+	
+	private AnalysisDetailsDto buildAnalysisDetailsDto(ResultSet rs) throws SQLException {
+		AnalysisDetailsDto analysisDetailsDto = new AnalysisDetailsDto();
+		analysisDetailsDto.setAnalysisDetailId(rs.getInt("ANALYSIS_EXP_DTL_ID"));
+		analysisDetailsDto.setAnalysisId(rs.getInt("ANALYSIS_EXP_ID"));
+		analysisDetailsDto.setName(rs.getString("NAME"));
+		analysisDetailsDto.setFileContent(new String(rs.getBytes("LOB_DETAILS")));
+		analysisDetailsDto.setStatus(rs.getString("STATUS"));
+		analysisDetailsDto.setInsertUser(rs.getString("INSERT_USER"));
+		analysisDetailsDto.setInsertDate(rs.getDate("INSERT_DATE"));
+		analysisDetailsDto.setUpdateUser(rs.getString("UPDATE_USER"));
+		analysisDetailsDto.setUpdateDate(rs.getDate("UPDATE_DATE"));
+		
+		return analysisDetailsDto;
 	}
 
 }
