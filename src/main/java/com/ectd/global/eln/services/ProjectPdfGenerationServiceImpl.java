@@ -128,8 +128,10 @@ public class ProjectPdfGenerationServiceImpl implements ProjectPdfGenerationServ
 				testRequestForms.forEach(testRequestFormDto -> {
 					if (testRequestFormDto.getAnalysisId() != null) {
 						AnalysisDto analysisDto = analysisDao.getAnalysisById(testRequestFormDto.getAnalysisId());
+						if(analysisDto != null) {
 						addSubheading(document, "Formulation Analysis Experiment");
 						buildAnalysisExperimentTable(document, Arrays.asList(analysisDto), experiment.getProject());
+						}
 					}
 				});
 			}
