@@ -1,6 +1,7 @@
 package com.ectd.global.eln.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,8 +118,8 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 	}
 
 	@Override
-	public TestRequestFormDto getTestRequestFormsByAnalysisId(Integer analysisId) {
-		return testRequestFormDao.getTestRequestFormsByAnalysisId(analysisId);
+	public List<TestRequestFormDto> getTestRequestFormsByAnalysisId(Integer analysisId) {
+		return Arrays.asList(testRequestFormDao.getTestRequestFormsByAnalysisId(analysisId));
 	}
 
 	private List<TestRequestFormRequest> prepareTestRequest(TestRequestFormRequest testRequestFormRequest) {

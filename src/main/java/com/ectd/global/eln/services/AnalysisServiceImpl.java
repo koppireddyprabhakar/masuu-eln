@@ -56,6 +56,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Autowired
 	private ExcipientDao excipientDao;
 	
+	@Autowired
+	private TestRequestFormService testRequestFormService;
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -252,7 +255,13 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<TestRequestFormDto> getTestRequestByAnalysisId(Integer analysisId){
-		return analysisDao.getTestRequestByAnalysisId(analysisId);
+		List<TestRequestFormDto> testRequestFormDtos = analysisDao.getTestRequestByAnalysisId(analysisId);
+		
+		if(CollectionUtils.isEmpty(testRequestFormDtos)) {
+			return testRequestFormService.getTestRequestFormsByAnalysisId(analysisId);
+		}
+		
+		return testRequestFormDtos;
 	}
 
 	@Override

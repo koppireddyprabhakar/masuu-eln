@@ -208,8 +208,8 @@ public class AnalysisController extends BaseController {
 	}
 	
 	@GetMapping("/get-trf-by-analysisId")
-	public ResponseEntity<TestRequestFormDto> getTestRequestFormsByAnalysisId(@RequestParam Integer analysisId){
-		return new ResponseEntity<TestRequestFormDto>(testRequestFormService.getTestRequestFormsByAnalysisId(analysisId), HttpStatus.OK);
+	public ResponseEntity<List<TestRequestFormDto>> getTestRequestFormsByAnalysisId(@RequestParam Integer analysisId){
+		return new ResponseEntity<List<TestRequestFormDto>>(testRequestFormService.getTestRequestFormsByAnalysisId(analysisId), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update-analysis-status")
