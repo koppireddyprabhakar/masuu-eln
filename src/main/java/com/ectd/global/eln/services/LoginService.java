@@ -13,5 +13,7 @@ public interface LoginService {
 	boolean sendOtp(String email);
 
 	boolean validateOtp(String email, String otp);
+	
+	boolean resetPassword(UpdatePasswordRequest updatePasswordRequest);
 
 }

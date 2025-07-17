@@ -114,6 +114,7 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "User Details Updated")
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 	    boolean wasLocked = usersDetailsDao.isUserLocked(usersDetailsRequest.getUserId()); // Check before update
 	    usersDetailsDao.updateUsersDetails(usersDetailsRequest);

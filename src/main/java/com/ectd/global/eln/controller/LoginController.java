@@ -1,5 +1,6 @@
 package com.ectd.global.eln.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class LoginController extends BaseController {
 	
 	
 	@PostMapping("/login")
-	public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest loginRequest, HttpSession session) {
 	    try {
 	        // Perform login and fetch user details
 	        LoginDto loginDto = loginService.login(loginRequest);
@@ -41,17 +42,22 @@ public class LoginController extends BaseController {
 	            throw new InvalidCredentialsException("Invalid Username");
 	        }
 	        
-	        // Check if license is expired
-//	        if (loginDto.isExpiryPanel()) {
-//	            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-//	                .body(Map.of("error", "Your license has expired. Please renew your license."));
-//	        }	
+	        session.setAttribute("userId", loginDto.getUserId());
+	        session.setAttribute("username", loginDto.getFirstName());
+	        System.out.println("userId in session: " + loginDto);
+	        System.out.println("userId in session: " + session.getAttribute("userId"));
+
 	        return ResponseEntity.ok(loginDto);
 	    } catch (InvalidCredentialsException e) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	    }	    
 	}
 	
+	@PutMapping("/resetPassword")
+	public ResponseEntity<String> resetPassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+	  boolean updated = loginService.resetPassword(updatePasswordRequest);
+	  return getResponseEntity(updated, "password update");
+	}
 
 	@PutMapping("/updatePassword")
 	public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {

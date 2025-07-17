@@ -14,10 +14,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.controller.InvalidCredentialsException;
 import com.ectd.global.eln.dao.LoginDao;
-import com.ectd.global.eln.dao.ControlPanelDao;
-import com.ectd.global.eln.dto.ControlPanelDto;
 import com.ectd.global.eln.dto.LoginDto;
 import com.ectd.global.eln.exception.AccountLockedException;
+import com.ectd.global.eln.exception.InvalidPasswordException;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.LoginRequest;
 import com.ectd.global.eln.request.UpdatePasswordRequest;
@@ -32,9 +31,7 @@ public class LoginServiceImpl implements LoginService {
 	@Autowired
 	private JavaMailSender mailSender;
 		
-	 @Autowired
-	 private ControlPanelDao controlPanelDao;  
-	 
+ 
 	 @Autowired
 	 private ElnUtils elnUtils;
 	 
@@ -115,6 +112,27 @@ public class LoginServiceImpl implements LoginService {
 
          return loginDto;
      }
+     
+     @Override
+     @Transactional(propagation = Propagation.REQUIRED)
+     public boolean resetPassword(UpdatePasswordRequest updatePasswordRequest) {
+         if (updatePasswordRequest == null || updatePasswordRequest.getMailId() == null
+             || updatePasswordRequest.getPassword() == null || updatePasswordRequest.getCurrentPassword() == null) {
+             throw new InvalidPasswordException("Invalid request. Please fill all required fields.");
+         }
+
+         LoginDto userDetails = loginDao.getUserDetails(updatePasswordRequest.getMailId());
+         if (userDetails == null || userDetails.getMailId() == null) {
+             throw new InvalidPasswordException("User not found");
+         }
+
+         if (!userDetails.getPassword().equals(updatePasswordRequest.getCurrentPassword())) {
+             throw new InvalidPasswordException("Current password is incorrect");
+         }
+
+         return loginDao.updatePassword(updatePasswordRequest.getMailId(), updatePasswordRequest.getPassword());
+     }
+
 
 	 
 //     private boolean isSuperAdmin(LoginDto loginDto) {

@@ -52,7 +52,6 @@ public class DosageServiceImpl implements DosageService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	@Auditable(action = "Got dosage formulations")
 	public List<DosageDto> getDosagesAndFormulations() {
 		return dosageDao.getDosagesAndFormulations();
 	}

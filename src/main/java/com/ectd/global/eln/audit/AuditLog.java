@@ -23,7 +23,16 @@ public class AuditLog {
     private String action; // Action Taken
     @Column(nullable = false)
     private Timestamp createdDate; // Timestamp of the Action
+    
+    @Column(nullable = true)
+    private Integer userId; // Timestamp of the Action
    
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 	public Long getId() {
 		return id;
 	}
