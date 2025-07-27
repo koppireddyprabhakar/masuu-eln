@@ -12,6 +12,7 @@ public class AnalysisDetailsDto extends Base implements Serializable  {
 	private Integer analysisId;
 	private String name;
 	private String fileContent;
+	private String autoSave = "N";
 	
 	private Integer analysisHistoryId;
 	private Integer analysisHistoryDetailId;
@@ -57,7 +58,14 @@ public class AnalysisDetailsDto extends Base implements Serializable  {
 	public void setAnalysisHistoryDetailId(Integer analysisHistoryDetailId) {
 		this.analysisHistoryDetailId = analysisHistoryDetailId;
 	}
-
+	
+	public String getAutoSave() {
+		return autoSave;
+	}
+	public void setAutoSave(String autoSave) {
+		this.autoSave = autoSave;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder(); 
 		sb.append(analysisDetailId); 

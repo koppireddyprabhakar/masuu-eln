@@ -10,6 +10,7 @@ public class AnalysisDetails extends Base implements Serializable  {
 	private Integer analysisId;
 	private String name;
 	private String fileContent;
+	private String autoSave = "N";
 	
 	public Integer getAnalysisDetailId() {
 		return analysisDetailId;
@@ -17,23 +18,33 @@ public class AnalysisDetails extends Base implements Serializable  {
 	public void setAnalysisDetailId(Integer analysisDetailId) {
 		this.analysisDetailId = analysisDetailId;
 	}
+	
 	public Integer getAnalysisId() {
 		return analysisId;
 	}
 	public void setAnalysisId(Integer analysisId) {
 		this.analysisId = analysisId;
 	}
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public String getFileContent() {
 		return fileContent;
 	}
 	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
+	}
+	
+	public String getAutoSave() {
+		return autoSave;
+	}
+	public void setAutoSave(String autoSave) {
+		this.autoSave = autoSave;
 	}
 	
 }

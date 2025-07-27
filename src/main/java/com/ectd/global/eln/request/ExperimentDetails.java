@@ -10,6 +10,7 @@ public class ExperimentDetails extends Base implements Serializable{
 	private Integer experimentId;
 	private String name;
 	private String fileContent;
+	private String autoSave = "N";
 	
 	public Integer getExperimentDetailId() {
 		return experimentDetailId;
@@ -38,5 +39,12 @@ public class ExperimentDetails extends Base implements Serializable{
 	public void setFileContent(String fileContent) {
 		this.fileContent = fileContent;
 	}
-
+	
+	public String getAutoSave() {
+		return autoSave;
+	}
+	public void setAutoSave(String autoSave) {
+		this.autoSave = autoSave;
+	}
+	
 }

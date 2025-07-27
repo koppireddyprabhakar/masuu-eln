@@ -73,6 +73,7 @@ public class AnalysisExpeimentDetailsDaoImpl implements AnalysisExpeimentDetails
 		parameters.addValue("fileContent", analysisDetails.getFileContent().getBytes());
 		parameters.addValue("name", analysisDetails.getName());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
+		parameters.addValue("autoSave", analysisDetails.getAutoSave());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
@@ -92,6 +93,7 @@ public class AnalysisExpeimentDetailsDaoImpl implements AnalysisExpeimentDetails
 		parameters.addValue("fileContent", analysisDetails.getFileContent().getBytes());
 		parameters.addValue("name", analysisDetails.getName());
 		parameters.addValue("status", analysisDetails.getStatus());
+		parameters.addValue("autoSave", analysisDetails.getAutoSave());
 		parameters.addValue("insertUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);

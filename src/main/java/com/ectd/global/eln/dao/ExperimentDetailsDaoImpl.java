@@ -45,6 +45,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 	@Value(value="${update.experiment.details}")
 	private String UPDATE_EXPERIMENT_DETAILS_QUERY;
 	
+	
 	@Value("${get.experiment.details.history.by.id}")
 	private String GET_EXPERIMENT_DETAILS_HISTORY_BY_ID_QUERY;
 	
@@ -89,6 +90,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 		parameters.addValue("fileContent", experimentDetails.getFileContent().getBytes());
 		parameters.addValue("name", experimentDetails.getName());
 		parameters.addValue("status", ElnUtils.STATUS.ACTIVE.getValue());
+		parameters.addValue("autoSave", experimentDetails.getAutoSave());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
@@ -108,6 +110,7 @@ public class ExperimentDetailsDaoImpl implements ExperimentDetailsDao{
 		parameters.addValue("fileContent", experimentDetails.getFileContent().getBytes());
 		parameters.addValue("name", experimentDetails.getName());
 		parameters.addValue("status", experimentDetails.getStatus());
+		parameters.addValue("autoSave", experimentDetails.getAutoSave());
 		parameters.addValue("insertUser", "ELN");
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", "ELN");
