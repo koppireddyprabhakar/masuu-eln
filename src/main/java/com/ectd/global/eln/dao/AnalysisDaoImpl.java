@@ -136,6 +136,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	@Value("${get.excipients.history.by.analysisHistoryId}")
 	private String GET_EXCIPIENTS_HISTORY_BY_ANALYSIS_HISTORY_ID_QUERY;
+	
+	@Value("${get.analysis.by.project.id}")
+	private String GET_ANALYSIS_BY_PROJECT_ID_QUERY;
 
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -160,6 +163,15 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return analysisList.get(0);
 	}
+	
+	@Override
+	public List<AnalysisDto> getAnalysisHistoryByProjectId(Integer projectId) {
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("projectId", projectId);
+		
+		return namedParameterJdbcTemplate.query(GET_ANALYSIS_BY_PROJECT_ID_QUERY, parameters, new AnalysisProjectExtractor());
+	}
+	
 	
 	@Override
 	public List<AnalysisDto> getAnalysisExperiments(Integer analysisId) {
@@ -731,12 +743,26 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		@Override
 		public List<AnalysisDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
 			List<AnalysisDto> analysisDtoList = new ArrayList<AnalysisDto>();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
+
+				if (isColumnExist(resultSet, "ANALYSIS_EXP_HIST_ID")) {
+					analysisDto.setAnalysisHistoryId(resultSet.getInt("ANALYSIS_EXP_HIST_ID"));
+				}
+
 				analysisDtoList.add(analysisDto);
 			}
 			return analysisDtoList;
 		};
+	}
+	
+	private Boolean isColumnExist(ResultSet resultSet, String columnName) {
+			try {
+				resultSet.findColumn(columnName);
+				return true;
+			} catch (SQLException e) {
+				return false;
+			}
 	}
 
 	private AnalysisDto getAnalysisDto(ResultSet resultSet) throws SQLException {

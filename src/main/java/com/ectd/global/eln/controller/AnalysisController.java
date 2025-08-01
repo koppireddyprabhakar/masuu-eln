@@ -276,4 +276,9 @@ public class AnalysisController extends BaseController {
 	    return new ResponseEntity<>(analysisService.getAnalysisListWithNullExpId(null, status, null), HttpStatus.OK);
     }
 	
+	@GetMapping("/get-analysis-history-by-project-id")
+	public ResponseEntity<List<AnalysisDto>> getAnalysisByStatusWithoutExpId(@RequestParam Integer projectId) throws Exception {
+	    return new ResponseEntity<>(analysisService.getAnalysisHistoryByProjectId(projectId), HttpStatus.OK);
+    }
+	
 }

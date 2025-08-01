@@ -615,6 +615,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return analysisDao.getAnalysisDetailHistoryByExperimentId(experimentId);
 	}
 	
+	@Override
+	public List<AnalysisDto> getAnalysisHistoryByProjectId(Integer projectId) {
+		return analysisDao.getAnalysisHistoryByProjectId(projectId);
+	}
+	
 	public String generateUniqueAnalyisisexperimentId() {
 	    String lastExperimentName = analysisDao.generateUniqueAnalyisisexperimentId();
 	    if (lastExperimentName == null || lastExperimentName.length() < 4) {

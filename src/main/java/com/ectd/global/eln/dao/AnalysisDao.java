@@ -76,4 +76,5 @@ public interface AnalysisDao {
 	
 	List<AnalysisExcipientDto> getExcipientHistoryByAnalysisHistoryId(Integer analysisHistoryId);
 	
+	List<AnalysisDto> getAnalysisHistoryByProjectId(Integer projectId);
 }
