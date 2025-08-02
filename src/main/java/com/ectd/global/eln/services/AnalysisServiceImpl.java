@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import com.ectd.global.eln.dao.AnalysisDao;
 import com.ectd.global.eln.dao.ExcipientDao;
 import com.ectd.global.eln.dao.ExperimentDao;
+import com.ectd.global.eln.dao.ProjectDao;
 import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
@@ -31,6 +32,7 @@ import com.ectd.global.eln.request.AnalysisReview;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.ExcipientRequest;
 import com.ectd.global.eln.request.ExperimentRequest;
+import com.ectd.global.eln.request.ProjectRequest;
 import com.ectd.global.eln.request.TestRequestFormRequest;
 import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
@@ -58,6 +60,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 	
 	@Autowired
 	private TestRequestFormService testRequestFormService;
+	
+	@Autowired
+	private ProjectDao projectDao;
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
@@ -137,6 +142,12 @@ public class AnalysisServiceImpl implements AnalysisService {
 		if(!CollectionUtils.isEmpty(analysisRequest.getTestRequestFormList())) {
 			analysisDao.batchTRFUpdate(analysisRequest.getTestRequestFormList(), analysisId);
 		}
+		// Update project status to INPROGRESS when analysis is created
+		ProjectRequest projectRequest = new ProjectRequest();
+		projectRequest.setProjectId(analysisRequest.getProjectId());
+		projectRequest.setStatus(ProjectRequest.PROJECT_STATUS.INPROGRESS.getValue());
+		projectDao.updateProjectStatus(projectRequest);
+
 
 		return analysisId;
 	}
@@ -606,6 +617,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 	
 	@Override
+	public List<AnalysisDto> getAnalysisHistoryByProjectId(Integer projectId) {
+		return analysisDao.getAnalysisHistoryByProjectId(projectId);
+	}
+	
+	@Override
 	public List<AnalysisDto> getAnalysisDetailByExperimentId(Integer experimentId){
 		return analysisDao.getAnalysisDetailByExperimentId(experimentId);
 	}
@@ -613,11 +629,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Override
 	public List<AnalysisDto> getAnalysisDetailHistoryByExperimentId(Integer experimentId) {
 		return analysisDao.getAnalysisDetailHistoryByExperimentId(experimentId);
-	}
-	
-	@Override
-	public List<AnalysisDto> getAnalysisHistoryByProjectId(Integer projectId) {
-		return analysisDao.getAnalysisHistoryByProjectId(projectId);
 	}
 	
 	public String generateUniqueAnalyisisexperimentId() {

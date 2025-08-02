@@ -256,6 +256,7 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		            		.addValue("insertDate", ElnUtils.getTimeStamp())
 		            		.addValue("updateUser", "ELN")
 		            		.addValue("updateDate", ElnUtils.getTimeStamp())
+		            		.addValue("autoSave", experimentDetails.getAutoSave())
 		                    .getValues());
 		}
 		

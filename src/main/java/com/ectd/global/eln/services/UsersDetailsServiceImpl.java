@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
 import com.ectd.global.eln.dao.DepartmentDao;
 import com.ectd.global.eln.dao.UserRoleDao;
 import com.ectd.global.eln.dao.UserTeamDao;
@@ -64,6 +63,8 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 		@Transactional(propagation = Propagation.REQUIRED)
 		@Auditable(action = "User Details Added")
 		public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		//  Normalize email at the very beginning
+			usersDetailsRequest.setMailId(usersDetailsRequest.getMailId().toLowerCase());
 			Integer userId = usersDetailsDao.createUsersDetails(usersDetailsRequest);
 			if(userId != null) {
 				usersDetailsDao.createUserTeam(usersDetailsRequest, userId);				
@@ -115,6 +116,8 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
+		//  Normalize email at the very beginning
+	    usersDetailsRequest.setMailId(usersDetailsRequest.getMailId().toLowerCase());
 	    boolean wasLocked = usersDetailsDao.isUserLocked(usersDetailsRequest.getUserId()); // Check before update
 	    usersDetailsDao.updateUsersDetails(usersDetailsRequest);
 	    

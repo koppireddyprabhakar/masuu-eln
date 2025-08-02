@@ -19,7 +19,9 @@ public class ExceptionController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 	
-	
+	@ExceptionHandler(value = InvalidPasswordException.class)
+	public ResponseEntity<Object> handleInvalidPasswordException(InvalidPasswordException exception) {
+	    return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 
-	
 }

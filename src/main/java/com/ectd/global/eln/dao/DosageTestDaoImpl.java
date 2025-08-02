@@ -97,7 +97,8 @@ public class DosageTestDaoImpl implements DosageTestDao {
 			DosageTestDto dosageTestDto = new DosageTestDto();
 			dosageTestDto.setTestId(resultSet.getInt("TEST_ID"));
 			dosageTestDto.setDosageId(resultSet.getInt("DOSAGE_ID"));
-			dosageTestDto.setDosageId(resultSet.getInt("STATUS"));
+		//	dosageTestDto.setDosageId(resultSet.getInt("STATUS"));
+			dosageTestDto.setStatus(resultSet.getString("STATUS")); 
 			dosageTestDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 			dosageTestDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			dosageTestDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));

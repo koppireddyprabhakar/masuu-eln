@@ -1,8 +1,8 @@
 package com.ectd.global.eln.controller;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import javax.servlet.http.HttpSession;
+import com.ectd.global.eln.dao.LoginDao;
 import com.ectd.global.eln.dto.LoginDto;
 import com.ectd.global.eln.request.ForgotPasswordRequest;
 import com.ectd.global.eln.request.ForgotPasswordResponse;
@@ -27,11 +28,12 @@ public class LoginController extends BaseController {
 
 	@Autowired
 	private LoginService loginService;
-
 	
+	@Autowired
+	private LoginDao loginDao;
 	
 	@PostMapping("/login")
-	public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest loginRequest,HttpSession session) {
 	    try {
 	        // Perform login and fetch user details
 	        LoginDto loginDto = loginService.login(loginRequest);
@@ -39,20 +41,20 @@ public class LoginController extends BaseController {
 	        // Check if loginDto is null, meaning invalid credentials
 	        if (loginDto == null) {
 	            throw new InvalidCredentialsException("Invalid Username");
-	        }
-	        
+	        }        
+	        session.setAttribute("userId", loginDto.getUserId());
+	        session.setAttribute("username", loginDto.getFirstName());        
 	        // Check if license is expired
-//	        if (loginDto.isExpiryPanel()) {
-//	            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-//	                .body(Map.of("error", "Your license has expired. Please renew your license."));
-//	        }	
+	        if (loginDto.isExpiryPanel()) {
+	            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", "Your license has expired. Please renew your license."));
+        }	
 	        return ResponseEntity.ok(loginDto);
 	    } catch (InvalidCredentialsException e) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	    }	    
 	}
 	
-
 	@PutMapping("/updatePassword")
 	public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
 		return getResponseEntity(loginService.updatePassword(updatePasswordRequest), "Password updated");

@@ -172,7 +172,6 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		return namedParameterJdbcTemplate.query(GET_ANALYSIS_BY_PROJECT_ID_QUERY, parameters, new AnalysisProjectExtractor());
 	}
 	
-	
 	@Override
 	public List<AnalysisDto> getAnalysisExperiments(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
@@ -382,6 +381,7 @@ public class AnalysisDaoImpl implements AnalysisDao {
 					.addValue("insertDate", ElnUtils.getTimeStamp())
 					.addValue("updateUser", "ELN")
 					.addValue("updateDate", ElnUtils.getTimeStamp())
+					.addValue("autoSave", analysisDetails.getAutoSave())
 					.getValues());
 		}
 
@@ -743,13 +743,11 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		@Override
 		public List<AnalysisDto> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
 			List<AnalysisDto> analysisDtoList = new ArrayList<AnalysisDto>();
-			while (resultSet.next()) {
+			while(resultSet.next()) {
 				AnalysisDto analysisDto = getAnalysisDto(resultSet);
-
 				if (isColumnExist(resultSet, "ANALYSIS_EXP_HIST_ID")) {
 					analysisDto.setAnalysisHistoryId(resultSet.getInt("ANALYSIS_EXP_HIST_ID"));
 				}
-
 				analysisDtoList.add(analysisDto);
 			}
 			return analysisDtoList;
@@ -757,13 +755,13 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	}
 	
 	private Boolean isColumnExist(ResultSet resultSet, String columnName) {
-			try {
-				resultSet.findColumn(columnName);
-				return true;
-			} catch (SQLException e) {
-				return false;
-			}
-	}
+		try {
+			resultSet.findColumn(columnName);
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
+}
 
 	private AnalysisDto getAnalysisDto(ResultSet resultSet) throws SQLException {
 

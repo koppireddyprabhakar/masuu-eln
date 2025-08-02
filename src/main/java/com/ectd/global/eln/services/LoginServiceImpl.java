@@ -18,6 +18,7 @@ import com.ectd.global.eln.dao.ControlPanelDao;
 import com.ectd.global.eln.dto.ControlPanelDto;
 import com.ectd.global.eln.dto.LoginDto;
 import com.ectd.global.eln.exception.AccountLockedException;
+import com.ectd.global.eln.exception.InvalidPasswordException;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.LoginRequest;
 import com.ectd.global.eln.request.UpdatePasswordRequest;
@@ -51,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
              return null;
          }
 
-         // Always validate password first
+        
          if (!loginDto.getPassword().equals(loginRequest.getPassword())) {
              loginDao.incrementFailedAttempts(loginRequest.getMailId());
              int failedAttempts = loginDao.getFailedAttempts(loginRequest.getMailId());
@@ -92,23 +93,23 @@ public class LoginServiceImpl implements LoginService {
          }
 
          // Skip expiry checks only for super admin
-//         if (!loginDto.isSuperAdmin()) {
-//             // Fetch control panel details
-//             ControlPanelDto controlPanelDto = controlPanelDao.getControlPanel();
-//             if (controlPanelDto == null) {
-//                 throw new RuntimeException("Control panel details not found.");
-//             }
-//
-//             // Check for license expiry
-//             Date expiryDate = controlPanelDto.getLicenceExpiryDate();
-//             Date currentDate = new Date(ElnUtils.getTimeStamp().getTime());
-//             if (expiryDate != null && !expiryDate.after(currentDate)) {
-//                 loginDto.setExpiryPanel(true);
-//             }
-//
-//             // Check for password expiry (only for non-super admin)
+         if (!loginDto.isSuperAdmin()) {
+             // Fetch control panel details
+             ControlPanelDto controlPanelDto = controlPanelDao.getControlPanel();
+             if (controlPanelDto == null) {
+                 throw new RuntimeException("Control panel details not found.");
+             }
+
+             // Check for license expiry
+             Date expiryDate = controlPanelDto.getLicenceExpiryDate();
+             Date currentDate = new Date(ElnUtils.getTimeStamp().getTime());
+             if (expiryDate != null && !expiryDate.after(currentDate)) {
+                 loginDto.setExpiryPanel(true);
+             }
+
+            // Check for password expiry (only for non-super admin)
              checkPasswordExpiry(loginDto);
-//         }
+          }
 
          // Password correct and account not locked — reset failed attempts
          loginDao.resetFailedAttempts(loginRequest.getMailId());
@@ -117,10 +118,10 @@ public class LoginServiceImpl implements LoginService {
      }
 
 	 
-//     private boolean isSuperAdmin(LoginDto loginDto) {
-//	 	    return loginDto.getRoleId() == 5;  // Assuming role ID 5 is for Super Admin from  logindto rowmapper , check logindto rowmapper
-//	 	}
-//	 
+     private boolean isSuperAdmin(LoginDto loginDto) {
+	 	    return loginDto.getRoleId() == 5;  // Assuming role ID 5 is for Super Admin from  logindto rowmapper , check logindto rowmapper
+	 	}
+	 
 	public void checkPasswordExpiry(LoginDto loginDto) {
 	    Date passwordUpdateDate = loginDto.getPasswordUpdateDate();
 
@@ -171,18 +172,12 @@ public class LoginServiceImpl implements LoginService {
 
 	        emailNotificationService.saveEmailNotification(emailNotification);
 
-	      //  System.out.println("Password expired. Email sent.");
 	    }
 
-	    // No warning or expiration before day 45
 	    else {
 	        loginDto.setPasswordExpiryWarning(null); // Clear warning
 	        loginDto.setPasswordExpired(false); // Password is valid
 	    }
-
-	    // Check the updated status
-	  //  System.out.println("Password Expired: " + loginDto.isPasswordExpired());
-	  //  System.out.println("Password Expiry Warning: " + loginDto.getPasswordExpiryWarning());
 	}
 
 	
@@ -209,7 +204,6 @@ public class LoginServiceImpl implements LoginService {
 	    emailNotificationService.saveEmailNotification(emailNotification);
 	}
 
-	
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -231,9 +225,7 @@ public class LoginServiceImpl implements LoginService {
 		if (count == 0) {
 			return false;
 		}
-
 		String otp = generateOtp();
-
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		loginDao.saveOtp(mailId, otp, timestamp);
 

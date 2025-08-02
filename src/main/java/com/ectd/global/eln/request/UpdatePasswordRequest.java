@@ -4,6 +4,7 @@ public class UpdatePasswordRequest {
 	
 	private String mailId;
 	private String password;
+	private String CurrentPassword;
 	
 	public String getMailId() {
 		return mailId;
@@ -20,4 +21,13 @@ public class UpdatePasswordRequest {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public void setCurrentPassword(String currentPassword) {
+		CurrentPassword = currentPassword;
+	}
+	
+	public String getCurrentPassword() {
+		return CurrentPassword;
+	}
+
 }

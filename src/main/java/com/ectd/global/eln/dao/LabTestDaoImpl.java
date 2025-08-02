@@ -159,8 +159,12 @@ public class LabTestDaoImpl implements LabTestDao {
 				dt.setUpdateDate(ElnUtils.getTimeStamp());
 				dt.setUpdateUser("ELN");
 			});
+			System.out.println("Update Dosage Count: " + updateDosageTests.size());
+			updateDosageTests.forEach(dt -> System.out.println("Updating dosageId: " + dt.getDosageId() + ", testId: " + dt.getTestId()));
 
-			updatedRows = this.batchExecution(testRequest.getDosageTests(), UPDATE_DOSAGE_TEST_QUERY);;
+//			updatedRows = this.batchExecution(testRequest.getDosageTests(), UPDATE_DOSAGE_TEST_QUERY);;
+			updatedRows = this.batchExecution(updateDosageTests, UPDATE_DOSAGE_TEST_QUERY);
+
 		}
 
 		if(!CollectionUtils.isEmpty(insertDosageTests)) {

@@ -1,6 +1,7 @@
 package com.ectd.global.eln.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.ectd.global.eln.request.Base;
 
@@ -18,6 +19,7 @@ public class ExperimentExcipientDto  extends Base implements Serializable {
 	private String potency;
 	private String grade;
 	private Double quantity;
+	private Date expiryDate;
 
 	private Integer experimentExcipientHistoryId;
 	private Integer experimentHistoryId;
@@ -134,6 +136,12 @@ public class ExperimentExcipientDto  extends Base implements Serializable {
 	        result = 31 * result + excipientId.hashCode();
 	    }
 	    return result;
+	}
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
 	}
 	
 }
