@@ -80,7 +80,7 @@ public class ExperimentAttachmentServiceImpl implements ExperimentAttachmentServ
 				String filename = path.getAttachmentLocation().substring(path.getAttachmentLocation().lastIndexOf("/") + 1);
 				String url = path.getAttachmentLocation();
 
-				return new FileInfo(filename, url, path.getExperimentId(), path.getExperimentAttachmentId(), null);
+				return new FileInfo(filename, url, path.getExperimentId(), path.getExperimentAttachmentId(), path.getFromSummary());
 			}).collect(Collectors.toList());
 
 		} catch (Exception e) {

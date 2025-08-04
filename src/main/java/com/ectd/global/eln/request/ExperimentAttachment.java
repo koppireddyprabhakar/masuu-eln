@@ -13,6 +13,8 @@ public class ExperimentAttachment extends Base implements Serializable {
 	private String projectId;
 	private String attachmentLocation;
 	private MultipartFile file;
+	private String fromSummary;
+
 	
 	public Integer getExperimentAttachmentId() {
 		return experimentAttachmentId;
@@ -47,6 +49,12 @@ public class ExperimentAttachment extends Base implements Serializable {
 	}
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+	public String getFromSummary() {
+		return fromSummary;
+	}
+	public void setFromSummary(String fromSummary) {
+		this.fromSummary = fromSummary;
 	}
 	
 }

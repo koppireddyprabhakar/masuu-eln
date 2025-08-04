@@ -7,6 +7,7 @@ public class ExperimentAttachmentDto extends Base {
 	private Integer experimentAttachmentId;
 	private Integer experimentId;
 	private String attachmentLocation;
+	private String  fromSummary;
 	
 	public Integer getExperimentAttachmentId() {
 		return experimentAttachmentId;
@@ -28,4 +29,12 @@ public class ExperimentAttachmentDto extends Base {
 	public void setAttachmentLocation(String attachmentLocation) {
 		this.attachmentLocation = attachmentLocation;
 	}
+	public String getFromSummary() {
+		return fromSummary;
+	}
+	public void setFromSummary(String fromSummary) {
+		this.fromSummary = fromSummary;
+	}
+	
+	
 }

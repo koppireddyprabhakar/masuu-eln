@@ -281,4 +281,10 @@ public class AnalysisController extends BaseController {
 	    return new ResponseEntity<>(analysisService.getAnalysisHistoryByProjectId(projectId), HttpStatus.OK);
     }
 	
+	@GetMapping("/get_analysis_experiments_by_experiment_id")
+	public ResponseEntity<List<AnalysisDto>> getAnalysisExperimentsByExperimentId(@RequestParam Integer experimentId) {
+		List<AnalysisDto> analysisDtoList = analysisService.getAnalysisExperimentsByExperimentId(experimentId);
+		return ResponseEntity.ok(analysisDtoList);
+	}
+	
 }

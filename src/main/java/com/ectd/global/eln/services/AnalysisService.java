@@ -61,4 +61,7 @@ public interface AnalysisService {
 	List<AnalysisExcipientDto> getExcipientHistoryByAnalysisHistoryId(Integer analysisHistoryId);
 	
 	List<AnalysisDto> getAnalysisHistoryByProjectId(Integer projectId);
+	
+	List<AnalysisDto> getAnalysisExperimentsByExperimentId(Integer experimentId);
+
 }

@@ -216,6 +216,26 @@ public class LoginServiceImpl implements LoginService {
 
 		return loginDao.updatePassword(updatePasswordRequest.getMailId(), updatePasswordRequest.getPassword());
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public boolean resetPassword(UpdatePasswordRequest updatePasswordRequest) {
+	    if (updatePasswordRequest == null || updatePasswordRequest.getMailId() == null
+	            || updatePasswordRequest.getPassword() == null || updatePasswordRequest.getCurrentPassword() == null) {
+	        return false;
+	    }
+ 
+	    LoginDto userDetails = loginDao.getUserDetails(updatePasswordRequest.getMailId());
+	    if (userDetails == null || userDetails.getPassword() == null) {
+	        return false;
+	    }
+ 
+	    if (!userDetails.getPassword().equals(updatePasswordRequest.getCurrentPassword())) {
+	        throw new InvalidPasswordException("Current Password is incorrect");
+	    }
+ 
+	    return loginDao.updatePassword(updatePasswordRequest.getMailId(), updatePasswordRequest.getPassword());
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)

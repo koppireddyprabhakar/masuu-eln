@@ -140,6 +140,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	@Value("${get.analysis.by.project.id}")
 	private String GET_ANALYSIS_BY_PROJECT_ID_QUERY;
 
+	@Value("${get.analysis.experiments.by.experiment.id}")
+	private String GET_ANALAYSIS_EXPERIMENTS_BY_EXPERIMENT_ID_QUERY;
+	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
@@ -207,6 +210,15 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		}
 
 		return analysisList.get(0);
+	}
+	
+	@Override
+	public List<AnalysisDto> getAnalysisExperimentsByExperimentId(Integer experimentId) {
+	    return jdbcTemplate.query(
+	        GET_ANALAYSIS_EXPERIMENTS_BY_EXPERIMENT_ID_QUERY,
+	        new Object[]{experimentId},
+	        new AnalysisExperimentRowMapper()
+	    );
 	}
 
 

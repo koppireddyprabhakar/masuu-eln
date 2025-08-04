@@ -9,6 +9,8 @@ public interface LoginService {
 	LoginDto login(LoginRequest loginRequest);
 
 	Boolean updatePassword(UpdatePasswordRequest updatePasswordRequest);
+	
+    boolean resetPassword(UpdatePasswordRequest updatePasswordRequest);
 
 	boolean sendOtp(String email);
 

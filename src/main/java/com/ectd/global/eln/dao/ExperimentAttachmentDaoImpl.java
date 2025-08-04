@@ -81,6 +81,8 @@ public class ExperimentAttachmentDaoImpl implements ExperimentAttachmentDao {
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("fromSummary", experimentAttachment.getFromSummary());
+
 		
 		return namedParameterJdbcTemplate.update(CREATE_EXPERIMENT_ATTACHMENT, parameters);
 	}
@@ -97,6 +99,7 @@ public class ExperimentAttachmentDaoImpl implements ExperimentAttachmentDao {
 		parameters.addValue("insertDate", ElnUtils.getTimeStamp());
 		parameters.addValue("updateUser", ElnUtils.DEFAULT_USER_ID);
 		parameters.addValue("updateDate", ElnUtils.getTimeStamp());
+		parameters.addValue("fromSummary", experimentAttachment.getFromSummary());
 
 		return namedParameterJdbcTemplate.update(UPDATE_EXPERIMENT_ATTACHMENT, parameters);
 	}
@@ -121,6 +124,8 @@ public class ExperimentAttachmentDaoImpl implements ExperimentAttachmentDao {
 			experimentAttachmentDto.setInsertUser(resultSet.getString("INSERT_USER"));
 			experimentAttachmentDto.setUpdateDate(resultSet.getDate("UPDATE_DATE"));
 			experimentAttachmentDto.setUpdateUser(resultSet.getString("UPDATE_USER"));
+			experimentAttachmentDto.setFromSummary(resultSet.getString("FROM_SUMMARY"));
+
 
 			return experimentAttachmentDto;
 		};

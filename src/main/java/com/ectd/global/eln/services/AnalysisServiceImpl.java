@@ -670,5 +670,10 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public List<AnalysisDto> getAnalysisListWithNullExpId(Integer teamId, String status, Integer userId) {
 	    return analysisDao.getAnalysisListWithNullExpId(teamId, status, userId);
 	}
+	
+	@Override
+	public List<AnalysisDto> getAnalysisExperimentsByExperimentId(Integer experimentId) {
+		return analysisDao.getAnalysisExperimentsByExperimentId(experimentId);
+	}
 
 }

@@ -70,6 +70,12 @@ public class LoginController extends BaseController {
 			return new ResponseEntity<>(new ForgotPasswordResponse("Invalid email."), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PutMapping("/resetPassword")
+	public ResponseEntity<String> resetPassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+	    boolean updated = loginService.resetPassword(updatePasswordRequest);
+	    return getResponseEntity(updated, "Password updated");
+	}
 
 	@PostMapping("/validate-otp")
 	public ResponseEntity<ValidateOtpResponse> validateOtp(@RequestBody ValidateOtpRequest request) {

@@ -94,6 +94,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 			experimentDetails.setStatus(ElnUtils.STATUS.ACTIVE.getValue());
 			experimentDetailsList.add(experimentDetails);
 			
+			
 			experimentRequest.setExperimentDetailsList(experimentDetailsList);
 			
 			experimentDao.batchInsert(experimentRequest.getExperimentDetailsList());
