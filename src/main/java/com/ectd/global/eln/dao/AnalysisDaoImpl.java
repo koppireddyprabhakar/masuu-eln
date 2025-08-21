@@ -193,13 +193,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	
 	@Override
 	public List<AnalysisDto> getAnalysisDetailHistoryByExperimentId(Integer experimentId) {
-		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_DETAILS_HISTORY_BY_EXPERIMENT_ID + " AND E.EXP_ID = " + experimentId,
-				new AnalysisExperimentHistoryRowMapper());
-
-		return analysisList;
+	    return jdbcTemplate.query( GET_ANALYSIS_DETAILS_HISTORY_BY_EXPERIMENT_ID, new AnalysisExperimentHistoryRowMapper(), experimentId );
 	}
 	
-
 	@Override
 	public AnalysisDto getAnalysisByIdWithoutTRF(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
@@ -613,21 +609,18 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return analysisReviewDtos.get(0);
 	}
-	
-	public List<AnalysisDto> getAnalysisByProjectId(Integer projectId) {
 		
-		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_PROJECT_ID + " AND A.PROJECT_ID = " + projectId,
-				new AnalysisProjectExtractor());
-
-		return analysisList;
+	@Override
+	public List<AnalysisDto> getAnalysisByProjectId(Integer projectId) {
+	    MapSqlParameterSource parameters = new MapSqlParameterSource();
+	    parameters.addValue("projectId", projectId);
+	    return namedParameterJdbcTemplate.query( GET_ANALYSIS_BY_PROJECT_ID_QUERY, parameters, new AnalysisProjectExtractor());
 	}
 	
 	public String generateUniqueAnalyisisexperimentId() {
         try {
-            // Execute the query to get the last analysis experiment ID
             return namedParameterJdbcTemplate.queryForObject(FIND_LAST_ANALYSIS_ID_QUERY, new MapSqlParameterSource(), String.class);
         } catch (EmptyResultDataAccessException e) {
-            // Return null if no analysis experiment ID is found
             return null;
         }
     }
