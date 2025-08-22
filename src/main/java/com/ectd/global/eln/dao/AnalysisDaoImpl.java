@@ -147,6 +147,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 	@Value("${get.analysis.experiments.by.reviewer.list.query}")
 	private String GET_ANALYSIS_EXPERIMENTS_BY_REVIEWER_LIST_QUERY;
 	
+	@Value("${get.analysis.details.by.analysisId}")
+	private String GET_ANALAYSIS_details_BY_ANALYSIS_ID_QUERY;
+	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
 		List<AnalysisDto> analysisList = jdbcTemplate.query(GET_ANALYSIS_BY_ID_WITH_OUT_TRF_QUERY + analysisId,
@@ -804,6 +807,14 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 		return  analysisDto;
 	}
+	
+	@Override
+	public List<AnalysisDetailsDto> getAnalysisDetailsByAnalysisId(Integer analysisId) {
+	    MapSqlParameterSource params = new MapSqlParameterSource();
+	    params.addValue("analysisId", analysisId);
+
+	    return namedParameterJdbcTemplate.query(GET_ANALAYSIS_details_BY_ANALYSIS_ID_QUERY, params, new AnalysisDetailsRowMapper());
+	}
 
 	private AnalysisDetailsDto getAnalysisDetailsWithOutContent(ResultSet resultSet) throws SQLException {
 
@@ -917,6 +928,23 @@ public class AnalysisDaoImpl implements AnalysisDao {
 		analysisDto.setInsertDate(resultSet.getDate("INSERT_DATE"));
 		
 		return analysisDto;
+	}
+	
+	public class AnalysisDetailsRowMapper implements RowMapper<AnalysisDetailsDto> {
+	    @Override
+	    public AnalysisDetailsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    	AnalysisDetailsDto dto = new AnalysisDetailsDto();
+	        dto.setAnalysisDetailId(rs.getInt("ANALYSIS_EXP_DTL_ID"));
+	        dto.setAnalysisId(rs.getInt("ANALYSIS_EXP_ID"));
+	        dto.setFileContent(rs.getString("LOB_DETAILS"));
+	        dto.setName(rs.getString("NAME"));
+	        dto.setStatus(rs.getString("STATUS"));
+	        dto.setInsertUser(rs.getString("INSERT_USER"));
+	        dto.setInsertDate(rs.getTimestamp("INSERT_DATE"));
+	        dto.setUpdateUser(rs.getString("UPDATE_USER"));
+	        dto.setUpdateDate(rs.getTimestamp("UPDATE_DATE"));
+	        return dto;
+	    }
 	}
 
 }

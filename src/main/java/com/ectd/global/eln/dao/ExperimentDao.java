@@ -62,4 +62,7 @@ public interface ExperimentDao {
 	 
 	 List<ExperimentExcipientDto> getExcipientHistoryByExperimentId(Integer experimentHistoryId);
 	 
+	 List<ExperimentDetailsDto> getExperimentDetailsByExperimentId(Integer experimentId);
+
+	 
 }

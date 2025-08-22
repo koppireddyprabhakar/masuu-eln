@@ -2,6 +2,7 @@ package com.ectd.global.eln.dao;
 
 import java.util.List;
 
+import com.ectd.global.eln.dto.AnalysisDetailsDto;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
 import com.ectd.global.eln.dto.AnalysisReviewDto;
@@ -81,4 +82,7 @@ public interface AnalysisDao {
 	List<AnalysisDto> getAnalysisExperimentsByExperimentId(Integer experimentId);
 
     List<AnalysisDto> getAnalysisExperimentsByReviewer(Integer reviewUserId, String status);
+    
+    List<AnalysisDetailsDto> getAnalysisDetailsByAnalysisId(Integer analysisId);
+
 }

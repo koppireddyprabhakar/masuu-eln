@@ -751,4 +751,38 @@ return experimentReviewDtos.stream().max(Comparator.comparing(ExperimentReviewDt
 		};
 	}
 	
+	 @Override
+	 public List<ExperimentDetailsDto> getExperimentDetailsByExperimentId(Integer experimentId) {
+	     String sql = "SELECT EXP_DETAIL_ID, EXP_ID, LOB_DETAILS, NAME, STATUS, INSERT_USER, INSERT_DATE, UPDATE_USER, UPDATE_DATE " +
+	                  "FROM EXPERIMENT_DETAILS WHERE EXP_ID = :expId ORDER BY EXP_DETAIL_ID";
+
+	     MapSqlParameterSource params = new MapSqlParameterSource();
+	     params.addValue("expId", experimentId);
+
+	     return namedParameterJdbcTemplate.query(sql, params, new ExperimentDetailsRowMapper());
+	 }
+
+	 class ExperimentDetailsRowMapper implements RowMapper<ExperimentDetailsDto> {
+		    public ExperimentDetailsDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+		        ExperimentDetailsDto details = new ExperimentDetailsDto();
+
+		        details.setExperimentDetailId(resultSet.getInt("EXP_DETAIL_ID"));
+		        details.setExperimentId(resultSet.getInt("EXP_ID"));
+		        details.setName(resultSet.getString("NAME"));
+		        details.setStatus(resultSet.getString("STATUS"));
+		        details.setInsertUser(resultSet.getString("INSERT_USER"));
+		        details.setInsertDate(resultSet.getTimestamp("INSERT_DATE"));
+		        details.setUpdateUser(resultSet.getString("UPDATE_USER"));
+		        details.setUpdateDate(resultSet.getTimestamp("UPDATE_DATE"));
+
+		        // Convert LOB_DETAILS from byte[] (or Blob) to String
+		        byte[] lobBytes = resultSet.getBytes("LOB_DETAILS");
+		        if (lobBytes != null) {
+		            details.setFileContent(new String(lobBytes)); // UTF-8 default, change if needed
+		        }
+
+		        return details;
+		    }
+		}
+	
 }

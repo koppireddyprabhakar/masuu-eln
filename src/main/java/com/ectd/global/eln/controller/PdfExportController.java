@@ -104,4 +104,20 @@ public class PdfExportController {
         }
     }
     
+        @GetMapping("/generate-experiments-pdf-project-id")
+        public ResponseEntity<byte[]> generateProjectExperimentsPdf(@RequestParam Integer projectId) {
+            try {
+                byte[] pdfBytes = projectPdfGenerationService.generateProjectExperimentsPdf(projectId);
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData("attachment", "FORMULATION_EXPERIMENTS_" + projectId + ".pdf");
+                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        
+        
+    }
+    
 }
