@@ -195,6 +195,12 @@ public class ExperimentController extends BaseController {
 		return  new ResponseEntity<>(experimentService.getExperimentReview(experimentId), HttpStatus.OK);
 	}
 	
+	@GetMapping("/get-experiments-by-reviewer")
+	public ResponseEntity<List<ExperimentDto>> getExperimentsByReviewer(@RequestParam Integer reviewUserId,@RequestParam(required = false) String status) {
+	    return ResponseEntity.ok(experimentService.getExperimentsByReviewer(reviewUserId, status));
+	}
+
+	
 	@GetMapping("get-test-requests-by-experiment-id")
 	public ResponseEntity<List<TestRequestFormDto>> getTestRequestByExperimentId(@RequestParam Integer experimentId) {
 		return new ResponseEntity<>(experimentService.getTRFByExpIds(experimentId), HttpStatus.OK);

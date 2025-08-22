@@ -80,4 +80,5 @@ public interface AnalysisDao {
 	
 	List<AnalysisDto> getAnalysisExperimentsByExperimentId(Integer experimentId);
 
+    List<AnalysisDto> getAnalysisExperimentsByReviewer(Integer reviewUserId, String status);
 }

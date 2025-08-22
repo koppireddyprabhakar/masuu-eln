@@ -237,6 +237,12 @@ public class AnalysisController extends BaseController {
 		return getResponseEntity(analysisService.updateAnalysisReview(analysisReview), "Analysis Review Update");
 	}
 	
+	@GetMapping("/get-analysis-experiments-by-reviewer")
+	public ResponseEntity<List<AnalysisDto>> getAnalysisByReviewer(@RequestParam Integer reviewUserId,@RequestParam(required = false) String status) {
+	    return ResponseEntity.ok(analysisService.getAnalysisExperimentsByReviewer(reviewUserId, status));
+	}
+
+	
 	@GetMapping("/get-analysis-review-by-analysis-id")
 	public ResponseEntity<AnalysisReviewDto> getAnalysisReview(@RequestParam Integer analysisId) throws Exception {
 		return  new ResponseEntity<>(analysisService.getAnalysisReview(analysisId), HttpStatus.OK);

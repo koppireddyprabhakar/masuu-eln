@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -121,6 +122,9 @@ public class ExperimentDaoImpl implements ExperimentDao {
 	@Value("${get.experiment.excipients.history.by.id}")
 	private String GET_EXPERIMENT_EXCIPIENTS_HISTORY_BY_ID;
 
+	@Value("${get.experiments.by.reviewer.list.query}")
+	private String GET_EXPERIMENTS_BY_REVIEWER_LIST_QUERY;
+	
 	@Override
 	public ExperimentDto getExperimentById(Integer experimentId) {
 		
@@ -187,7 +191,18 @@ public class ExperimentDaoImpl implements ExperimentDao {
 		return jdbcTemplate.query(sb.toString(), new ExperimentRowMapper());
 	}
 	
-	
+	@Override
+	public List<ExperimentDto> getExperimentsByReviewer(Integer reviewUserId, String status) {
+
+	    String sql = GET_EXPERIMENTS_BY_REVIEWER_LIST_QUERY;
+
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("reviewUserId", reviewUserId);
+	    params.put("status", status);
+
+	    return namedParameterJdbcTemplate.query(sql, params, new ExperimentRowMapper());
+	}
+
 	
 	@Override
 	public List<ExperimentDto> getExperimentHistory(Integer projectId) {

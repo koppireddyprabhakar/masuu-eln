@@ -2,6 +2,7 @@ package com.ectd.global.eln.dao;
 
 import java.util.List;
 
+import com.ectd.global.eln.dto.ExperimentDetailsDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ExperimentExcipientDto;
 import com.ectd.global.eln.dto.ExperimentReviewDto;
@@ -50,6 +51,8 @@ public interface ExperimentDao {
 	Integer updateExperimentReview(ExperimentReview experimentReview);
 	
 	ExperimentReviewDto getExperimentReview(Integer experimentId);
+	
+	List<ExperimentDto> getExperimentsByReviewer(Integer reviewUserId, String status);
 		
 	 String findLastExperimentId();
 	 

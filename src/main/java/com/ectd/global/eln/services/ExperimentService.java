@@ -38,6 +38,8 @@ public interface ExperimentService {
 	
 	ExperimentReviewDto getExperimentReview(Integer experimentId);
 	
+	List<ExperimentDto> getExperimentsByReviewer(Integer reviewUserId, String status);
+	
 	List<TestRequestFormDto> getTRFByExpIds(Integer experimentId);
 		
 	String generateUniqueexperimentId();

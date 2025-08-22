@@ -676,4 +676,8 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return analysisDao.getAnalysisExperimentsByExperimentId(experimentId);
 	}
 
+	@Override
+	public List<AnalysisDto> getAnalysisExperimentsByReviewer(Integer reviewUserId, String status) {
+	    return analysisDao.getAnalysisExperimentsByReviewer(reviewUserId, status);
+	}
 }

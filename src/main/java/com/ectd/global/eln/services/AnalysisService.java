@@ -5,6 +5,7 @@ import java.util.List;
 import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.AnalysisExcipientDto;
 import com.ectd.global.eln.dto.AnalysisReviewDto;
+import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
 import com.ectd.global.eln.request.AnalysisExcipient;
 import com.ectd.global.eln.request.AnalysisRequest;
@@ -45,7 +46,6 @@ public interface AnalysisService {
 	Integer updateAnalysisReview(AnalysisReview analysisReview);
 	
 	AnalysisReviewDto getAnalysisReview(Integer analysisId);
-	
 	String generateUniqueAnalyisisexperimentId();
 	
 	List<AnalysisDto> getAnalysisDetailByExperimentId(Integer experimentId);
@@ -63,5 +63,8 @@ public interface AnalysisService {
 	List<AnalysisDto> getAnalysisHistoryByProjectId(Integer projectId);
 	
 	List<AnalysisDto> getAnalysisExperimentsByExperimentId(Integer experimentId);
+	
+	List<AnalysisDto> getAnalysisExperimentsByReviewer(Integer reviewUserId, String status);
+
 
 }

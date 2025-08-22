@@ -334,6 +334,13 @@ public class ExperimentServiceImpl implements ExperimentService {
 	public ExperimentReviewDto getExperimentReview(Integer experimentId) {
 		return experimentDao.getExperimentReview(experimentId);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<ExperimentDto> getExperimentsByReviewer(Integer reviewUserId, String status) {
+	    return experimentDao.getExperimentsByReviewer(reviewUserId, status);
+	}
+
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)

@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -142,6 +143,9 @@ public class AnalysisDaoImpl implements AnalysisDao {
 
 	@Value("${get.analysis.experiments.by.experiment.id}")
 	private String GET_ANALAYSIS_EXPERIMENTS_BY_EXPERIMENT_ID_QUERY;
+	
+	@Value("${get.analysis.experiments.by.reviewer.list.query}")
+	private String GET_ANALYSIS_EXPERIMENTS_BY_REVIEWER_LIST_QUERY;
 	
 	@Override
 	public AnalysisDto getAnalysisById(Integer analysisId) {
@@ -624,6 +628,15 @@ public class AnalysisDaoImpl implements AnalysisDao {
             return null;
         }
     }
+	
+	@Override
+	public List<AnalysisDto> getAnalysisExperimentsByReviewer(Integer reviewUserId, String status) {
+	    String sql = GET_ANALYSIS_EXPERIMENTS_BY_REVIEWER_LIST_QUERY;
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("reviewUserId", reviewUserId);
+	    params.put("status", status);
+	    return namedParameterJdbcTemplate.query(sql, params, new AnalysisRowMapper());
+	}
 	
 	class AnalysisReviewRowMapper implements RowMapper<AnalysisReviewDto> {
 		public AnalysisReviewDto mapRow(ResultSet resultSet, int rowNum) throws SQLException {
