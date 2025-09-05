@@ -15,5 +15,7 @@ public interface LoginService {
 	boolean sendOtp(String email);
 
 	boolean validateOtp(String email, String otp);
+	
+	void logout();
 
 }

@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,6 +16,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import com.ectd.global.eln.controller.InvalidCredentialsException;
 import com.ectd.global.eln.dao.LoginDao;
 import com.ectd.global.eln.dao.ControlPanelDao;
@@ -22,6 +29,7 @@ import com.ectd.global.eln.exception.InvalidPasswordException;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.LoginRequest;
 import com.ectd.global.eln.request.UpdatePasswordRequest;
+import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
 
 @Service
@@ -45,6 +53,7 @@ public class LoginServiceImpl implements LoginService {
 	
      
      @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, noRollbackFor = { AccountLockedException.class, InvalidCredentialsException.class })
+     @Auditable(action = "User Logged In", eventType = "LOG IN", moduleSection = "Authentication")
      public LoginDto login(LoginRequest loginRequest) throws AccountLockedException {
          LoginDto loginDto = loginDao.getUserDetails(loginRequest.getMailId());
 
@@ -113,6 +122,16 @@ public class LoginServiceImpl implements LoginService {
 
          // Password correct and account not locked — reset failed attempts
          loginDao.resetFailedAttempts(loginRequest.getMailId());
+         
+         ServletRequestAttributes attributes =
+                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+         if (attributes != null) {
+             HttpServletRequest request = attributes.getRequest();
+             HttpSession session = request.getSession(true);
+ 
+             session.setAttribute("userId", loginDto.getUserId());       // used by AuditAspect
+             session.setAttribute("userName", loginDto.getFirstName());  // optional
+         }
 
          return loginDto;
      }
@@ -284,6 +303,13 @@ public class LoginServiceImpl implements LoginService {
 
 	private String generateOtp() {
 		int otp = 100000 + new Random().nextInt(900000);
-		return Integer.toString(otp);
+	return Integer.toString(otp);
 	}
-}
+
+
+	@Auditable(action = "User Logged Out", eventType = "LOG OUT", moduleSection = "Authentication")
+	public void logout() {
+	    
+	    }
+	}
+

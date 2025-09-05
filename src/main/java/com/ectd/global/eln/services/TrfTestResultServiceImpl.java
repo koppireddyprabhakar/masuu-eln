@@ -32,14 +32,14 @@ public class TrfTestResultServiceImpl implements TrfTestResultService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "TestResults Created")
+	@Auditable(action = "TestResults Created", eventType = "CREATE", moduleSection = "TRF Results")
 	public Integer createTrfTestResult(TrfTestResultRequest trfTestResultRequest) {
 		return trfTestResultDao.createTrfTestResult(trfTestResultRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "TestResults Updated")
+	@Auditable(action = "TestResults Updated", eventType = "Update", moduleSection = "TRF Results")
 	public Integer updateTrfTestResult(TrfTestResultRequest trfTestResultRequest) {
 		return trfTestResultDao.updateTrfTestResult(trfTestResultRequest);
 	}

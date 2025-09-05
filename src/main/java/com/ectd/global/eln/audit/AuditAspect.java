@@ -10,20 +10,16 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.lang3.StringUtils;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.ectd.global.eln.dao.AuditLogDao;
 import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.UsersDetailsDto;
-import com.ectd.global.eln.repository.AuditLogRepository;
-import com.ectd.global.eln.request.Base;
 import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
+import com.ectd.global.eln.utils.IpUtils;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +30,7 @@ public class AuditAspect {
 	private static final Logger logger = LogManager.getLogger(AuditAspect.class);
 	
 	@Autowired
-	private AuditLogRepository auditLogRepository;
+	private AuditLogDao auditLogDao;
 	
 	@Autowired
 	private UsersDetailsDao  usersDetailsDao;
@@ -45,13 +41,16 @@ public class AuditAspect {
 	public void logActivity(JoinPoint joinPoint, Auditable auditable) {
 
 		String userName = "ELN";
-	
+		String ipAddress = "UNKNOWN";
 		Integer userId = 0;
 		try {
 		    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
 		    if (attributes != null) {
 		        HttpServletRequest request = attributes.getRequest();
+		        // ✅ Capture IP using utility
+                ipAddress = IpUtils.getClientIp(request);
+                
 		        HttpSession session = request.getSession(false);
 
 		        if (session != null) {
@@ -72,12 +71,18 @@ public class AuditAspect {
 		    logger.error("Error in AuditAspect", ex);	
 		}
 
-		AuditLog auditLog = new AuditLog();
-		auditLog.setUserName(userName);
-		auditLog.setAction(auditable.action());
-		auditLog.setCreatedDate(ElnUtils.getTimeStamp());
+				AuditLog auditLog = new AuditLog();
+				auditLog.setUserName(userName);
+				auditLog.setAction(auditable.action());
+				auditLog.setUserId(userId);
+				auditLog.setEventType(auditable.eventType());  // login/logout
+				auditLog.setModuleSection(auditable.moduleSection());
+				auditLog.setIpAddress(ipAddress);             // captured IP
+				auditLog.setCreatedDate(ElnUtils.getTimeStamp());
+				
+				auditLogDao.saveAuditLog(auditLog);
+				
 
-		auditLogRepository.save(auditLog);
 	}
 	
 }

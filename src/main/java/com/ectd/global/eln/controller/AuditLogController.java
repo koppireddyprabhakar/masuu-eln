@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ectd.global.eln.audit.AuditLogDto;
+import com.ectd.global.eln.request.AuditReportRequest;
 import com.ectd.global.eln.services.AuditLogService;
-import com.ectd.global.eln.services.AuditReportService;
+import com.ectd.global.eln.services.AuditReportGenerateService;
  
 @RestController
 @RequestMapping("/audit")
@@ -25,7 +27,7 @@ public class AuditLogController {
     private AuditLogService auditLogService;
     
     @Autowired
-    private AuditReportService auditReportService;
+    private AuditReportGenerateService auditReportService;
 
 
     @GetMapping("/get-audit-logs")
@@ -33,9 +35,22 @@ public class AuditLogController {
         return auditLogService.getAllAuditLogs();
     }
     
+	
+    @GetMapping("/get-audit-logs-by-userid")
+    public List<AuditLogDto> getAuditLogsByUserId(@RequestParam int userId) {
+        return auditLogService.getAuditLogsByUserId(userId);
+    }
+    
+
     @PostMapping("/audit-report/download")
-    public ResponseEntity<byte[]> downloadAuditReport(@RequestBody List<AuditLogDto> logs) {
-        byte[] pdf = auditReportService.generateAuditReportFromView(logs);
+    public ResponseEntity<byte[]> downloadAuditReport(@RequestBody AuditReportRequest auditReportRequest) {
+        List<AuditLogDto> logs = auditReportRequest.getLogs();
+        String fromDate = auditReportRequest.getFromDate();
+        String toDate = auditReportRequest.getToDate();
+        String userName = auditReportRequest.getUserName();
+
+        byte[] pdf = auditReportService.generateAuditReportFromView(logs, fromDate, toDate, userName);
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("attachment", "Audit_Report.pdf");

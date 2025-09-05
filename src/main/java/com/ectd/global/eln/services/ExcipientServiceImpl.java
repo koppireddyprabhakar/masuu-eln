@@ -33,14 +33,14 @@ public class ExcipientServiceImpl implements ExcipientService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Formulation Excipients Created")
+	@Auditable(action = "Formulation Excipients Created", eventType = "CREATE", moduleSection = "Formulation Excipients")
 	public Integer createExcipient(ExcipientRequest excipientRequest) {
 		return excipientDao.createExcipient(excipientRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Formulation Excipients Updated")
+	@Auditable(action = "Formulation Excipients Updated", eventType = "UPDATE", moduleSection = "Formulation Excipients")
 	public Integer updateExcipient(ExcipientRequest excipientRequest) {
 		
 		if(excipientRequest.getQuantity().doubleValue() == 0.00) {

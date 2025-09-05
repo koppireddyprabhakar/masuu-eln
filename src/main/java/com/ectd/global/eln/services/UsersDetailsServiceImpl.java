@@ -16,7 +16,6 @@ import com.ectd.global.eln.dao.UserTeamDao;
 import com.ectd.global.eln.dao.UsersDetailsDao;
 import com.ectd.global.eln.dto.DepartmentDto;
 import com.ectd.global.eln.dto.UserRoleDto;
-import com.ectd.global.eln.dto.UserTeamDto;
 import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.EmailNotification;
 import com.ectd.global.eln.request.UserTeamRequest;
@@ -39,9 +38,6 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 	@Autowired
 	private DepartmentDao departmentDao;
 	
-	@Autowired
-	private UserTeamDao userTeamDao;
-	
 	
 	@Autowired
 	private EmailNotificationService emailNotificationService;
@@ -61,7 +57,8 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 		@Override
 		@Transactional(propagation = Propagation.REQUIRED)
-		@Auditable(action = "User Details Added")
+//		@Auditable(action = "User Details Added")
+		@Auditable(action = "User Details Added", eventType = "CREATE", moduleSection = "User Management")
 		public Boolean createUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		//  Normalize email at the very beginning
 			usersDetailsRequest.setMailId(usersDetailsRequest.getMailId().toLowerCase());
@@ -115,6 +112,7 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "User Details Updated", eventType = "UPDATE", moduleSection = "User Management")
 	public Integer updateUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		//  Normalize email at the very beginning
 	    usersDetailsRequest.setMailId(usersDetailsRequest.getMailId().toLowerCase());
@@ -172,6 +170,7 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "User Details Deleted", eventType = "DELETE", moduleSection = "User Management")
 	public Integer deleteUsersDetails(UsersDetailsRequest usersDetailsRequest) {
 		return this.updateUsersDetails(usersDetailsRequest);
 	}

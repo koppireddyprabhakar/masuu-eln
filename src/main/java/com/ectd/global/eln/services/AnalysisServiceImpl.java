@@ -84,7 +84,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Analysis Experiment Created")
+	@Auditable(action = "Analysis Experiment Created", eventType = "CREATE", moduleSection = "Analysis Experiments")
 	public Integer createAnalysis(AnalysisRequest analysisRequest) {
 		Integer analysisId = analysisDao.createAnalysis(analysisRequest);
 		
@@ -154,7 +154,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Analysis Experiment Updated")
+	@Auditable(action = "Analysis Experiment Updated", eventType = "UPDATE", moduleSection = " Analysis Experiments")
 	public Integer updateAnalysis(AnalysisRequest analysisRequest) {
 		return this.update(analysisRequest);
 	}
@@ -188,21 +188,21 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Analysis Excipients Created")
+	@Auditable(action = "Analysis Experiment Excipients Created", eventType = "CREATE", moduleSection = " Analysis Excipients")
 	public Integer createAnalysisExcipient(AnalysisExcipient analysisExcipient) {
 		return analysisDao.createAnalysisExcipient(analysisExcipient);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Analysis Excipients Updated")
+	@Auditable(action = "Analysis Excipients Updated",  eventType = "UPDATE", moduleSection = " Analysis Excipients")
 	public Integer updateAnalysisExcipient(AnalysisExcipient analysisExcipient) {
 		return analysisDao.updateAnalysisExcipient(analysisExcipient);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Analysis Excipients Saved")
+	@Auditable(action = "Analysis Excipients Saved", eventType = "UPDATE", moduleSection = " Analysis Excipients")
 	public Integer saveAnalysisExcipients(List<AnalysisExcipient> analysisExcipients) {
 
 		if(CollectionUtils.isEmpty(analysisExcipients)) {
@@ -277,7 +277,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Analysis TrfResult Created")
+	@Auditable(action = "Analysis TrfResult Created", eventType = "Created", moduleSection = " Analysis Trf")
 	public Integer updateTestRequestFormResult(List<TestRequestFormRequest> results) {
 		return analysisDao.updateTestRequestFormResult(results);
 	}
@@ -296,7 +296,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Analysis  Status Updated")
+	@Auditable(action = "Analysis  Status Updated", eventType = "UPDATE", moduleSection = " Analysis Dashboard")
 	public Integer updateAnalysisStatus(AnalysisRequest analysisRequest) {
 
 		analysisDao.updateAnalysisStatus(analysisRequest);
@@ -547,7 +547,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
-	@Auditable(action = "Analysis  Review Created")
+	@Auditable(action = "Analysis  Review Created", eventType = "CREATE", moduleSection = "Analysis Review")
 	public Integer createAnalysisReview(AnalysisReview analysisReview) {
 
 		analysisDao.createAnalysisReview(analysisReview);
@@ -599,7 +599,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
-	@Auditable(action = "Analysis  Review Updated")
+	@Auditable(action = "Analysis  Review Updated", eventType = "UPDATE", moduleSection = "Analysis Review")
 	public Integer updateAnalysisReview(AnalysisReview analysisReview) {
 		analysisDao.updateAnalysisReview(analysisReview);
 		

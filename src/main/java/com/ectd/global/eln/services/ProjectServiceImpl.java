@@ -45,7 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	@Auditable(action = "Project  Created")
+	@Auditable(action = "Project Created", eventType = "CREATE", moduleSection = "Project Management")
 	public Integer createProject(ProjectRequest projectRequest) {
 		Integer projectId = projectDao.createProject(projectRequest);
 
@@ -89,7 +89,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Project  Updated")
+	@Auditable(action = "Project Updated", eventType = "UPDATE", moduleSection = "Project Management")
 	public Integer updateProject(ProjectRequest projectRequest) {
 		return projectDao.updateProject(projectRequest);
 	}
@@ -102,7 +102,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Project  Status Updated")
+	@Auditable(action = "Project Status", eventType = "UPDATE", moduleSection = "Project Management")
 	public Integer updateProjectStatus(ProjectRequest projectRequest) {
 	    Integer rowsUpdated = projectDao.updateProjectStatus(projectRequest);
 		 

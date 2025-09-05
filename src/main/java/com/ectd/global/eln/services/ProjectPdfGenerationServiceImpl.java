@@ -13,6 +13,7 @@ import com.ectd.global.eln.dto.AnalysisDto;
 import com.ectd.global.eln.dto.ExperimentDto;
 import com.ectd.global.eln.dto.ProjectDto;
 import com.ectd.global.eln.dto.TestRequestFormDto;
+import com.ectd.global.eln.utils.ProjectPdfFooter;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -271,8 +272,10 @@ public class ProjectPdfGenerationServiceImpl implements ProjectPdfGenerationServ
 	    List<AnalysisDto> analysisExperiments = analysisDao.getAnalysisByProjectId(projectId);
 
 	    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-	        Document document = new Document(PageSize.A3);
-	        PdfWriter.getInstance(document, outputStream);
+	    	Document document = new Document(PageSize.A3, 36, 36, 36, 80);
+//	        PdfWriter.getInstance(document, outputStream);
+	        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+            writer.setPageEvent(new ProjectPdfFooter());
 	        document.open();
 
 	        Set<Integer> printedAnalysisIds = new HashSet<>();
@@ -330,9 +333,6 @@ public class ProjectPdfGenerationServiceImpl implements ProjectPdfGenerationServ
 	                }
 	            }
 	        }
-
-	        // 4. Footer
-	        addFooter(document, "Admin", new Date());
 
 	        document.close();
 	        return outputStream.toByteArray();
@@ -529,10 +529,7 @@ public class ProjectPdfGenerationServiceImpl implements ProjectPdfGenerationServ
 	        doc.add(table);
 	    }
 
-	    private void addFooter(Document doc, String printedBy, Date printedDate) throws DocumentException {
-	        doc.add(new Paragraph("Printed by: " + printedBy, fieldFont));
-	        doc.add(new Paragraph("Printed on: " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(printedDate), fieldFont));
-	    }
+	  
 
 	    private void addSubheading(Document doc, String subHeading) {
 	        try {

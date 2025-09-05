@@ -53,7 +53,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "TestRequestForm  Created")
+	@Auditable(action = "TRF Created", eventType = "CREATE", moduleSection = "TRF Management")
 	public Integer createTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
 	
 		int[] rowsEffected = testRequestFormDao.batchTestRequestInsert(prepareTestRequest(testRequestFormRequest));
@@ -80,7 +80,7 @@ public class TestRequestFormServiceImpl implements TestRequestFormService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "TestRequestForm  Updated")
+	@Auditable(action = "TRF Updated", eventType = "UPDATE", moduleSection = "TRF Management")
 	public Integer updateTestRequestForm(TestRequestFormRequest testRequestFormRequest) {
 		List<TestRequestFormRequest> testRequests = prepareTestRequest(testRequestFormRequest);
 		

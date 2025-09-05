@@ -36,14 +36,14 @@ public class TeamsServiceImpl implements TeamsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Team  Created")
+	@Auditable(action = "Team Created", eventType = "CREATE", moduleSection = "Team Management")
 	public Boolean createTeams(TeamsRequest teamsRequest) {
 		return teamsDao.createTeams(teamsRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Team  Updated")
+	@Auditable(action = "Team Created", eventType = "UPDATE", moduleSection = "Team Management")
 	public Integer updateTeams(TeamsRequest teamsRequest) {
 		teamsDao.updateTeams(teamsRequest);
 

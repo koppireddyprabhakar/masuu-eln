@@ -88,4 +88,13 @@ public class LoginController extends BaseController {
 		}
 	}
 
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout(HttpSession session) {
+	    loginService.logout();
+	    if (session != null) {
+	        session.invalidate();
+	    }
+	    return ResponseEntity.ok("Logged out successfully");
+	}
+	
 }

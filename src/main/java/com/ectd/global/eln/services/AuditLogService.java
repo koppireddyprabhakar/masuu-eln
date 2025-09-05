@@ -7,5 +7,7 @@ import com.ectd.global.eln.audit.AuditLogDto;
 public interface AuditLogService {
 	
 	List<AuditLogDto> getAllAuditLogs();
+	
+	List<AuditLogDto> getAuditLogsByUserId(int userId);
 
 }

@@ -32,14 +32,14 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "product created")
+	@Auditable(action = "Product Created", eventType = "CREATE", moduleSection = "Product Management")
 	public Integer createProduct(ProductRequest productRequest) {
 		return productRepository.createProduct(productRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Product  Updated")
+	@Auditable(action = "Product Updated", eventType = "UPDATE", moduleSection = "Product Management")
 	public Integer updateProduct(ProductRequest productRequest) {
 		return productRepository.updateProduct(productRequest);
 	}

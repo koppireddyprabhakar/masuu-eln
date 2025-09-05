@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Auditable {
     String action() default "";
+    String eventType() default "";            // login/logout
+    String moduleSection() default "";        // module/section
 }

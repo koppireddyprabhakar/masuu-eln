@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ectd.global.eln.dao.CoaReviewDetailsDao;
 import com.ectd.global.eln.dto.CoaReviewDto;
 import com.ectd.global.eln.request.CoaReviewDetailsRequest;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class CoaReviewDetailsServiceimpl implements CoaReviewDetailsService{
@@ -20,6 +21,7 @@ public class CoaReviewDetailsServiceimpl implements CoaReviewDetailsService{
  
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Coa Generated", eventType = "Generated", moduleSection = " Coa Generated")
 	public Integer saveCoaCreateDetails(CoaReviewDetailsRequest coaReviewDetailsRequest) {
 		return coaReviewDetailsDao.saveCoaCreateDetails(coaReviewDetailsRequest);
 	}
@@ -38,6 +40,7 @@ public class CoaReviewDetailsServiceimpl implements CoaReviewDetailsService{
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	@Auditable(action = "Coa Fomulation Reviewed", eventType = "Review", moduleSection = " Coa Review")
 	public Integer updateCoaFormulationReview(CoaReviewDetailsRequest coaReviewDetailsRequest) {
 		return coaReviewDetailsDao.updateCoaFormulationReview(coaReviewDetailsRequest);
  
@@ -45,6 +48,7 @@ public class CoaReviewDetailsServiceimpl implements CoaReviewDetailsService{
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	@Auditable(action = "Coa Fomulation Approved", eventType = "Approve", moduleSection = " QA Approve")
 	public Integer updateCoaFormulationAproval(CoaReviewDetailsRequest coaReviewDetailsRequest) {
 		return coaReviewDetailsDao.updateCoaFormulationAproval(coaReviewDetailsRequest);
  
@@ -52,6 +56,7 @@ public class CoaReviewDetailsServiceimpl implements CoaReviewDetailsService{
  
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	@Auditable(action = "Coa Analysis Reviewed", eventType = "Review", moduleSection = " Coa Review")
 	public Integer updateAnalysisCoaReview(CoaReviewDetailsRequest coaReviewDetailsRequest) {
 		return coaReviewDetailsDao.updateAnalysisCoaReview(coaReviewDetailsRequest);
  
@@ -59,6 +64,7 @@ public class CoaReviewDetailsServiceimpl implements CoaReviewDetailsService{
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+	@Auditable(action = "Coa Analysis Approved", eventType = "Approve", moduleSection = " QA Approve")
 	public Integer updateAnalysisCoaAproval(CoaReviewDetailsRequest coaReviewDetailsRequest) {
 		return coaReviewDetailsDao.updateAnalysisCoaAproval(coaReviewDetailsRequest);
 	}

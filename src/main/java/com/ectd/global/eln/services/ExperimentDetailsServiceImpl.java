@@ -52,7 +52,7 @@ public class ExperimentDetailsServiceImpl implements ExperimentDetailsService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Formulation Experiment Details Created")
+	@Auditable(action = "Formulation Experiment Details Created", eventType = "CREATE", moduleSection = "Formulation Experiments")
 	public Integer saveExperimentDetails(ExperimentDetails experimentDetails) {
 
 		if(experimentDetails.getExperimentDetailId() == null) {

@@ -32,14 +32,14 @@ public class DosageServiceImpl implements DosageService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Dosage created")
+	@Auditable(action = "Dosage Created", eventType = "CREATE", moduleSection = "Dosage management")
 	public Integer createDosage(DosageRequest dosageRequest) {
 		return dosageDao.createDosage(dosageRequest);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Dosage Updated")
+	@Auditable(action = "Dosage Updated", eventType = "UPDATE", moduleSection = "Dosage management")
 	public Integer updateDosage(DosageRequest dosageRequest) {
 		return dosageDao.updateDosage(dosageRequest);
 	}
@@ -58,13 +58,13 @@ public class DosageServiceImpl implements DosageService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	@Auditable(action = "Dosage Formulation Saved")
+	@Auditable(action = "Dosage Formulation Created", eventType = "CREATE", moduleSection = "Dosage management")
 	public Boolean saveDosageWithFormulations(DosageRequest dosageRequest) {
 		return dosageDao.saveDosageWithFormulations(dosageRequest);
 	}
 
 	@Override
-	@Auditable(action = "Dosage Formulation Updated")
+	@Auditable(action = "Dosage Formulation Updated", eventType = "UPDATE", moduleSection = "Dosage management")
 	public Boolean updateDosageWithFormulations(DosageRequest dosageRequest) {
 		return dosageDao.updateDosageWithFormulations(dosageRequest);
 	}

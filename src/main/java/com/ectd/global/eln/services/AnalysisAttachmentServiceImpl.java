@@ -22,6 +22,7 @@ import com.ectd.global.eln.dao.AnalysisAttachmentDao;
 import com.ectd.global.eln.dto.AnalysisAttachmentDto;
 import com.ectd.global.eln.request.AnalysisAttachment;
 import com.ectd.global.eln.request.FileInfo;
+import com.ectd.global.eln.utils.Auditable;
 
 @Service
 public class AnalysisAttachmentServiceImpl implements AnalysisAttachmentService {
@@ -46,6 +47,7 @@ public class AnalysisAttachmentServiceImpl implements AnalysisAttachmentService 
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis Experiment Attachments Created")
 	public List<FileInfo> createAnalysisAttachment(AnalysisAttachment analysisAttachment) {
 		this.save(analysisAttachment);
 		analysisAttachmentDao.createAnalysisAttachment(analysisAttachment);
@@ -54,6 +56,7 @@ public class AnalysisAttachmentServiceImpl implements AnalysisAttachmentService 
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Analysis Experiment Attachments Updated")
 	public Integer updateAnalysisAttachment(AnalysisAttachment analysisAttachment) {
 		return analysisAttachmentDao.updateAnalysisAttachment(analysisAttachment);
 	}
