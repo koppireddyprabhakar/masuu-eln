@@ -13,19 +13,6 @@ public class AuditLogServiceImpl implements AuditLogService {
 	@Autowired
     private AuditLogDao auditLogDao ;
 
-//	@Override
-//	public List<AuditLogDto> getAllAuditLogs() {
-//	    List<AuditLog> logs = auditLogRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDate"));
-//	    return logs.stream()
-//	               .map(log -> {
-//	                   AuditLogDto dto = new AuditLogDto();
-//	                   dto.setId(log.getId());
-//	                   dto.setUserName(log.getUserName());
-//	                   dto.setAction(log.getAction());
-//	                   dto.setCreatedDate(log.getCreatedDate());
-//	                   return dto;
-//	               }).collect(Collectors.toList());
-//	}
 	 @Override
 	    public List<AuditLogDto> getAllAuditLogs() {
 	        return auditLogDao.getAllAuditLogs();

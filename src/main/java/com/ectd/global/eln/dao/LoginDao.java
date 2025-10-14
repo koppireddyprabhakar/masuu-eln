@@ -23,5 +23,6 @@ public interface LoginDao {
 		void lockAccount(String mailId);
 		
 		void resetFailedAttempts(String mailId);
+		LoginDto getUserDetailsById(int userId);
 
 }

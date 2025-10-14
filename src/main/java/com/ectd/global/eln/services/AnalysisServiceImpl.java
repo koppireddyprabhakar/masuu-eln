@@ -142,7 +142,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 		if(!CollectionUtils.isEmpty(analysisRequest.getTestRequestFormList())) {
 			analysisDao.batchTRFUpdate(analysisRequest.getTestRequestFormList(), analysisId);
 		}
-		// Update project status to INPROGRESS when analysis is created
+	
 		ProjectRequest projectRequest = new ProjectRequest();
 		projectRequest.setProjectId(analysisRequest.getProjectId());
 		projectRequest.setStatus(ProjectRequest.PROJECT_STATUS.INPROGRESS.getValue());
@@ -174,16 +174,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 	private Integer update(AnalysisRequest analysisRequest) {
 
 		return analysisDao.updateAnalysis(analysisRequest);
-
-//		if(!CollectionUtils.isEmpty(analysisRequest.getAnalysisDetailsList())) {
-//			analysisDao.batchAnalysisDetailsUpdate(analysisRequest.getAnalysisDetailsList());
-//		}
-//
-//		if(!CollectionUtils.isEmpty(analysisRequest.getExcipients())) {
-//			analysisDao.batchExcipientUpdate(analysisRequest.getExcipients());
-//		}
-
-//		return 1;
 	}
 
 	@Override
@@ -220,7 +210,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 				Optional<AnalysisExcipient> excipientRequestOption =	analysisExcipients.stream().filter(
 						r -> (r.getExcipientId().equals(excipientDto.getExcipientId()) &&
-						excipientDto.getRemainingQuantity() > r.getChangedQuantity())
+						excipientDto.getRemainingQuantity() >=r.getChangedQuantity())
 						).findFirst();
 
 				if(excipientRequestOption.isEmpty()) {
@@ -306,10 +296,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 		    
 		    List<String> hodMailIds = usersDetailsDao.getUsersDetails(1, "ANALYSIS")
 		    	    .stream()
-		    	    .map(UsersDetailsDto::getMailId) // Use getMailId() instead of getEmail()
+		    	    .map(UsersDetailsDto::getMailId) 
 		    	    .collect(Collectors.toList());
-		    
-		    // Prepare the email content based on the status
+
 		    String emailSubject = "Experiment Status Update: " + analysisRequest.getAnalysisName();
 		    String emailBody = "";
 		    List<String> teamMemberMailIds = new ArrayList<String>();
@@ -452,8 +441,6 @@ public class AnalysisServiceImpl implements AnalysisService {
             "<p>Best regards,</p><p>[Your Team/Company Name]</p></body></html>",
             analysis.getAnalysisName(), analysis.getBatchSize(), analysis.getStatus()
         );
-
-        // Send HOD email notification
         EmailNotification hodEmailNotification = elnUtils.buildEmailNotification(
             hodEmailSubject, hodEmailBody, creatorMailId, hodMailIds
         );
@@ -511,8 +498,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     default:
         emailBody = "<html><body><p>Status update received with unknown status.</p></body></html>";
         break;
-}
-		    // Send email notification to the creator and relevant team members
+}		 
 		    EmailNotification emailNotification = elnUtils.buildEmailNotification(
 		            emailSubject,
 		            emailBody,
@@ -580,16 +566,13 @@ public class AnalysisServiceImpl implements AnalysisService {
 		            "</html>",
 		            analysisRequest.getStatus(),
 		            analysisRequest.getSummary(),
-		            analysis.getAnalysisName(),  // Assuming this is a field in the analysis object
-		            analysis.getBatchSize()      // Assuming this is a field in the analysis object
-		    );
-
-
-		    // Send email notification to the reviewer (excluding team members)
+		            analysis.getAnalysisName(), 
+		            analysis.getBatchSize()      
+		    );		  
 		    List<String> teamMemberMailIds = new ArrayList<>();
 		    EmailNotification emailNotification = elnUtils.buildEmailNotification(
 		            "Analysis Review Created",
-		            emailBody,  // Use the HTML-formatted email body
+		            emailBody,  
 		            reviewerMailId,
 		            teamMemberMailIds
 		    );
@@ -597,7 +580,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return analysisId;
 
 	}
-
 	@Override
 	@Auditable(action = "Analysis  Review Updated", eventType = "UPDATE", moduleSection = "Analysis Review")
 	public Integer updateAnalysisReview(AnalysisReview analysisReview) {
@@ -637,12 +619,12 @@ public class AnalysisServiceImpl implements AnalysisService {
 	        return "mgss001";
 	    }
 	    if (!lastExperimentName.startsWith("mgss") || lastExperimentName.length() <= 4) {
-	        return "mgss001"; // If the format is incorrect, handle it appropriately
+	        return "mgss001"; 
 	    }
 	    
 	    String numberPart = lastExperimentName.substring(4);
 
-	    // Ensure the numberPart contains only digits before parsing
+	   
 	    if (!numberPart.matches("\\d+")) {
 	        throw new RuntimeException("Invalid numeric part in experiment name: " + lastExperimentName);
 	    }

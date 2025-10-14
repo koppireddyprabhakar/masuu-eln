@@ -14,9 +14,9 @@ public class PdfFooterEvent extends PdfPageEventHelper{
 	    public PdfFooterEvent() {
 	        try {
 	            // Load the logo from the classpath
-	            InputStream logoStream = getClass().getClassLoader().getResourceAsStream("static/images/Logo.jpg");
+	            InputStream logoStream = getClass().getClassLoader().getResourceAsStream("static/images/Logo.png");
 	            if (logoStream == null) {
-	                throw new FileNotFoundException("File not found: static/images/Logo.jpg");
+	                throw new FileNotFoundException("File not found: static/images/Logo.png");
 	            }
 
 	            // Create image from stream

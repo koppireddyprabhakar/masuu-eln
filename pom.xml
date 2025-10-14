@@ -8,9 +8,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ectd.global</groupId>
-	<artifactId>ectd-eln</artifactId>
+	<artifactId>eln-Test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ectd-eln</name>
+	<name>eln-Test</name>
 	<packaging>war</packaging>
 	<description>Electronic Lab Note</description>
 	<properties>
@@ -125,6 +125,32 @@
 		   <artifactId>spring-boot-starter-tomcat</artifactId>
 		   <scope>provided</scope>
 		</dependency>
+		 <!-- Spring Security -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <!-- JWT (io.jsonwebtoken library) -->
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-api</artifactId>
+        <version>0.11.5</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-impl</artifactId>
+        <version>0.11.5</version>
+        <scope>runtime</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-jackson</artifactId>
+        <version>0.11.5</version>
+        <scope>runtime</scope>
+    </dependency>
 	</dependencies>
 
 	<build>

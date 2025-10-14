@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import com.ectd.global.eln.dao.LoginDao;
 import com.ectd.global.eln.dto.LoginDto;
@@ -20,7 +21,9 @@ import com.ectd.global.eln.request.LoginRequest;
 import com.ectd.global.eln.request.UpdatePasswordRequest;
 import com.ectd.global.eln.request.ValidateOtpRequest;
 import com.ectd.global.eln.request.ValidateOtpResponse;
+import com.ectd.global.eln.security.JwtUtil;
 import com.ectd.global.eln.services.LoginService;
+import com.ectd.global.eln.utils.Auditable;
 
 @RestController
 @RequestMapping("/login")
@@ -32,24 +35,31 @@ public class LoginController extends BaseController {
 	@Autowired
 	private LoginDao loginDao;
 	
+	@Autowired
+    private JwtUtil jwtUtil;
+	
 	@PostMapping("/login")
+	
 	public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest loginRequest,HttpSession session) {
-	    try {
-	        // Perform login and fetch user details
-	        LoginDto loginDto = loginService.login(loginRequest);
-
-	        // Check if loginDto is null, meaning invalid credentials
+	    try {	    
+	        LoginDto loginDto = loginService.login(loginRequest);	       
 	        if (loginDto == null) {
 	            throw new InvalidCredentialsException("Invalid Username");
 	        }        
 	        session.setAttribute("userId", loginDto.getUserId());
-	        session.setAttribute("username", loginDto.getFirstName());        
-	        // Check if license is expired
+	        session.setAttribute("username", loginDto.getFirstName());        	     
 	        if (loginDto.isExpiryPanel()) {
 	            return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(Map.of("error", "Your license has expired. Please renew your license."));
-        }	
-	        return ResponseEntity.ok(loginDto);
+        }		        
+	        String subject = String.valueOf(loginDto.getUserId()); 
+	        String token = jwtUtil.generateToken(subject);
+	        String refreshToken = jwtUtil.generateRefreshToken(subject);	        	     
+	        return ResponseEntity.ok(Map.of(
+	        		"accessToken", jwtUtil.getTokenPrefix() + " " + token,
+	                "refreshToken", refreshToken,
+	                "user", loginDto
+	        ));	     
 	    } catch (InvalidCredentialsException e) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	    }	    
@@ -89,12 +99,40 @@ public class LoginController extends BaseController {
 	}
 
 	@PostMapping("/logout")
-	public ResponseEntity<String> logout(HttpSession session) {
-	    loginService.logout();
-	    if (session != null) {
-	        session.invalidate();
-	    }
+	public ResponseEntity<String> logout() {
+	    loginService.logout(); 
 	    return ResponseEntity.ok("Logged out successfully");
 	}
-	
+
+	@PostMapping("/refresh")
+	public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+	    try {
+	        String refreshToken = request.get("refreshToken");
+	        if (refreshToken == null || refreshToken.isBlank()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .body(Map.of("error", "Refresh token is required"));
+	        }	   
+	        String userId = jwtUtil.extractUserId(refreshToken);
+	        if (!jwtUtil.validateRefreshToken(refreshToken, userId)) {
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                    .body(Map.of("error", "Invalid or expired refresh token"));
+	        }	       
+	        LoginDto loginDto = loginDao.getUserDetailsById(Integer.parseInt(userId));
+	        if (loginDto == null) {
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                    .body(Map.of("error", "User not found"));
+	        }	       
+	        String newAccessToken = jwtUtil.getTokenPrefix() + " " + jwtUtil.generateToken(userId);
+
+	        return ResponseEntity.ok(Map.of(
+	                "accessToken", newAccessToken,
+	                "refreshToken", refreshToken, 
+	                "user", loginDto
+	        ));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                .body(Map.of("error", "Could not refresh token: " + e.getMessage()));
+	    }
+	}
+		
 }

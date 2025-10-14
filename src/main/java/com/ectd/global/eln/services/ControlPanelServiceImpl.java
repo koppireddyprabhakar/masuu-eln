@@ -21,11 +21,13 @@ import com.ectd.global.eln.dto.ControlPanelDto;
 import com.ectd.global.eln.dto.UsersDetailsDto;
 import com.ectd.global.eln.request.ControlPanelRequest;
 import com.ectd.global.eln.request.EmailNotification;
+import com.ectd.global.eln.utils.Auditable;
 import com.ectd.global.eln.utils.ElnUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.time.Instant;
 
@@ -51,14 +53,6 @@ public class ControlPanelServiceImpl implements ControlPanelService {
 	 @Autowired
 	 private ElnUtils elnUtils;
 	 
-
-   
-
-//    @Override
-//    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-//    public List<ControlPanelDto> getControlPanel() {
-//        return controlPanelDao.getControlPanel();
-//    }
     
     @Override
     public ControlPanelDto getControlPanel() {
@@ -68,12 +62,14 @@ public class ControlPanelServiceImpl implements ControlPanelService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
+    @Auditable(action = "Control Panel Created", eventType = "CREATE", moduleSection = "Control Panel")
     public Integer createControlPanel(ControlPanelRequest controlPanelRequest) {
         return controlPanelDao.createControlPanel(controlPanelRequest);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
+    @Auditable(action = "Control Panel Updated", eventType = "UPDATE", moduleSection = "Control Panel")
     public Integer updateControlPanel(ControlPanelRequest controlPanelRequest) {
         return controlPanelDao.updateControlPanel(controlPanelRequest);
     }
@@ -94,12 +90,12 @@ public class ControlPanelServiceImpl implements ControlPanelService {
     @Override
     @Transactional(readOnly = true)
     public List<String> getAdminEmails() {
-        List<String> emails = usersDetailsDao.getUsersDetails(4, null) // Role ID 4, no department filtering
+        List<String> emails = usersDetailsDao.getUsersDetails(4, null)
                 .stream()
                 .map(UsersDetailsDto::getMailId)
                 .collect(Collectors.toList());
         
-        System.out.println("Fetched Admin Emails: " + emails);
+   
         return emails;
     }
 
@@ -109,23 +105,22 @@ public class ControlPanelServiceImpl implements ControlPanelService {
   
     @Scheduled(cron = "0 0 9 * * ?")
     public void checkAndSendLicenseExpiryEmails() {
-        System.out.println("Scheduled task checkAndSendLicenseExpiryEmails started at " + LocalDateTime.now());
-
         ControlPanelDto controlPanel = getControlPanel();
         if (controlPanel == null) {
-            System.out.println("No control panel data available. Exiting task.");
+        
             return;
-        }
-
-        // Get current date using ElnUtils and convert to LocalDate
-        Date currentDate = ElnUtils.getTimeStamp(); // Get the current timestamp
+        }     
+        Date currentDate = ElnUtils.getTimeStamp(); 
         LocalDate today = Instant.ofEpochMilli(currentDate.getTime())
                                  .atZone(ZoneId.systemDefault())
                                  .toLocalDate();
 
-        Date expiryDateObj = controlPanel.getLicenceExpiryDate(); // Get expiry date (java.util.Date)
-        if (expiryDateObj == null) {
-            System.out.println("License expiry date is null. Exiting task.");
+        Date expiryDateObj = controlPanel.getLicenceExpiryDate();
+        Integer userLimit = controlPanel.getUsersLimit();
+        Integer activeUsers = getNumberOfUsers();
+        Date startDate = controlPanel.getLicenceStartDate();
+        
+        if (expiryDateObj == null) {      
             return;
         }
 
@@ -133,60 +128,57 @@ public class ControlPanelServiceImpl implements ControlPanelService {
                                       .atZone(ZoneId.systemDefault())
                                       .toLocalDate();
 
-        long daysUntilExpiry = today.until(expiryDate).getDays();
-
-        System.out.println("Today's date: " + today);
-        System.out.println("License Expiry Date: " + expiryDate);
-        System.out.println("Days until expiry: " + daysUntilExpiry);
-
-        // Check if today is one of the scheduled notification days
+        long daysUntilExpiry = today.until(expiryDate).getDays();     
+        long durationDays = 0;
+        if (startDate != null && expiryDate != null) {
+        	LocalDate start = Instant.ofEpochMilli(startDate.getTime())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();    
+          LocalDate end = expiryDate;
+          durationDays = ChronoUnit.DAYS.between(start, end);         
+        }
+       
+        String licenseDetailsHtml = "<p><b>Current License Details:</b></p>" +
+                "<ul>" +
+                "<li>License Validity Period: <b>" + startDate + "</b> to <b>" + expiryDate + "</b> (" + durationDays + " Days)</li>" +
+                "<li>User Limitation: <b>" + userLimit + "</b></li>" +
+                "<li>Number of Active Users: <b>" + activeUsers + "</b></li>" +
+                "<li> Expiry Date: <b>" + expiryDate + "</b></li>" +
+                "</ul>";         
         if (daysUntilExpiry == 60 || daysUntilExpiry == 45 || daysUntilExpiry == 30 ||
-            daysUntilExpiry == 10 || daysUntilExpiry == 5 || daysUntilExpiry == 1) {
+            daysUntilExpiry == 10 || daysUntilExpiry == 5 || daysUntilExpiry == 4 || daysUntilExpiry == 3|| daysUntilExpiry == 2||daysUntilExpiry == 1) {
 
             List<String> adminEmails = getAdminEmails();
-            if (adminEmails == null || adminEmails.isEmpty()) {
-                System.out.println("No admin emails found. Skipping email notification.");
+            if (adminEmails == null || adminEmails.isEmpty()) {             
                 return;
-            }
-
-            System.out.println("Admin emails found: " + adminEmails);
-
-            // Build email subject and body
+            }                  
+            List<String> superAdminEmails = usersDetailsDao.getUsersDetails(5, null)
+                    .stream()
+                    .map(UsersDetailsDto::getMailId)
+                    .collect(Collectors.toList());
             String subject = "License Expiry Notification - " + daysUntilExpiry + " Days Remaining";
             String body = "<html>" +
-                          "<body>" +
-                          "<p>Dear Admin,</p>" +
-                          "<p>Your system's license will expire in <b>" + daysUntilExpiry + " days</b> on <b>" + expiryDate + "</b>.</p>" +
-                          "<p>Please take necessary actions to renew the license.Reach out to manager or business development team of masuu . drop a mail to <b>info@masuuglobal.com</b> for further clarifications</p>" +
-                          "<p>Regards,<br>Your System Team</p>" +
-                          "</body>" +
-                          "</html>";
-
-            // If there are multiple admin emails, use the first as the primary receiver and the rest as CC.
-            String primaryAdminEmail = adminEmails.get(0);
-            List<String> ccList = new ArrayList<>();
-            if (adminEmails.size() > 1) {
-                ccList.addAll(adminEmails.subList(1, adminEmails.size()));
-            }
-
-            System.out.println("Primary Email: " + primaryAdminEmail);
-            System.out.println("CC Emails: " + ccList);
-
-            // Build EmailNotification using ElnUtils
-            EmailNotification emailNotification = elnUtils.buildEmailNotification(
+                    "<body>" +
+                    "<p>Dear Admin,</p>" +
+                    "<p>Your system's license will expire in <b>" + daysUntilExpiry + " days</b> on <b>" + expiryDate + "</b>.</p>" +
+                    "<p>To ensure uninterrupted service and to avoid any last-minute rush, please take necessary actions to renew the license. " +
+                    "For any assistance regarding software license renewal, you can contact our manager, the business development team of Masuu, " +
+                    "or email us at: <b>info@ectdglobal.com</b>.</p>" +
+                    licenseDetailsHtml +
+                    "<br>" +
+                    "<p>Thank you!<br>" +
+                    "Nextgen eLN Team</p>" +
+                    "</body>" +
+                    "</html>";                
+            EmailNotification emailNotification = elnUtils.buildEmailNotificationMultipleReceivers(
                     subject,
                     body,
-                    primaryAdminEmail,
-                    ccList
+                    adminEmails,  
+                    superAdminEmails
             );
             emailNotification.setEmailNotificationType(1);
-
-            // Save the email notification; EmailNotificationJob will pick it up to send the email
-            emailNotificationService.saveEmailNotification(emailNotification);
-            System.out.println("Email notification saved successfully.");
-         // Add a print statement to check if email was actually sent
-          // boolean emailSent = emailNotificationService.checkIfEmailSent(emailNotification);
-          //  System.out.println("Email sent: " + emailSent);
+        
+            emailNotificationService.saveEmailNotification(emailNotification);           
         } else {
             System.out.println("No email notification sent today. Days until expiry does not match the notification schedule.");
         }

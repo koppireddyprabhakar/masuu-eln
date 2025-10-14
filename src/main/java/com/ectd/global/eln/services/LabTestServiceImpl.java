@@ -57,12 +57,14 @@ public class LabTestServiceImpl implements LabTestService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Test Created", eventType = "CREATE", moduleSection = "Test management")
 	public Boolean createTests(List<TestRequest> testRequests) {
 		return labTestDao.createTests(testRequests);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Auditable(action = "Test Updated", eventType = "UPDATE", moduleSection = "Test management")
 	public Boolean updateTests(TestRequest testRequest) {
 		return labTestDao.updateTests(testRequest);
 	}

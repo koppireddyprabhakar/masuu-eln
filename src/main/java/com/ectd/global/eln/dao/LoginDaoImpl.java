@@ -35,6 +35,8 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Value(value = "${UPDATE_PASSWORD}")
 	private String updatePasswordQuery;
+	@Value(value = "${SELECT_USER_DETAILS_BY_ID}")
+	private String selectUserDetailsByIdQuery;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -100,7 +102,15 @@ public class LoginDaoImpl implements LoginDao {
 	        String resetFailedAttemptsQuery = "UPDATE USERS_DETAILS SET FAILED_ATTEMPTS = 0 WHERE MAIL_ID = ?";
 	        jdbcTemplate.update(resetFailedAttemptsQuery, mailId);
 	    }
-
+       
+	    @Override
+	    public LoginDto getUserDetailsById(int userId) {
+	        try {
+	            return jdbcTemplate.queryForObject(selectUserDetailsByIdQuery, new Object[]{userId}, new LoginDTOMapper());
+	        } catch (EmptyResultDataAccessException ex) {
+	            return null;
+	        }
+	    }
 
 
 	private final class LoginDTOMapper implements RowMapper<LoginDto> {

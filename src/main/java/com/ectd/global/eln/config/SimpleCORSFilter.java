@@ -1,3 +1,4 @@
+/*
 package com.ectd.global.eln.config;
 
 import java.io.IOException;
@@ -46,3 +47,4 @@ public void destroy() {
 }
 
 }
+*/

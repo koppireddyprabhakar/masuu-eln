@@ -6,7 +6,6 @@ import com.ectd.global.eln.request.ControlPanelRequest;
 
 public interface ControlPanelService {
 
-  //  List<ControlPanelDto> getControlPanels();
     
     ControlPanelDto getControlPanel();
 
